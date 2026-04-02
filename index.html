@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quinta da Levada — Queen of Retreats</title>
+  <!-- Adobe Fonts: replace with your project embed URL -->
+  <!-- <link rel="stylesheet" href="https://use.typekit.net/XXXXXXX.css"> -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Page-specific overrides */
+    .gallery-thumbs {
+      display: flex;
+      gap: var(--s2);
+      margin-top: var(--s9);
+      max-width: var(--max-content);
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 var(--s7);
+    }
+    .gallery-thumb {
+      height: 80px;
+      flex: 1;
+      object-fit: cover;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      opacity: 0.75;
+      transition: opacity var(--dur-fast);
+    }
+    .gallery-thumb:hover { opacity: 1; }
+    .section { padding: var(--s8) 0; }
+    .section + .section { border-top: 1px solid var(--border); }
+    .highlight-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--s5);
+      padding: var(--s7) 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin: var(--s7) 0;
+    }
+    .highlight-stat {}
+    .highlight-stat__value {
+      font-family: var(--serif);
+      font-size: var(--t-2xl);
+      color: var(--ink);
+      margin-bottom: var(--s1);
+    }
+    .highlight-stat__label { font-size: var(--t-sm); color: var(--stone); }
+    .programme-day {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: var(--s5);
+      padding: var(--s5) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .programme-day:last-child { border-bottom: none; }
+    .programme-day__label { font-size: var(--t-sm); font-weight: 600; color: var(--stone); }
+    .programme-day__content {}
+    .programme-day__title { font-weight: 500; margin-bottom: var(--s1); color: var(--ink); }
+    .programme-day__desc { font-size: var(--t-sm); color: var(--stone); }
+    .room-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s4);
+    }
+    .room-preview-card { border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--border); }
+    .room-preview-card__img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: var(--sand-mid);
+    }
+    .room-preview-card__body { padding: var(--s5); }
+    .room-preview-card__name { font-family: var(--serif); font-size: var(--t-lg); color: var(--ink); margin-bottom: var(--s1); }
+    .room-preview-card__detail { font-size: var(--t-sm); color: var(--stone); margin-bottom: var(--s3); }
+    .room-preview-card__price { font-size: var(--t-base); font-weight: 600; color: var(--charcoal); }
+    .aggregate-rating {
+      display: flex;
+      align-items: center;
+      gap: var(--s6);
+      margin-bottom: var(--s7);
+    }
+    .agg-score {
+      font-family: var(--serif);
+      font-size: 56px;
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .agg-details {}
+    .agg-stars { color: var(--sage); font-size: 20px; letter-spacing: 2px; }
+    .agg-count { font-size: var(--t-sm); color: var(--stone); margin-top: var(--s2); }
+    .map-placeholder {
+      width: 100%;
+      height: 300px;
+      background: var(--sand-mid);
+      border-radius: var(--r-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--stone);
+      font-size: var(--t-sm);
+      border: 1px solid var(--border);
+      margin-top: var(--s5);
+    }
+    .widget-dates-scroll {
+      display: flex;
+      gap: var(--s2);
+      overflow-x: auto;
+      padding-bottom: var(--s2);
+      scrollbar-width: none;
+    }
+    .widget-dates-scroll::-webkit-scrollbar { display: none; }
+    .widget-date-pill.is-soldout { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
+    .widget-spaces {
+      font-size: var(--t-sm);
+      color: var(--warning);
+      font-weight: 500;
+    }
+    .footer {
+      border-top: 1px solid var(--border);
+      background: var(--white);
+      padding: var(--s7) 0;
+    }
+    .footer__inner {
+      max-width: var(--max-content);
+      margin: 0 auto;
+      padding: 0 var(--s7);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer__logo { font-family: var(--serif); font-size: 18px; color: var(--ink); }
+    .footer__links { display: flex; gap: var(--s6); }
+    .footer__links a { font-size: var(--t-sm); color: var(--stone); }
+    .footer__links a:hover { color: var(--ink); }
+    .breadcrumb { display: none; }
+    .breadcrumb__inner {
+      max-width: var(--max-content);
+      margin: 0 auto;
+      padding: 0 var(--s7);
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      font-size: var(--t-sm);
+      color: var(--stone);
+    }
+    .breadcrumb__inner a { color: var(--stone); }
+    .breadcrumb__inner a:hover { color: var(--ink); }
+    .breadcrumb__sep { color: var(--mist); }
+    .breadcrumb__current { color: var(--ink); font-weight: 500; }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Site Header ===== -->
+  <header class="site-header">
+    <div class="site-header__inner">
+      <nav class="site-header__nav">
+        <a href="#">Retreats</a>
+        <a href="#">Destinations</a>
+        <a href="#">Inspiration</a>
+        <a href="#">About</a>
+      </nav>
+      <a href="#" class="site-header__logo">Queen of Retreats</a>
+      <div class="site-header__actions">
+        <button class="btn btn--ghost" style="gap:6px">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Search
+        </button>
+        <button class="btn btn--ghost" style="gap:6px">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Sign In
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <img src="images/header_vale-de-moses.jpg"
+         alt="Quinta da Levada retreat in Alentejo"
+         class="hero__image">
+    <div class="hero__overlay"></div>
+    <!-- Title, subhead & ratings — vertically centred above booking bar -->
+    <div class="hero__center">
+      <p class="hero__eyebrow">GIANYAR &nbsp;·&nbsp; BALI &nbsp;·&nbsp; 7 nights</p>
+      <h1 class="hero__title">Elevation Barn - Bali</h1>
+      <p class="hero__subtitle">Retreats in a tropical oasis to help you find and fuel what matters most</p>
+      <div class="hero__meta">
+        <div class="hero__rating">
+          <span style="color:#c9a84c;">★★★★★</span>
+          <span>4.9 &nbsp;·&nbsp; 47 reviews</span>
+        </div>
+        <div class="hero__vetted">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          QoR Vetted
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== Booking Bar — overlaid on hero ===== -->
+    <div class="booking-bar">
+      <div class="booking-bar__price">
+        <span class="booking-bar__from">From</span>
+        <span class="booking-bar__amount">£2,195</span>
+        <span class="booking-bar__per">per person</span>
+      </div>
+
+      <div class="booking-bar__divider"></div>
+
+      <div class="booking-bar__dates">
+        <p class="booking-bar__label">Select dates - (These can be changed later)</p>
+        <div class="widget-dates-scroll">
+          <div class="widget-date-pill is-limited">7–14 Jun ·&thinsp;3 left</div>
+          <div class="widget-date-pill">21–28 Jun</div>
+          <div class="widget-date-pill is-soldout">5–12 Jul</div>
+          <div class="widget-date-pill">19–26 Jul</div>
+          <div class="widget-date-pill is-limited">2–9 Aug ·&thinsp;2 left</div>
+          <div class="widget-date-pill">16–23 Aug</div>
+        </div>
+        <p class="booking-bar__availability">Only 3 spaces left on the dates shown</p>
+      </div>
+
+      <div class="booking-bar__divider"></div>
+
+      <div class="booking-bar__guests">
+        <p class="booking-bar__label">Guests</p>
+        <div class="stepper">
+          <button class="stepper__btn" disabled>−</button>
+          <span class="stepper__val">1</span>
+          <button class="stepper__btn">+</button>
+        </div>
+      </div>
+
+      <div class="booking-bar__divider"></div>
+
+      <div class="booking-bar__secondary-cta">
+        <a href="#" class="btn btn--outline-light btn--lg">Enquire</a>
+      </div>
+
+      <div class="booking-bar__divider"></div>
+
+      <div class="booking-bar__cta">
+        <a href="booking.html" class="btn btn--primary btn--lg">Book This Retreat</a>
+        <p class="booking-bar__note">No payment today · 25% deposit to secure</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ===== Trust Bar ===== -->
+  <div class="trust-bar">
+    <div class="container">
+      <div class="trust-bar__inner">
+        <div class="trust-bar__item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          QoR Curated &amp; Quality Checked
+        </div>
+        <div class="trust-bar__item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Free cancellation up to 90 days
+        </div>
+        <div class="trust-bar__item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Max 12 guests
+        </div>
+        <div class="trust-bar__item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Secure deposit — 25% to book
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Breadcrumb ===== -->
+  <div class="breadcrumb">
+    <div class="breadcrumb__inner">
+      <a href="#">Home</a>
+      <span class="breadcrumb__sep">/</span>
+      <a href="#">Destinations</a>
+      <span class="breadcrumb__sep">/</span>
+      <a href="#">Portugal</a>
+      <span class="breadcrumb__sep">/</span>
+      <a href="#">Alentejo</a>
+      <span class="breadcrumb__sep">/</span>
+      <span class="breadcrumb__current">Quinta da Levada</span>
+    </div>
+  </div>
+
+
+  <!-- ===== Main Content ===== -->
+  <div class="page-body">
+
+    <!-- Left: Tabbed content -->
+    <div class="tabs-scope">
+      <div class="tabs">
+        <div class="tabs__list">
+          <button class="tabs__tab is-active" data-tab="overview">Overview</button>
+          <button class="tabs__tab" data-tab="included">What's Included</button>
+          <button class="tabs__tab" data-tab="accommodation">Accommodation</button>
+          <button class="tabs__tab" data-tab="programme">Programme</button>
+          <button class="tabs__tab" data-tab="reviews">Reviews</button>
+          <button class="tabs__tab" data-tab="location">Location</button>
+        </div>
+      </div>
+
+      <!-- Tab: Overview -->
+      <div class="tab-panel is-active" data-panel="overview">
+        <div class="section">
+          <p style="font-family: var(--serif); font-size: var(--t-xl); line-height: 1.5; color: var(--ink); margin-bottom: var(--s6); font-weight: 300;">
+            Set in a restored 18th-century farmhouse in the golden hills of Alentejo, Quinta da Levada is a place to <em>slow down, go inward, and return to yourself.</em>
+          </p>
+          <p style="color: var(--stone); line-height: 1.8; margin-bottom: var(--s4);">
+            Seven days of restorative yoga, guided forest bathing, and somatic movement — held alongside long farm-to-table lunches, evenings under the stars, and the deep, unhurried quiet of the Portuguese countryside. This is not a programme about doing more. It's about arriving, fully, at rest.
+          </p>
+          <p style="color: var(--stone); line-height: 1.8;">
+            Led by internationally-trained facilitators with backgrounds in trauma-informed yoga, nature therapy, and integrative coaching. Suitable for all experience levels. Maximum 12 guests ensures a genuinely intimate experience.
+          </p>
+
+          <div class="highlight-stats">
+            <div class="highlight-stat">
+              <div class="highlight-stat__value">7</div>
+              <div class="highlight-stat__label">Nights</div>
+            </div>
+            <div class="highlight-stat">
+              <div class="highlight-stat__value">12</div>
+              <div class="highlight-stat__label">Max guests</div>
+            </div>
+            <div class="highlight-stat">
+              <div class="highlight-stat__value">4.9</div>
+              <div class="highlight-stat__label">Guest rating</div>
+            </div>
+            <div class="highlight-stat">
+              <div class="highlight-stat__value">6</div>
+              <div class="highlight-stat__label">Dates in 2026</div>
+            </div>
+          </div>
+
+          <p class="label-caps" style="margin-bottom: var(--s4);">Led by</p>
+          <div style="display:flex; gap: var(--s5); align-items: flex-start;">
+            <div style="width:60px; height:60px; border-radius:50%; background:var(--sand-mid); flex-shrink:0;"></div>
+            <div>
+              <div style="font-weight: 600; color: var(--ink); margin-bottom: var(--s1);">Sofia Nunes &amp; Jamie Carvalho</div>
+              <div style="font-size: var(--t-sm); color: var(--stone); line-height: 1.6;">Trauma-informed yoga teacher &amp; nature therapy guide. Combined 22 years of retreat facilitation across Europe and Southeast Asia.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: What's Included -->
+      <div class="tab-panel" data-panel="included">
+        <div class="section">
+          <div class="section-head">
+            <h2>Everything you need, included</h2>
+            <p>All the essentials — and the extras that make the difference.</p>
+          </div>
+          <div class="includes-grid">
+            <div class="include-item">Return transfers from Lisbon Airport</div>
+            <div class="include-item">7 nights accommodation</div>
+            <div class="include-item">All meals — breakfast, lunch &amp; dinner</div>
+            <div class="include-item">Filtered water &amp; herbal teas throughout</div>
+            <div class="include-item">2× daily yoga &amp; movement sessions</div>
+            <div class="include-item">Daily meditation practice</div>
+            <div class="include-item">2× guided forest bathing walks</div>
+            <div class="include-item">Closing ceremony &amp; farewell dinner</div>
+            <div class="include-item">Welcome gift &amp; retreat journal</div>
+            <div class="include-item">Wi-Fi (deliberately limited)</div>
+            <div class="include-item">Yoga props &amp; all equipment</div>
+            <div class="include-item">Pre-arrival 1:1 call with a facilitator</div>
+          </div>
+          <div class="divider"></div>
+          <p class="label-caps" style="margin-bottom: var(--s4);">Not included</p>
+          <div style="display:flex; flex-direction: column; gap: var(--s2); color: var(--stone); font-size: var(--t-sm);">
+            <div>— Flights to/from Lisbon</div>
+            <div>— Alcohol (available to purchase on-site)</div>
+            <div>— Optional 1:1 private coaching sessions (£85/session)</div>
+            <div>— Travel insurance (strongly recommended)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Accommodation -->
+      <div class="tab-panel" data-panel="accommodation">
+        <div class="section">
+          <div class="section-head">
+            <h2>Your accommodation</h2>
+            <p>Three room types, each designed for rest and retreat.</p>
+          </div>
+          <div class="room-preview-grid">
+            <div class="room-preview-card">
+              <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg"
+                   alt="Shared Garden Room" class="room-preview-card__img">
+              <div class="room-preview-card__body">
+                <div class="room-preview-card__name">Shared Garden Room</div>
+                <div class="room-preview-card__detail">Twin share · Garden view · En-suite</div>
+                <div class="room-preview-card__price">From £2,195 <span style="font-weight:400; color: var(--stone)">per person</span></div>
+              </div>
+            </div>
+            <div class="room-preview-card">
+              <img src="images/header_casa-ana_20230628180415.jpg"
+                   alt="Private Valley Room" class="room-preview-card__img">
+              <div class="room-preview-card__body">
+                <div class="room-preview-card__name">Private Valley Room</div>
+                <div class="room-preview-card__detail">Double or twin · Valley view · En-suite</div>
+                <div class="room-preview-card__price">From £2,895 <span style="font-weight:400; color: var(--stone)">per person</span></div>
+              </div>
+            </div>
+            <div class="room-preview-card">
+              <img src="images/header_les-marguerites.jpg"
+                   alt="Quinta Suite" class="room-preview-card__img">
+              <div class="room-preview-card__body">
+                <div class="room-preview-card__name">Quinta Suite</div>
+                <div class="room-preview-card__detail">Junior suite · Private terrace · Deep soak bath</div>
+                <div class="room-preview-card__price">From £3,750 <span style="font-weight:400; color: var(--stone)">per person</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Programme -->
+      <div class="tab-panel" data-panel="programme">
+        <div class="section">
+          <div class="section-head">
+            <h2>Your week at Quinta da Levada</h2>
+            <p>A gentle rhythm, held by nature and each other.</p>
+          </div>
+          <div class="programme-day">
+            <div class="programme-day__label">Day 1</div>
+            <div class="programme-day__content">
+              <div class="programme-day__title">Arrival &amp; Settling</div>
+              <div class="programme-day__desc">Transfer from Lisbon, welcome lunch, orientation walk and opening circle. Early evening yin yoga to decompress from travel. Communal dinner.</div>
+            </div>
+          </div>
+          <div class="programme-day">
+            <div class="programme-day__label">Days 2–3</div>
+            <div class="programme-day__content">
+              <div class="programme-day__title">Deepening</div>
+              <div class="programme-day__desc">Morning movement (vinyasa or restorative), guided meditation, afternoon forest bathing, workshops on breath and somatic awareness. Free time for rest or journalling.</div>
+            </div>
+          </div>
+          <div class="programme-day">
+            <div class="programme-day__label">Days 4–5</div>
+            <div class="programme-day__content">
+              <div class="programme-day__title">Stillness &amp; Integration</div>
+              <div class="programme-day__desc">Morning silence practice, embodied movement, afternoon free time for pool, walking trails or 1:1 sessions. Evening sharing circles.</div>
+            </div>
+          </div>
+          <div class="programme-day">
+            <div class="programme-day__label">Days 6–7</div>
+            <div class="programme-day__content">
+              <div class="programme-day__title">Closing &amp; Return</div>
+              <div class="programme-day__desc">Integration practices, letter-writing workshop, closing ceremony and farewell dinner. Morning 7: departure after a final breakfast, return transfer to Lisbon.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Reviews -->
+      <div class="tab-panel" data-panel="reviews">
+        <div class="section">
+          <div class="aggregate-rating">
+            <div class="agg-score">4.9</div>
+            <div class="agg-details">
+              <div class="agg-stars">★★★★★</div>
+              <p style="font-size: var(--t-sm); color: var(--stone); margin-top: var(--s2);">Based on 47 guest reviews</p>
+            </div>
+          </div>
+
+          <div class="reviews-grid">
+            <div class="review-card">
+              <p class="review-card__quote">"The most present I've felt in years. I arrived exhausted and depleted. I left feeling like myself again."</p>
+              <p class="review-card__author"><strong>Sarah M.</strong> — London · June 2025</p>
+            </div>
+            <div class="review-card">
+              <p class="review-card__quote">"Sofia and Jamie hold the space with such warmth. The food alone is worth the trip — and I say that as someone who came for the yoga."</p>
+              <p class="review-card__author"><strong>David K.</strong> — Dublin · September 2025</p>
+            </div>
+            <div class="review-card">
+              <p class="review-card__quote">"I've done a lot of retreats. This one is different. It doesn't try to fix you. It just gives you the space to remember who you already are."</p>
+              <p class="review-card__author"><strong>Priya S.</strong> — Manchester · August 2025</p>
+            </div>
+            <div class="review-card">
+              <p class="review-card__quote">"Genuinely transformative. The quality of everything — the facilitation, the food, the setting — exceeded every expectation."</p>
+              <p class="review-card__author"><strong>Alix R.</strong> — Paris · July 2025</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab: Location -->
+      <div class="tab-panel" data-panel="location">
+        <div class="section">
+          <div class="section-head">
+            <h2>Alentejo, Portugal</h2>
+            <p>A land of cork forests, ancient olive groves, and extraordinary quiet.</p>
+          </div>
+          <p style="color: var(--stone); line-height: 1.8; margin-bottom: var(--s5);">
+            Quinta da Levada sits in the Val do Guadiana, approximately 2.5 hours from Lisbon by car. Return transfers from Lisbon Humberto Delgado Airport are included in all packages.
+          </p>
+          <div class="map-placeholder">
+            [ Interactive map — Alentejo, Portugal ]
+          </div>
+          <div style="display: flex; gap: var(--s7); margin-top: var(--s6);">
+            <div>
+              <p class="label-caps" style="margin-bottom: var(--s2);">Nearest Airport</p>
+              <p style="font-size: var(--t-sm); color: var(--stone);">Lisbon (LIS) — 2h 30m by road</p>
+            </div>
+            <div>
+              <p class="label-caps" style="margin-bottom: var(--s2);">Nearest Town</p>
+              <p style="font-size: var(--t-sm); color: var(--stone);">Mértola — 20 minutes</p>
+            </div>
+            <div>
+              <p class="label-caps" style="margin-bottom: var(--s2);">Best time to visit</p>
+              <p style="font-size: var(--t-sm); color: var(--stone);">April–October</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div><!-- end tabs-scope -->
+
+  </div><!-- end page-body -->
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__logo">Queen of Retreats</div>
+      <div class="footer__links">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Contact</a>
+        <a href="#">For Retreat Owners</a>
+      </div>
+      <p style="font-size: var(--t-xs); color: var(--mist);">© 2026 Queen of Retreats</p>
+    </div>
+  </footer>
+
+  <script>
+    // Tabs (inline for index page)
+    document.querySelectorAll('.tabs__tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const tabList = tab.closest('.tabs');
+        const target  = tab.dataset.tab;
+        const scope   = tab.closest('.tabs-scope') || document;
+        tabList.querySelectorAll('.tabs__tab').forEach(t => t.classList.remove('is-active'));
+        tab.classList.add('is-active');
+        scope.querySelectorAll('.tab-panel').forEach(panel => {
+          panel.classList.toggle('is-active', panel.dataset.panel === target);
+        });
+      });
+    });
+
+    // Widget date pill selection
+    document.querySelectorAll('.widget-date-pill:not(.is-soldout)').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.widget-date-pill').forEach(p => p.classList.remove('is-active'));
+        pill.classList.add('is-active');
+      });
+    });
+
+    // Widget stepper
+    const steps = document.querySelector('.booking-bar .stepper');
+    if (steps) {
+      const minus = steps.querySelector('.stepper__btn:first-child');
+      const plus  = steps.querySelector('.stepper__btn:last-child');
+      const val   = steps.querySelector('.stepper__val');
+      let count   = 1;
+      minus.addEventListener('click', () => {
+        if (count > 1) { count--; val.textContent = count; minus.disabled = count <= 1; }
+      });
+      plus.addEventListener('click', () => {
+        if (count < 12) { count++; val.textContent = count; minus.disabled = false; }
+      });
+    }
+  </script>
+
+  <script>
+    // Transparent header → white on scroll past hero
+    const header = document.querySelector('.site-header');
+    const hero = document.querySelector('.hero');
+    function updateHeader() {
+      const threshold = hero ? hero.offsetHeight - header.offsetHeight : 100;
+      header.classList.toggle('is-scrolled', window.scrollY > threshold);
+    }
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    updateHeader();
+  </script>
+
+</body>
+</html>
