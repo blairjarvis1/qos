@@ -341,6 +341,8 @@ function initViewToggle() {
   const listView = document.getElementById('list-view');
   if (!calView || !listView) return;
 
+  const arrowsEl = document.getElementById('cal-arrows');
+
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       buttons.forEach(b => b.classList.remove('is-active'));
@@ -348,6 +350,7 @@ function initViewToggle() {
       const view = btn.dataset.view;
       calView.classList.toggle('hidden', view !== 'calendar');
       listView.classList.toggle('hidden', view !== 'list');
+      if (arrowsEl) arrowsEl.style.display = view === 'calendar' ? 'flex' : 'none';
     });
   });
 }
