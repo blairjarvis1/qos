@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queen of Retreats — Find Your Perfect Retreat</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+
+    /* ── Reset & base ───────────────────────────────────────────── */
+    html, body { height: 100%; overflow-x: hidden; }
+    body { background: var(--parchment); }
+
+    /* ── HERO ───────────────────────────────────────────────────── */
+    .hp-hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Video background */
+    .hp-hero__video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Dark overlay */
+    .hp-hero__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(10, 12, 10, 0.30) 0%,
+        rgba(10, 12, 10, 0.45) 50%,
+        rgba(10, 12, 10, 0.60) 100%
+      );
+    }
+
+    /* Hero content */
+    .hp-hero__content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 0 var(--s7);
+      width: 100%;
+      max-width: 900px;
+      margin-top: -140px;
+    }
+
+    .hp-hero__eyebrow {
+      font-family: var(--ui);
+      font-size: var(--t-xs);
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: var(--s5);
+    }
+
+    .hp-hero__headline {
+      font-family: var(--serif);
+      font-size: clamp(22px, 3.4vw, 52px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: var(--s8);
+      white-space: nowrap;
+      text-align: center;
+    }
+    .hp-hero__headline em {
+      font-style: italic;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* ── SEARCH BAR ─────────────────────────────────────────────── */
+    .hp-search {
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto var(--s6);
+      position: relative;
+    }
+
+    /* The pill container */
+    .hp-search__bar {
+      display: flex;
+      align-items: stretch;
+      background: var(--white);
+      border-radius: var(--r-pill);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10);
+      overflow: visible;
+      position: relative;
+      height: 66px;
+    }
+
+    /* Individual section */
+    .hp-search__section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 24px;
+      cursor: pointer;
+      border-radius: var(--r-pill);
+      transition: background var(--dur-fast);
+      position: relative;
+      min-width: 0;
+    }
+    .hp-search__section:hover {
+      background: rgba(28,28,26,0.05);
+    }
+    .hp-search__section.is-active {
+      background: var(--white);
+      box-shadow: 0 2px 20px rgba(28,28,26,0.14);
+      z-index: 3;
+    }
+    /* Suppress hover when another is active */
+    .hp-search__bar.has-active .hp-search__section:not(.is-active):hover {
+      background: rgba(28,28,26,0.04);
+    }
+
+    /* Dividers between sections */
+    .hp-search__divider {
+      width: 1px;
+      background: var(--border);
+      align-self: stretch;
+      margin: 12px 0;
+      flex-shrink: 0;
+      transition: opacity var(--dur-fast);
+    }
+    /* Hide dividers adjacent to active section */
+    .hp-search__section.is-active + .hp-search__divider,
+    .hp-search__divider:has(+ .hp-search__section.is-active) {
+      opacity: 0;
+    }
+
+    .hp-search__label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      margin-bottom: 2px;
+      white-space: nowrap;
+    }
+    .hp-search__value {
+      font-size: var(--t-sm);
+      color: var(--stone);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .hp-search__value.has-value { color: var(--ink); }
+    .hp-search__input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: var(--t-sm);
+      color: var(--ink);
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      caret-color: var(--sage);
+    }
+    .hp-search__input::placeholder { color: var(--stone); }
+
+    /* Search button */
+    .hp-search__btn-wrap {
+      display: flex;
+      align-items: center;
+      padding-right: 8px;
+      flex-shrink: 0;
+    }
+    .hp-search__btn {
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      background: var(--sage);
+      color: var(--white);
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 0 var(--s6) 0 var(--s5);
+      height: 50px;
+      font-family: var(--ui);
+      font-size: var(--t-sm);
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background var(--dur-fast), transform var(--dur-fast);
+      white-space: nowrap;
+    }
+    .hp-search__btn:hover { background: #4e6349; transform: scale(1.02); }
+    .hp-search__btn svg { flex-shrink: 0; }
+
+    /* ── DROPDOWNS ──────────────────────────────────────────────── */
+    .hp-search__dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 0;
+      background: var(--white);
+      border-radius: 24px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08);
+      z-index: 200;
+      overflow-y: auto;
+      text-align: left;
+    }
+    .hp-search__dropdown.is-open { display: block; }
+
+    /* Interest dropdown */
+    #dd-interest {
+      width: 560px;
+      left: 0;
+    }
+    .dd-section-title {
+      font-family: var(--ui);
+      font-size: var(--t-xs);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--stone);
+      padding: var(--s3) var(--s6) var(--s2);
+    }
+    .dd-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 var(--s6) var(--s3);
+    }
+    .dd-chip {
+      font-size: var(--t-sm);
+      color: var(--charcoal);
+      background: var(--parchment);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-pill);
+      padding: 4px var(--s3);
+      cursor: pointer;
+      transition: all var(--dur-fast);
+      white-space: nowrap;
+    }
+    .dd-chip:hover, .dd-chip.is-selected {
+      background: var(--sage-pale);
+      border-color: var(--sage-mid);
+      color: var(--sage);
+    }
+    .dd-divider { height: 1px; background: var(--border); margin: 0 var(--s6); }
+    .dd-categories {
+      max-height: 148px;
+      overflow-y: auto;
+      padding: var(--s1) 0 var(--s2);
+    }
+    .dd-categories::-webkit-scrollbar { width: 4px; }
+    .dd-categories::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 2px; }
+    .dd-category {
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      padding: 7px var(--s6);
+      cursor: pointer;
+      transition: background var(--dur-fast);
+    }
+    .dd-category:hover { background: var(--parchment); }
+    .dd-category.is-selected { background: var(--sage-pale); }
+    .dd-category__icon {
+      width: 30px; height: 30px;
+      background: var(--cloud);
+      border-radius: var(--r-md);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+    .dd-category__name {
+      font-size: var(--t-sm);
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .dd-category__desc {
+      font-size: var(--t-xs);
+      color: var(--stone);
+      margin-top: 1px;
+    }
+
+    /* Destination dropdown */
+    #dd-destination {
+      width: 560px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .dd-dest-top {
+      padding: var(--s3) var(--s6);
+      border-bottom: 1px solid var(--border);
+    }
+    .dd-dest-search {
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      background: var(--cloud);
+      border-radius: var(--r-pill);
+      padding: 7px var(--s5);
+    }
+    .dd-dest-search input {
+      border: none; outline: none;
+      background: transparent;
+      font-size: var(--t-sm);
+      color: var(--ink);
+      width: 100%;
+    }
+    .dd-dest-search input::placeholder { color: var(--stone); }
+    .dd-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .dd-cols-left { border-right: 1px solid var(--border); }
+    .dd-place {
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      padding: 3px var(--s5);
+      cursor: pointer;
+      transition: background var(--dur-fast);
+    }
+    .dd-place:hover { background: var(--parchment); }
+    .dd-place__icon {
+      width: 22px; height: 22px;
+      background: var(--cloud);
+      border-radius: var(--r-sm);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 11px;
+    }
+    .dd-place__name { font-size: var(--t-sm); color: var(--ink); font-weight: 500; line-height: 1.2; }
+    .dd-place__count { font-size: 10px; color: var(--stone); }
+
+    /* Dates dropdown */
+    #dd-dates {
+      width: 480px;
+      right: 76px;
+      left: auto;
+    }
+    .dd-dates-header {
+      display: flex;
+      gap: var(--s2);
+      padding: var(--s3) var(--s6) var(--s3);
+      border-bottom: 1px solid var(--border);
+    }
+    .dd-date-mode {
+      flex: 1;
+      text-align: center;
+      font-size: var(--t-sm);
+      font-weight: 500;
+      color: var(--stone);
+      padding: 6px var(--s3);
+      border-radius: var(--r-pill);
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all var(--dur-fast);
+    }
+    .dd-date-mode:hover { background: var(--cloud); color: var(--ink); }
+    .dd-date-mode.is-active {
+      background: var(--ink);
+      color: var(--white);
+    }
+    .dd-months {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: var(--s2) var(--s6) var(--s3);
+    }
+    .dd-month-tile {
+      text-align: center;
+      padding: 8px var(--s3);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      cursor: pointer;
+      transition: all var(--dur-fast);
+    }
+    .dd-month-tile:hover { border-color: var(--sage-mid); background: var(--sage-pale); }
+    .dd-month-tile.is-selected { border-color: var(--sage); background: var(--sage-pale); }
+    .dd-month-tile__month { font-weight: 600; font-size: var(--t-sm); color: var(--ink); line-height: 1.2; }
+    .dd-month-tile__year { font-size: 10px; color: var(--stone); }
+
+    /* ── "WONDERING WHERE TO START" button ─────────────────────── */
+    .hp-hero__explore {
+      position: relative;
+      z-index: 2;
+      margin-top: var(--s4);
+    }
+    .hp-hero__explore-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s3);
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: var(--white);
+      font-size: var(--t-sm);
+      font-weight: 400;
+      padding: 12px var(--s5);
+      border-radius: var(--r-pill);
+      cursor: pointer;
+      transition: all var(--dur-mid) var(--ease-out);
+    }
+    .hp-hero__explore-btn:hover {
+      background: rgba(255,255,255,0.25);
+      border-color: rgba(255,255,255,0.4);
+      transform: translateY(-1px);
+    }
+    .hp-hero__explore-btn svg { opacity: 0.8; }
+
+    /* ── SCROLL INDICATOR ───────────────────────────────────────── */
+    .hp-hero__scroll {
+      position: absolute;
+      bottom: var(--s8);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--s2);
+      opacity: 0.5;
+      animation: bounce 2.4s ease-in-out infinite;
+    }
+    .hp-hero__scroll span {
+      font-family: var(--ui);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── BACKDROP (closes dropdowns on outside click) ───────────── */
+    .hp-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+    }
+    .hp-backdrop.is-open { display: block; }
+
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVIGATION ──────────────────────────────────────────────── -->
+  <header class="site-header" id="hp-nav">
+    <div class="site-header__inner">
+      <nav class="site-header__nav">
+        <a href="#">Retreats</a>
+        <a href="#">Destinations</a>
+        <a href="#">Inspiration</a>
+        <a href="#">About</a>
+      </nav>
+      <a href="homepage.html" class="site-header__logo">Queen of Retreats</a>
+      <div class="site-header__actions">
+        <button class="btn btn--ghost" style="gap:6px">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Search
+        </button>
+        <button class="btn btn--ghost" style="gap:6px">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Sign In
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── BACKDROP ────────────────────────────────────────────────── -->
+  <div class="hp-backdrop" id="hp-backdrop"></div>
+
+  <!-- ── HERO ────────────────────────────────────────────────────── -->
+  <section class="hp-hero">
+
+    <!-- Background video -->
+    <video class="hp-hero__video" autoplay muted loop playsinline>
+      <source src="video/malibu.mp4" type="video/mp4">
+    </video>
+
+    <!-- Overlay -->
+    <div class="hp-hero__overlay"></div>
+
+    <!-- Hero content -->
+    <div class="hp-hero__content">
+      <p class="hp-hero__eyebrow">Expertly vetted · Personally selected</p>
+
+      <h1 class="hp-hero__headline">
+        Retreats that transform how you live
+      </h1>
+
+      <!-- ── SEARCH BAR ─────────────────────────────────────────── -->
+      <div class="hp-search">
+        <div class="hp-search__bar" id="hp-search-bar">
+
+          <!-- Section 1: Interest -->
+          <div class="hp-search__section" id="sec-interest" data-section="interest">
+            <div class="hp-search__label">I'm interested in</div>
+            <input
+              class="hp-search__input"
+              id="input-interest"
+              type="text"
+              placeholder="Yoga, meditation, detox…"
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="hp-search__divider"></div>
+
+          <!-- Section 2: Destination -->
+          <div class="hp-search__section" id="sec-destination" data-section="destination">
+            <div class="hp-search__label">Destination</div>
+            <input
+              class="hp-search__input"
+              id="input-destination"
+              type="text"
+              placeholder="Anywhere"
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="hp-search__divider"></div>
+
+          <!-- Section 3: Dates -->
+          <div class="hp-search__section" id="sec-dates" data-section="dates">
+            <div class="hp-search__label">When</div>
+            <div class="hp-search__value" id="val-dates">Any time</div>
+          </div>
+
+          <!-- Search button -->
+          <div class="hp-search__btn-wrap">
+            <button class="hp-search__btn" id="hp-search-submit">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              Search
+            </button>
+          </div>
+        </div>
+
+        <!-- ── DROPDOWN: Interest ──────────────────────────────── -->
+        <div class="hp-search__dropdown" id="dd-interest">
+          <div class="dd-section-title">Popular categories</div>
+          <div class="dd-chips">
+            <div class="dd-chip" data-value="Yoga">Yoga</div>
+            <div class="dd-chip" data-value="Meditation">Meditation</div>
+            <div class="dd-chip" data-value="Detox">Detox</div>
+            <div class="dd-chip" data-value="Fitness">Fitness</div>
+            <div class="dd-chip" data-value="Wellness">Wellness</div>
+            <div class="dd-chip" data-value="Mindfulness">Mindfulness</div>
+            <div class="dd-chip" data-value="Spiritual">Spiritual</div>
+            <div class="dd-chip" data-value="Adventure">Adventure</div>
+            <div class="dd-chip" data-value="Nature">Nature</div>
+          </div>
+          <div class="dd-divider"></div>
+          <div class="dd-section-title">Browse by type</div>
+          <div class="dd-categories">
+            <div class="dd-category" data-value="Yoga &amp; Movement">
+              <div class="dd-category__icon">🧘</div>
+              <div>
+                <div class="dd-category__name">Yoga &amp; Movement</div>
+                <div class="dd-category__desc">Hatha, vinyasa, yin, sound healing</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Meditation &amp; Mindfulness">
+              <div class="dd-category__icon">🌿</div>
+              <div>
+                <div class="dd-category__name">Meditation &amp; Mindfulness</div>
+                <div class="dd-category__desc">Silent retreats, breathwork, mindfulness</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Detox &amp; Cleanse">
+              <div class="dd-category__icon">✨</div>
+              <div>
+                <div class="dd-category__name">Detox &amp; Cleanse</div>
+                <div class="dd-category__desc">Juice fasts, gut health, digital detox</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Fitness &amp; Active">
+              <div class="dd-category__icon">🏃</div>
+              <div>
+                <div class="dd-category__name">Fitness &amp; Active</div>
+                <div class="dd-category__desc">Hiking, surfing, triathlon, bootcamp</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Mental Wellness">
+              <div class="dd-category__icon">🧠</div>
+              <div>
+                <div class="dd-category__name">Mental Wellness</div>
+                <div class="dd-category__desc">Burnout recovery, anxiety, stress</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Spiritual &amp; Healing">
+              <div class="dd-category__icon">🌸</div>
+              <div>
+                <div class="dd-category__name">Spiritual &amp; Healing</div>
+                <div class="dd-category__desc">Shamanic, energy work, plant medicine</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Creative &amp; Arts">
+              <div class="dd-category__icon">🎨</div>
+              <div>
+                <div class="dd-category__name">Creative &amp; Arts</div>
+                <div class="dd-category__desc">Painting, writing, photography, pottery</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Couples &amp; Relationships">
+              <div class="dd-category__icon">💛</div>
+              <div>
+                <div class="dd-category__name">Couples &amp; Relationships</div>
+                <div class="dd-category__desc">Reconnect, communication, tantra</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DROPDOWN: Destination ──────────────────────────── -->
+        <div class="hp-search__dropdown" id="dd-destination">
+          <div class="dd-dest-top">
+            <div class="dd-dest-search">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--stone); flex-shrink:0">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" placeholder="Where do you want to go?" id="dest-search-input" autocomplete="off">
+            </div>
+          </div>
+          <div class="dd-cols">
+            <div class="dd-cols-left">
+              <div class="dd-section-title">Top destinations</div>
+              <div class="dd-place" data-value="Bali, Indonesia">
+                <div class="dd-place__icon">🌴</div>
+                <div>
+                  <div class="dd-place__name">Bali, Indonesia</div>
+                  <div class="dd-place__count">142 retreats</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Portugal">
+                <div class="dd-place__icon">🌊</div>
+                <div>
+                  <div class="dd-place__name">Portugal</div>
+                  <div class="dd-place__count">96 retreats</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Spain">
+                <div class="dd-place__icon">☀️</div>
+                <div>
+                  <div class="dd-place__name">Spain</div>
+                  <div class="dd-place__count">190 retreats</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Greece">
+                <div class="dd-place__icon">🏛️</div>
+                <div>
+                  <div class="dd-place__name">Greece</div>
+                  <div class="dd-place__count">264 retreats</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="France">
+                <div class="dd-place__icon">🇫🇷</div>
+                <div>
+                  <div class="dd-place__name">France</div>
+                  <div class="dd-place__count">173 retreats</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Morocco">
+                <div class="dd-place__icon">🕌</div>
+                <div>
+                  <div class="dd-place__name">Morocco</div>
+                  <div class="dd-place__count">39 retreats</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="dd-section-title">Explore by region</div>
+              <div class="dd-place" data-value="Europe">
+                <div class="dd-place__icon">🗺️</div>
+                <div>
+                  <div class="dd-place__name">Europe</div>
+                  <div class="dd-place__count">All countries</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Southeast Asia">
+                <div class="dd-place__icon">🌏</div>
+                <div>
+                  <div class="dd-place__name">Southeast Asia</div>
+                  <div class="dd-place__count">Thailand, Bali & more</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Caribbean">
+                <div class="dd-place__icon">🏖️</div>
+                <div>
+                  <div class="dd-place__name">Caribbean</div>
+                  <div class="dd-place__count">61 retreats</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Central America">
+                <div class="dd-place__icon">🦜</div>
+                <div>
+                  <div class="dd-place__name">Central America</div>
+                  <div class="dd-place__count">Costa Rica, Mexico & more</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Middle East">
+                <div class="dd-place__icon">🌅</div>
+                <div>
+                  <div class="dd-place__name">Middle East</div>
+                  <div class="dd-place__count">UAE, Jordan & more</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Anywhere">
+                <div class="dd-place__icon">✈️</div>
+                <div>
+                  <div class="dd-place__name">Surprise me</div>
+                  <div class="dd-place__count">I'm open to anywhere</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DROPDOWN: Dates ──────────────────────────────────── -->
+        <div class="hp-search__dropdown" id="dd-dates">
+          <div class="dd-dates-header">
+            <div class="dd-date-mode is-active" data-mode="flexible">Flexible dates</div>
+            <div class="dd-date-mode" data-mode="fixed">Specific month</div>
+            <div class="dd-date-mode" data-mode="range">Date range</div>
+          </div>
+          <div class="dd-months" id="dd-months-grid">
+            <div class="dd-month-tile" data-value="May 2026">
+              <div class="dd-month-tile__month">May</div>
+              <div class="dd-month-tile__year">2026</div>
+            </div>
+            <div class="dd-month-tile" data-value="June 2026">
+              <div class="dd-month-tile__month">June</div>
+              <div class="dd-month-tile__year">2026</div>
+            </div>
+            <div class="dd-month-tile" data-value="July 2026">
+              <div class="dd-month-tile__month">July</div>
+              <div class="dd-month-tile__year">2026</div>
+            </div>
+            <div class="dd-month-tile" data-value="August 2026">
+              <div class="dd-month-tile__month">August</div>
+              <div class="dd-month-tile__year">2026</div>
+            </div>
+            <div class="dd-month-tile" data-value="September 2026">
+              <div class="dd-month-tile__month">September</div>
+              <div class="dd-month-tile__year">2026</div>
+            </div>
+            <div class="dd-month-tile" data-value="October 2026">
+              <div class="dd-month-tile__month">October</div>
+              <div class="dd-month-tile__year">2026</div>
+            </div>
+            <div class="dd-month-tile" data-value="November 2026">
+              <div class="dd-month-tile__month">November</div>
+              <div class="dd-month-tile__year">2026</div>
+            </div>
+            <div class="dd-month-tile" data-value="December 2026">
+              <div class="dd-month-tile__month">December</div>
+              <div class="dd-month-tile__year">2026</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /.hp-search -->
+
+      <!-- "Wondering where to start?" -->
+      <div class="hp-hero__explore">
+        <button class="hp-hero__explore-btn" id="btn-explore">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+          </svg>
+          Wondering where to start?
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </div>
+
+    </div><!-- /.hp-hero__content -->
+
+    <!-- Scroll hint -->
+    <div class="hp-hero__scroll">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+
+  </section>
+
+  <script>
+    /* ── Nav: transparent → white on scroll ─────────────────────── */
+    const header = document.querySelector('.site-header');
+    function updateHeader() {
+      header.classList.toggle('is-scrolled', window.scrollY > 40);
+    }
+    window.addEventListener('scroll', updateHeader, { passive: true });
+    updateHeader();
+
+    /* ── Search bar interaction ──────────────────────────────────── */
+    const searchBar   = document.getElementById('hp-search-bar');
+    const backdrop    = document.getElementById('hp-backdrop');
+    const sections    = document.querySelectorAll('.hp-search__section');
+    const dropdowns   = document.querySelectorAll('.hp-search__dropdown');
+
+    // State
+    const state = { activeSection: null };
+
+    function openSection(sectionId) {
+      // Close all first
+      closeAll();
+
+      const sec = document.getElementById('sec-' + sectionId);
+      const dd  = document.getElementById('dd-' + sectionId);
+
+      if (!sec || !dd) return;
+
+      sec.classList.add('is-active');
+      dd.classList.add('is-open');
+      searchBar.classList.add('has-active');
+      backdrop.classList.add('is-open');
+      state.activeSection = sectionId;
+
+      // Constrain dropdown height to viewport with 32px bottom gap
+      const ddTop = dd.getBoundingClientRect().top;
+      const maxH  = window.innerHeight - ddTop - 32;
+      dd.style.maxHeight = Math.max(maxH, 200) + 'px';
+
+      // Focus input if present
+      const inp = sec.querySelector('input');
+      if (inp) inp.focus();
+    }
+
+    function closeAll() {
+      sections.forEach(s => s.classList.remove('is-active'));
+      dropdowns.forEach(d => d.classList.remove('is-open'));
+      searchBar.classList.remove('has-active');
+      backdrop.classList.remove('is-open');
+      state.activeSection = null;
+    }
+
+    // Section click handlers
+    sections.forEach(sec => {
+      sec.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = sec.dataset.section;
+        if (state.activeSection === id) {
+          closeAll();
+        } else {
+          openSection(id);
+        }
+      });
+    });
+
+    // Backdrop closes all
+    backdrop.addEventListener('click', closeAll);
+
+    // Prevent dropdown clicks from closing
+    dropdowns.forEach(dd => {
+      dd.addEventListener('click', e => e.stopPropagation());
+    });
+
+    /* ── Interest: chip & category selection ─────────────────────── */
+    document.querySelectorAll('.dd-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.dd-chip').forEach(c => c.classList.remove('is-selected'));
+        chip.classList.add('is-selected');
+        const inp = document.getElementById('input-interest');
+        inp.value = chip.dataset.value;
+        inp.dispatchEvent(new Event('input'));
+        setTimeout(closeAll, 200);
+      });
+    });
+
+    document.querySelectorAll('.dd-category').forEach(cat => {
+      cat.addEventListener('click', () => {
+        document.querySelectorAll('.dd-category').forEach(c => c.classList.remove('is-selected'));
+        cat.classList.add('is-selected');
+        const inp = document.getElementById('input-interest');
+        inp.value = cat.dataset.value;
+        setTimeout(closeAll, 200);
+      });
+    });
+
+    // Interest typeahead: reopen dropdown on typing
+    document.getElementById('input-interest').addEventListener('input', (e) => {
+      if (e.target.value && state.activeSection !== 'interest') {
+        openSection('interest');
+      }
+    });
+    document.getElementById('input-interest').addEventListener('focus', () => {
+      openSection('interest');
+    });
+
+    /* ── Destination: place selection ────────────────────────────── */
+    document.querySelectorAll('.dd-place').forEach(place => {
+      place.addEventListener('click', () => {
+        const inp = document.getElementById('input-destination');
+        inp.value = place.dataset.value;
+        setTimeout(closeAll, 200);
+      });
+    });
+
+    // Destination search input syncs to bar input
+    document.getElementById('dest-search-input').addEventListener('input', (e) => {
+      document.getElementById('input-destination').value = e.target.value;
+    });
+
+    document.getElementById('input-destination').addEventListener('focus', () => {
+      openSection('destination');
+    });
+    document.getElementById('input-destination').addEventListener('input', (e) => {
+      document.getElementById('dest-search-input').value = e.target.value;
+    });
+
+    /* ── Dates: mode tabs ────────────────────────────────────────── */
+    document.querySelectorAll('.dd-date-mode').forEach(mode => {
+      mode.addEventListener('click', () => {
+        document.querySelectorAll('.dd-date-mode').forEach(m => m.classList.remove('is-active'));
+        mode.classList.add('is-active');
+      });
+    });
+
+    /* ── Dates: month tile selection ─────────────────────────────── */
+    document.querySelectorAll('.dd-month-tile').forEach(tile => {
+      tile.addEventListener('click', () => {
+        document.querySelectorAll('.dd-month-tile').forEach(t => t.classList.remove('is-selected'));
+        tile.classList.add('is-selected');
+        document.getElementById('val-dates').textContent = tile.dataset.value;
+        document.getElementById('val-dates').classList.add('has-value');
+        setTimeout(closeAll, 300);
+      });
+    });
+
+    /* ── Search button ───────────────────────────────────────────── */
+    document.getElementById('hp-search-submit').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const interest    = document.getElementById('input-interest').value;
+      const destination = document.getElementById('input-destination').value;
+      const dates       = document.getElementById('val-dates').textContent;
+      // For now navigate to index.html — wire to listing page later
+      window.location.href = 'index.html';
+    });
+
+    /* ── "Wondering where to start?" ────────────────────────────── */
+    document.getElementById('btn-explore').addEventListener('click', () => {
+      openSection('interest');
+    });
+
+  </script>
+
+</body>
+</html>
