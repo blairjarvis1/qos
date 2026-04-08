@@ -322,12 +322,32 @@ function initGuestType() {
       document.querySelectorAll('.guest-type-card[data-type]').forEach(c => {
         c.classList.toggle('is-active', c.dataset.type === state.guestType);
       });
-      state.guestCount = state.guestType === 'couple' ? 2 : 1;
+      if (state.guestType === 'couple') {
+        state.guestCount = 2;
+      } else if (state.guestType === 'group') {
+        const sel = document.getElementById('group-guest-count');
+        state.guestCount = sel ? parseInt(sel.value) : 3;
+      } else {
+        state.guestCount = 1;
+      }
       const val = document.getElementById('guest-count');
       if (val) val.textContent = state.guestCount;
       updateSidebar();
     });
   });
+
+  // Group dropdown — activate card and update count when selection changes
+  const groupSelect = document.getElementById('group-guest-count');
+  if (groupSelect) {
+    groupSelect.addEventListener('change', () => {
+      state.guestType = 'group';
+      document.querySelectorAll('.guest-type-card[data-type]').forEach(c => {
+        c.classList.toggle('is-active', c.dataset.type === 'group');
+      });
+      state.guestCount = parseInt(groupSelect.value);
+      updateSidebar();
+    });
+  }
 }
 
 /* --- View Toggle (Calendar / List) -------------------------- */

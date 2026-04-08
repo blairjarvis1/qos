@@ -910,8 +910,8 @@
           </div>
 
           <div style="margin-top: var(--s7);">
-            <h4 style="font-family: var(--sans); font-size: var(--t-base); font-weight: 600; margin-bottom: var(--s4);">Are you travelling alone or with someone?</h4>
-            <div class="guest-type-grid">
+            <h4 style="font-family: var(--sans); font-size: var(--t-base); font-weight: 600; margin-bottom: var(--s4);">Are you travelling alone, with someone or in a group?</h4>
+            <div class="guest-type-grid" style="grid-template-columns: 1fr 1fr 1fr;">
               <div class="guest-type-card is-active" data-type="solo">
                 <div class="guest-type-card__title">Solo traveller</div>
                 <div class="guest-type-card__desc">1 guest — private or shared room</div>
@@ -919,6 +919,20 @@
               <div class="guest-type-card" data-type="couple">
                 <div class="guest-type-card__title">Two guests</div>
                 <div class="guest-type-card__desc">2 guests — prices apply per person</div>
+              </div>
+              <div class="guest-type-card" data-type="group">
+                <div class="guest-type-card__title">A group</div>
+                <div style="display: flex; align-items: center; gap: var(--s3); margin-top: var(--s2);">
+                  <div class="select-wrap" style="flex-shrink: 0; width: 130px;">
+                    <select class="form-select" id="group-guest-count" style="padding: var(--s3) var(--s4);">
+                      <option value="3">3 guests</option>
+                      <option value="4">4 guests</option>
+                      <option value="5">5 guests</option>
+                      <option value="6">6 guests</option>
+                    </select>
+                  </div>
+                  <span class="guest-type-card__desc" style="margin-top: 0;">prices apply per person</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1160,6 +1174,49 @@
             <span>All personal information is handled in accordance with our Privacy Policy and is shared only with the retreat organiser to facilitate your stay.</span>
           </div>
 
+          <!-- Login to your account -->
+          <div class="form-section" style="margin-bottom: var(--s5);">
+            <button class="accordion-trigger" style="padding: var(--s4) var(--s6); background: var(--parchment); border: none; border-bottom: 1px solid var(--border); font-family: var(--sans); font-size: var(--t-base); font-weight: 600; color: var(--ink);">
+              <span>Login to your account <span style="font-weight: 400; color: var(--stone); font-size: var(--t-sm);">(optional)</span></span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="accordion-body" style="padding: var(--s6);">
+              <p style="font-size: var(--t-sm); color: var(--stone); line-height: 1.6; margin-bottom: var(--s5);">If you already have an account, login here to use your saved guest details.</p>
+              <div class="form-group">
+                <label class="form-label" for="login-email-enq">Username</label>
+                <input class="form-input" type="email" id="login-email-enq" placeholder="e.g. name@email.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="login-password-enq">Password</label>
+                <input class="form-input" type="password" id="login-password-enq" placeholder="Minimum 8 characters">
+              </div>
+              <p style="font-size: var(--t-sm); margin-bottom: var(--s6);"><a href="#" style="color: var(--sage);">Forgot your password? Reset here</a></p>
+              <button class="btn btn--primary" type="button">LOGIN</button>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section__header">
+              <h4>Create an account <span style="font-weight: 400; color: var(--stone); font-size: var(--t-sm);">(optional)</span></h4>
+            </div>
+            <div class="form-section__body">
+              <p style="font-size: var(--t-sm); color: var(--stone); line-height: 1.6;">Save your details for future bookings, access your retreat portal, and manage your booking from one place.</p>
+              <label class="check-item" style="padding: 0;">
+                <input type="checkbox" id="create-account" data-reveals="password-field">
+                <div class="check-item__text">
+                  <strong>Create a Queen of Retreats account</strong>
+                  <span>Your email address below will be your username</span>
+                </div>
+              </label>
+              <div id="password-field" class="hidden">
+                <div class="form-group">
+                  <label class="form-label" for="password">Choose a password</label>
+                  <input class="form-input" type="password" id="password" placeholder="Minimum 8 characters">
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div class="form-section">
             <div class="form-section__header">
               <h4>Lead guest</h4>
@@ -1199,28 +1256,6 @@
                       <option value="other">Other</option>
                     </select>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="form-section">
-            <div class="form-section__header">
-              <h4>Create an account <span style="font-weight: 400; color: var(--stone); font-size: var(--t-sm);">(optional)</span></h4>
-            </div>
-            <div class="form-section__body">
-              <p style="font-size: var(--t-sm); color: var(--stone); line-height: 1.6;">Save your details for future bookings, access your retreat portal, and manage your booking from one place.</p>
-              <label class="check-item" style="padding: 0;">
-                <input type="checkbox" id="create-account" data-reveals="password-field">
-                <div class="check-item__text">
-                  <strong>Create a Queen of Retreats account</strong>
-                  <span>Your email address above will be your username</span>
-                </div>
-              </label>
-              <div id="password-field" class="hidden">
-                <div class="form-group">
-                  <label class="form-label" for="password">Choose a password</label>
-                  <input class="form-input" type="password" id="password" placeholder="Minimum 8 characters">
                 </div>
               </div>
             </div>

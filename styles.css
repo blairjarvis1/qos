@@ -540,6 +540,12 @@ h5 { font-size: var(--t-md); }
 }
 .progress-step.is-done .progress-step__label { color: var(--sage); }
 .progress-step.is-active .progress-step__label { color: var(--ink); }
+.progress-step.is-done { cursor: pointer; }
+.progress-step.is-done:hover .progress-step__dot {
+  background: var(--sage-mid);
+  border-color: var(--sage-mid);
+}
+.progress-step.is-done:hover .progress-step__label { color: var(--sage-mid); }
 .progress-step__line {
   flex: 1;
   height: 1px;
