@@ -613,6 +613,326 @@
     }
     .hp-backdrop.is-open { display: block; }
 
+
+    /* ── GUIDED SEARCH OVERLAY ──────────────────────────────────── */
+    .hp-hero.gs-active .hp-hero__content {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .gs-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--s9);
+    }
+
+    @keyframes gs-enter {
+      0%   { opacity: 0; transform: translateY(16px) scale(0.97); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .gs-panel {
+      background: var(--white);
+      border-radius: 28px;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.28), 0 4px 16px rgba(0,0,0,0.12);
+      width: 100%;
+      max-width: 580px;
+      max-height: 82vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: gs-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .gs-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--s6) var(--s7) var(--s4);
+      flex-shrink: 0;
+    }
+
+    .gs-progress {
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
+      font-family: var(--ui);
+      font-size: var(--t-xs);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--stone);
+      text-transform: uppercase;
+    }
+
+    .gs-progress__num {
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .gs-close {
+      width: 32px; height: 32px;
+      border: 1px solid var(--border);
+      background: var(--cloud);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      color: var(--stone);
+      transition: all var(--dur-fast);
+      line-height: 1;
+    }
+    .gs-close:hover { background: var(--parchment); color: var(--ink); border-color: var(--mist); }
+
+    .gs-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 var(--s7) var(--s6);
+      scrollbar-width: thin;
+      scrollbar-color: var(--mist) transparent;
+    }
+    .gs-body::-webkit-scrollbar { width: 4px; }
+    .gs-body::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 2px; }
+
+    .gs-question-num {
+      font-family: var(--serif);
+      font-size: 48px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: var(--s3);
+      opacity: 0.15;
+    }
+
+    .gs-question {
+      font-family: var(--serif);
+      font-size: clamp(20px, 2.2vw, 28px);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: var(--s3);
+      letter-spacing: -0.01em;
+    }
+
+    .gs-subtext {
+      font-family: var(--sans);
+      font-size: var(--t-sm);
+      color: var(--stone);
+      line-height: 1.6;
+      margin-bottom: var(--s5);
+    }
+
+    .gs-label {
+      font-family: var(--ui);
+      font-size: var(--t-xs);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: var(--s3);
+    }
+
+    /* List options (single/multi select) */
+    .gs-options {
+      display: flex;
+      flex-direction: column;
+      gap: var(--s2);
+    }
+
+    .gs-option {
+      display: flex;
+      align-items: center;
+      gap: var(--s4);
+      padding: var(--s3) var(--s5);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      cursor: pointer;
+      transition: all var(--dur-fast);
+      background: var(--white);
+      user-select: none;
+    }
+    .gs-option:hover { border-color: var(--mist); background: var(--parchment); }
+    .gs-option.is-selected { border-color: var(--sage); background: var(--sage-pale); }
+
+    .gs-option__emoji {
+      font-size: 22px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: var(--cloud);
+      border-radius: var(--r-md);
+    }
+    .gs-option.is-selected .gs-option__emoji { background: rgba(255,255,255,0.8); }
+
+    .gs-option__text { flex: 1; }
+    .gs-option__label {
+      font-family: var(--sans);
+      font-size: var(--t-sm);
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.2;
+    }
+    .gs-option__desc {
+      font-size: var(--t-xs);
+      color: var(--stone);
+      margin-top: 1px;
+    }
+
+    .gs-option__check {
+      width: 20px; height: 20px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--dur-fast);
+      font-size: 11px;
+      color: transparent;
+    }
+    .gs-option.is-selected .gs-option__check {
+      background: var(--sage);
+      border-color: var(--sage);
+      color: var(--white);
+    }
+
+    /* Chip options (multi-select feelings) */
+    .gs-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s2);
+    }
+
+    .gs-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px var(--s4);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-pill);
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: var(--t-sm);
+      font-weight: 500;
+      color: var(--ink);
+      background: var(--white);
+      transition: all var(--dur-fast);
+      user-select: none;
+    }
+    .gs-chip:hover { border-color: var(--mist); background: var(--parchment); }
+    .gs-chip.is-selected { border-color: var(--sage); background: var(--sage-pale); color: var(--sage); }
+
+    .gs-chip__check {
+      width: 14px; height: 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px;
+      color: transparent;
+      flex-shrink: 0;
+      transition: all var(--dur-fast);
+    }
+    .gs-chip.is-selected .gs-chip__check {
+      background: var(--sage);
+      border-color: var(--sage);
+      color: var(--white);
+    }
+
+    /* Country input (step 7) */
+    .gs-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: var(--s3) var(--s5);
+      background: var(--white);
+      transition: border-color var(--dur-fast);
+    }
+    .gs-input-wrap:focus-within { border-color: var(--sage); }
+    .gs-input-wrap svg { color: var(--stone); flex-shrink: 0; }
+    .gs-country-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: var(--sans);
+      font-size: var(--t-md);
+      color: var(--ink);
+      background: transparent;
+    }
+    .gs-country-input::placeholder { color: var(--mist); }
+
+    /* Reset chips button */
+    .gs-reset {
+      font-family: var(--ui);
+      font-size: var(--t-xs);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--stone);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+      margin-bottom: var(--s3);
+      display: block;
+    }
+    .gs-reset:hover { color: var(--ink); }
+
+    /* Footer */
+    .gs-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--s4) var(--s7) var(--s6);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+      gap: var(--s4);
+    }
+
+    .gs-hint {
+      font-family: var(--ui);
+      font-size: var(--t-xs);
+      color: var(--mist);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .gs-continue {
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      background: var(--sage);
+      color: var(--white);
+      border: none;
+      border-radius: var(--r-pill);
+      padding: var(--s3) var(--s6);
+      font-family: var(--ui);
+      font-size: var(--t-sm);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background var(--dur-fast), transform var(--dur-fast), opacity var(--dur-fast);
+    }
+    .gs-continue:hover { background: #4e6349; transform: scale(1.02); }
+    .gs-continue:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+    /* Step transition */
+    .gs-body.is-exiting { animation: gs-exit 0.2s ease forwards; }
+    .gs-body.is-entering { animation: gs-enter-step 0.3s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    @keyframes gs-exit { to { opacity: 0; transform: translateX(-20px); } }
+    @keyframes gs-enter-step { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
   </style>
 </head>
 <body>
@@ -659,7 +979,7 @@
       <p class="hp-hero__eyebrow">Expertly vetted · Personally selected</p>
 
       <h1 class="hp-hero__headline">
-        Retreats that transform how you live your life
+        Retreats to transform how you live your life
       </h1>
 
       <!-- ── SEARCH BAR ─────────────────────────────────────────── -->
@@ -983,6 +1303,24 @@
       </svg>
     </div>
 
+    <!-- ── GUIDED SEARCH OVERLAY ──────────────────────────────────── -->
+    <div class="gs-overlay" id="gs-overlay" style="display:none">
+      <div class="gs-panel" id="gs-panel">
+        <div class="gs-header">
+          <div class="gs-progress">
+            <span class="gs-progress__num" id="gs-step-num">1</span>
+            <span id="gs-step-total">&nbsp;/ 6</span>
+          </div>
+          <button class="gs-close" id="gs-close" aria-label="Close">&#x2715;</button>
+        </div>
+        <div class="gs-body" id="gs-body"></div>
+        <div class="gs-footer">
+          <div class="gs-hint">Press Enter&nbsp;&#x23CE;</div>
+          <button class="gs-continue" id="gs-continue" disabled>CONTINUE &nbsp;→</button>
+        </div>
+      </div>
+    </div>
+
   </section>
 
   <script>
@@ -1254,9 +1592,258 @@
       window.location.href = 'index.html';
     });
 
-    /* ── "Wondering where to start?" ────────────────────────────── */
-    document.getElementById('btn-explore').addEventListener('click', () => {
-      // dummy link — no action
+    /* ── GUIDED SEARCH FLOW ─────────────────────────────────────── */
+    const GS_STEPS = [
+      {
+        num: '1', total: '/ 6',
+        heading: '1.',
+        question: 'What are you interested in for a retreat?',
+        subtext: 'Tell us the kind of retreat you\'re looking for and what kind of experience you hope for, by answering some simple questions.',
+        label: 'CHOOSE YOUR TYPE OF RETREAT FIRST',
+        type: 'single',
+        options: [
+          { emoji: '🤷', label: 'I don\'t know yet',            desc: 'We can suggest retreats based on further questions' },
+          { emoji: '🧘', label: 'Yoga & Meditation',            desc: 'Meditation, silence, breathwork' },
+          { emoji: '🏃', label: 'Fitness & Adventure',          desc: 'Hiking, surfing, cycling, running' },
+          { emoji: '🌸', label: 'Personal Growth & Coaching',   desc: 'Life coaching, leadership, mentoring' },
+          { emoji: '🎨', label: 'Creative & Cultural',          desc: 'Writing, art, music, photography, acting' },
+          { emoji: '💛', label: 'Health & Healing',             desc: 'Detox, ayurveda, nutrition, hormone health' },
+          { emoji: '🧠', label: 'Emotional & Mental Support',   desc: 'Anxiety, depression, trauma, grief' },
+          { emoji: '🌿', label: 'Nature & Outdoors',            desc: 'Rewilding, forest bathing, safari, wildlife' },
+        ]
+      },
+      {
+        num: '2', total: '/ 6',
+        heading: '2.',
+        question: 'Do you know the feeling you want?',
+        subtext: 'We\'ve suggested a number of feelings you might want from a retreat. We\'ll take this into consideration when making any recommendations.',
+        label: 'CHOOSE THE TYPES OF FEELING YOU\'RE AFTER — YOU CAN CHOOSE AS MANY AS YOU LIKE.',
+        type: 'chips',
+        options: [
+          { label: 'Meditate' }, { label: 'Recover' }, { label: 'Let go' },
+          { label: 'Connect' }, { label: 'Find meaning' }, { label: 'Heal' },
+          { label: 'Feel better' }, { label: 'Build confidence' }, { label: 'Escape' },
+          { label: 'Cleanse' }, { label: 'Deep dive' }, { label: 'Indulge' },
+          { label: 'Balance' }, { label: 'Slow down' }, { label: 'I don\'t know' },
+        ]
+      },
+      {
+        num: '3', total: '/ 6',
+        heading: '3.',
+        question: 'Do you know the setting you might like?',
+        subtext: 'Tell us the type of location you would like to go on your retreat.',
+        label: 'CHOOSE THE TYPES OF LOCATION YOU\'RE AFTER.',
+        type: 'single',
+        options: [
+          { emoji: '🏞️', label: 'Lakes & Rivers',      desc: 'Peaceful waterside settings' },
+          { emoji: '🏖️', label: 'Beach',               desc: 'Coastal & seaside escapes' },
+          { emoji: '☀️', label: 'Winter Sun',           desc: 'Warm destinations in colder months' },
+          { emoji: '🌲', label: 'Forest & Woodland',   desc: 'Immersive nature & tree canopy' },
+          { emoji: '⛰️', label: 'Mountains',            desc: 'High altitude & alpine settings' },
+          { emoji: '🤷', label: 'I don\'t know',       desc: 'Show me everything' },
+        ]
+      },
+      {
+        num: '4', total: '/ 6',
+        heading: '4.',
+        question: 'Do you know how far you want to travel?',
+        subtext: 'Tell us how far you\'re willing to travel and we can suggest a range of options.',
+        label: 'CHOOSE THE RANGE YOU\'RE WILLING TO TRAVEL.',
+        type: 'single',
+        options: [
+          { emoji: '🌍', label: 'Worldwide',        desc: 'I\'ll go anywhere' },
+          { emoji: '🗺️', label: 'Same continent',   desc: 'Keep it within my region' },
+          { emoji: '🏠', label: 'Same country',     desc: 'Stay close to home' },
+        ]
+      },
+      {
+        num: '5', total: '/ 6',
+        heading: '5.',
+        question: 'When do you want to go?',
+        subtext: 'Let us know how fixed your dates are and we\'ll tailor our recommendations accordingly.',
+        label: 'HOW FLEXIBLE ARE YOUR DATES?',
+        type: 'single',
+        options: [
+          { emoji: '📅', label: 'Exact dates',         desc: 'I know exactly when I want to go' },
+          { emoji: '🗓️', label: 'I have a rough idea', desc: 'A particular month or season in mind' },
+          { emoji: '🤷', label: 'I don\'t know yet',   desc: 'Completely open — surprise me' },
+        ]
+      },
+      {
+        num: '6', total: '/ 6',
+        heading: '6.',
+        question: 'How many people are you travelling with?',
+        subtext: 'Let us know your group size so we can match you with the right retreat options.',
+        label: 'CHOOSE YOUR GROUP SIZE.',
+        type: 'single',
+        options: [
+          { emoji: '🧘', label: 'Just me',            desc: 'Solo retreat' },
+          { emoji: '👫', label: 'Two of us',           desc: 'Couple or friends' },
+          { emoji: '👨‍👩‍👧', label: 'Small group',       desc: '3 – 5 people' },
+          { emoji: '👥', label: 'Larger group',        desc: '6 or more' },
+        ]
+      },
+      {
+        num: 'A little about you.', total: '',
+        heading: '6.',
+        question: 'Your location.',
+        subtext: 'We just need to know where you currently live to get the best results.',
+        label: 'TYPE OR CHOOSE A COUNTRY FROM THE MENU BELOW.',
+        type: 'country',
+        options: []
+      },
+    ];
+
+    const gsState = { step: 0, selections: Array(GS_STEPS.length).fill(null).map(() => []) };
+
+    function gsOpen() {
+      const overlay = document.getElementById('gs-overlay');
+      overlay.style.display = 'flex';
+      hero.classList.add('search-active', 'gs-active');
+      gsState.step = 0;
+      gsRender();
+    }
+
+    function gsClose() {
+      const overlay = document.getElementById('gs-overlay');
+      overlay.style.display = 'none';
+      hero.classList.remove('search-active', 'gs-active');
+    }
+
+    function gsRender() {
+      const step     = GS_STEPS[gsState.step];
+      const numEl    = document.getElementById('gs-step-num');
+      const totalEl  = document.getElementById('gs-step-total');
+      const continueBtn = document.getElementById('gs-continue');
+
+      numEl.textContent   = step.num;
+      totalEl.textContent = step.total ? '\u00a0' + step.total : '';
+
+      // Update continue button label
+      continueBtn.textContent = gsState.step === GS_STEPS.length - 1
+        ? 'FIND RETREATS  →'
+        : 'CONTINUE  →';
+
+      // Render body
+      const body = document.getElementById('gs-body');
+      let html = '';
+
+      html += `<div class="gs-question-num">${step.heading}</div>`;
+      html += `<div class="gs-question">${step.question}</div>`;
+      html += `<div class="gs-subtext">${step.subtext}</div>`;
+      html += `<div class="gs-label">${step.label}</div>`;
+
+      const sel = gsState.selections[gsState.step];
+
+      if (step.type === 'chips') {
+        html += `<button class="gs-reset" id="gs-reset">Reset</button>`;
+        html += `<div class="gs-chips">`;
+        step.options.forEach((opt, i) => {
+          const selected = sel.includes(i) ? ' is-selected' : '';
+          html += `<div class="gs-chip${selected}" data-index="${i}">
+            <div class="gs-chip__check">✓</div>
+            ${opt.label}
+          </div>`;
+        });
+        html += `</div>`;
+      } else if (step.type === 'country') {
+        html += `<div class="gs-input-wrap">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <input class="gs-country-input" id="gs-country-input" type="text" placeholder="Type your country…" autocomplete="country-name" value="${sel[0] || ''}">
+        </div>`;
+      } else {
+        html += `<div class="gs-options">`;
+        step.options.forEach((opt, i) => {
+          const selected = sel.includes(i) ? ' is-selected' : '';
+          html += `<div class="gs-option${selected}" data-index="${i}">
+            <div class="gs-option__emoji">${opt.emoji}</div>
+            <div class="gs-option__text">
+              <div class="gs-option__label">${opt.label}</div>
+              ${opt.desc ? `<div class="gs-option__desc">${opt.desc}</div>` : ''}
+            </div>
+            <div class="gs-option__check">✓</div>
+          </div>`;
+        });
+        html += `</div>`;
+      }
+
+      body.innerHTML = html;
+      body.scrollTop = 0;
+      gsUpdateContinue();
+
+      // Bind interactions
+      if (step.type === 'chips') {
+        body.querySelectorAll('.gs-chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            const idx = parseInt(chip.dataset.index);
+            const s = gsState.selections[gsState.step];
+            const pos = s.indexOf(idx);
+            if (pos === -1) s.push(idx); else s.splice(pos, 1);
+            gsRender();
+          });
+        });
+        const resetBtn = body.querySelector('#gs-reset');
+        if (resetBtn) resetBtn.addEventListener('click', () => {
+          gsState.selections[gsState.step] = [];
+          gsRender();
+        });
+      } else if (step.type === 'country') {
+        const input = document.getElementById('gs-country-input');
+        input.focus();
+        input.addEventListener('input', () => {
+          gsState.selections[gsState.step] = input.value.trim() ? [input.value.trim()] : [];
+          gsUpdateContinue();
+        });
+      } else {
+        body.querySelectorAll('.gs-option').forEach(opt => {
+          opt.addEventListener('click', () => {
+            gsState.selections[gsState.step] = [parseInt(opt.dataset.index)];
+            gsRender();
+          });
+        });
+      }
+    }
+
+    function gsUpdateContinue() {
+      const btn = document.getElementById('gs-continue');
+      const sel = gsState.selections[gsState.step];
+      btn.disabled = sel.length === 0;
+    }
+
+    function gsAdvance() {
+      const btn = document.getElementById('gs-continue');
+      if (btn.disabled) return;
+      if (gsState.step < GS_STEPS.length - 1) {
+        gsState.step++;
+        const body = document.getElementById('gs-body');
+        body.classList.add('is-exiting');
+        setTimeout(() => {
+          body.classList.remove('is-exiting');
+          gsRender();
+          body.classList.add('is-entering');
+          setTimeout(() => body.classList.remove('is-entering'), 300);
+        }, 200);
+      } else {
+        // Final step — navigate to results
+        window.location.href = 'index.html';
+      }
+    }
+
+    // Trigger
+    document.getElementById('btn-explore').addEventListener('click', gsOpen);
+    document.getElementById('gs-close').addEventListener('click', gsClose);
+    document.getElementById('gs-continue').addEventListener('click', gsAdvance);
+
+    // Keyboard: Enter to advance
+    document.addEventListener('keydown', (e) => {
+      const overlay = document.getElementById('gs-overlay');
+      if (overlay.style.display !== 'none' && e.key === 'Enter') {
+        e.preventDefault();
+        gsAdvance();
+      }
+      if (overlay.style.display !== 'none' && e.key === 'Escape') {
+        gsClose();
+      }
     });
 
   </script>
