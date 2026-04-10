@@ -3,159 +3,1161 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elevation Barn - Bali — Queen of Retreats</title>
-  <!-- Adobe Fonts: replace with your project embed URL -->
-  <!-- <link rel="stylesheet" href="https://use.typekit.net/XXXXXXX.css"> -->
+  <title>Queen of Retreats — Find Your Perfect Retreat</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    /* Page-specific overrides */
-    .gallery-thumbs {
+
+    /* ── Reset & base ───────────────────────────────────────────── */
+    html, body { height: 100%; overflow-x: hidden; }
+    body { background: var(--parchment); }
+
+    /* ── HERO ───────────────────────────────────────────────────── */
+    .hp-hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
       display: flex;
-      gap: var(--s2);
-      margin-top: var(--s9);
-      max-width: var(--max-content);
-      margin-left: auto;
-      margin-right: auto;
-      padding: 0 var(--s7);
-    }
-    .gallery-thumb {
-      height: 80px;
-      flex: 1;
-      object-fit: cover;
-      border-radius: var(--r-sm);
-      cursor: pointer;
-      opacity: 0.75;
-      transition: opacity var(--dur-fast);
-    }
-    .gallery-thumb:hover { opacity: 1; }
-    .section { padding: var(--s8) 0; }
-    .section + .section { border-top: 1px solid var(--border); }
-    .highlight-stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: var(--s5);
-      padding: var(--s7) 0;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      margin: var(--s7) 0;
-    }
-    .highlight-stat {}
-    .highlight-stat__value {
-      font-family: var(--serif);
-      font-size: var(--t-2xl);
-      color: var(--ink);
-      margin-bottom: var(--s1);
-    }
-    .highlight-stat__label { font-size: var(--t-sm); color: var(--stone); }
-    .programme-day {
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: var(--s5);
-      padding: var(--s5) 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .programme-day:last-child { border-bottom: none; }
-    .programme-day__label { font-size: var(--t-sm); font-weight: 600; color: var(--stone); }
-    .programme-day__content {}
-    .programme-day__title { font-weight: 500; margin-bottom: var(--s1); color: var(--ink); }
-    .programme-day__desc { font-size: var(--t-sm); color: var(--stone); }
-    .room-preview-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--s4);
-    }
-    .room-preview-card { border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--border); }
-    .room-preview-card__img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      background: var(--sand-mid);
-    }
-    .room-preview-card__body { padding: var(--s5); }
-    .room-preview-card__name { font-family: var(--serif); font-size: var(--t-lg); color: var(--ink); margin-bottom: var(--s1); }
-    .room-preview-card__detail { font-size: var(--t-sm); color: var(--stone); margin-bottom: var(--s3); }
-    .room-preview-card__price { font-size: var(--t-base); font-weight: 600; color: var(--charcoal); }
-    .aggregate-rating {
-      display: flex;
-      align-items: center;
-      gap: var(--s6);
-      margin-bottom: var(--s7);
-    }
-    .agg-score {
-      font-family: var(--serif);
-      font-size: 56px;
-      font-weight: 300;
-      color: var(--ink);
-      line-height: 1;
-    }
-    .agg-details {}
-    .agg-stars { color: var(--sage); font-size: 20px; letter-spacing: 2px; }
-    .agg-count { font-size: var(--t-sm); color: var(--stone); margin-top: var(--s2); }
-    .map-placeholder {
-      width: 100%;
-      height: 300px;
-      background: var(--sand-mid);
-      border-radius: var(--r-lg);
-      display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: var(--stone);
-      font-size: var(--t-sm);
-      border: 1px solid var(--border);
-      margin-top: var(--s5);
+      overflow: hidden;
     }
-    .widget-dates-scroll {
-      display: flex;
-      gap: var(--s2);
-      overflow-x: auto;
-      padding-bottom: var(--s2);
-      scrollbar-width: none;
+
+    /* Video background */
+    .hp-hero__video {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transition: filter 0.6s ease;
     }
-    .widget-dates-scroll::-webkit-scrollbar { display: none; }
-    .widget-date-pill.is-soldout { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
-    .widget-spaces {
-      font-size: var(--t-sm);
-      color: var(--warning);
-      font-weight: 500;
+    .hp-hero.search-active .hp-hero__video {
+      filter: blur(9px) brightness(0.65);
     }
-    .footer {
-      border-top: 1px solid var(--border);
-      background: var(--white);
-      padding: var(--s7) 0;
+    .hp-hero.gs-active .hp-hero__video {
+      filter: blur(14px) brightness(0.38);
+      transition: filter 1.2s ease;
     }
-    .footer__inner {
-      max-width: var(--max-content);
-      margin: 0 auto;
+
+    /* Dark overlay */
+    .hp-hero__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(10, 12, 10, 0.30) 0%,
+        rgba(10, 12, 10, 0.45) 50%,
+        rgba(10, 12, 10, 0.60) 100%
+      );
+      transition: background 0.6s ease;
+    }
+    .hp-hero.search-active .hp-hero__overlay {
+      background: rgba(10, 12, 10, 0.68);
+    }
+    .hp-hero.gs-active .hp-hero__overlay {
+      background: rgba(10, 12, 10, 0.85);
+      transition: background 1.2s ease;
+    }
+
+    /* Hero content */
+    .hp-hero__content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, calc(-50% - 12px));
+      z-index: 2;
+      text-align: center;
       padding: 0 var(--s7);
+      width: 100%;
+      max-width: 100%;
+    }
+
+    .hp-hero__eyebrow {
+      font-family: var(--ui);
+      font-size: var(--t-xs);
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: var(--s5);
+    }
+
+    .hp-hero__headline {
+      font-family: var(--serif);
+      font-size: clamp(22px, 3.5vw, 53px);
+      font-weight: 400;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      margin-bottom: var(--s8);
+      white-space: nowrap;
+      text-align: center;
+    }
+    .hp-hero__headline em {
+      font-style: italic;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* ── SEARCH BAR ─────────────────────────────────────────────── */
+    .hp-search {
+      width: 100%;
+      max-width: 860px;
+      margin: 0 auto var(--s6);
+      position: relative;
+    }
+
+    /* The pill container */
+    .hp-search__bar {
+      display: flex;
+      align-items: stretch;
+      background: var(--white);
+      border-radius: var(--r-pill);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.10);
+      overflow: visible;
+      position: relative;
+      height: 66px;
+    }
+
+    /* Individual section */
+    .hp-search__section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 0 24px;
+      cursor: pointer;
+      border-radius: var(--r-pill);
+      transition: background var(--dur-fast);
+      position: relative;
+      min-width: 0;
+    }
+    .hp-search__section:hover {
+      background: rgba(28,28,26,0.05);
+    }
+    .hp-search__section.is-active {
+      background: var(--white);
+      box-shadow: 0 2px 20px rgba(28,28,26,0.14);
+      z-index: 3;
+    }
+    /* Suppress hover when another is active */
+    .hp-search__bar.has-active .hp-search__section:not(.is-active):hover {
+      background: rgba(28,28,26,0.04);
+    }
+
+    /* Dividers between sections */
+    .hp-search__divider {
+      width: 1px;
+      background: var(--border);
+      align-self: stretch;
+      margin: 12px 0;
+      flex-shrink: 0;
+      transition: opacity var(--dur-fast);
+    }
+    /* Hide dividers adjacent to active section, or on pill hover */
+    .hp-search__section.is-active + .hp-search__divider,
+    .hp-search__divider:has(+ .hp-search__section.is-active),
+    .hp-search__bar:hover .hp-search__divider {
+      opacity: 0;
+    }
+
+    .hp-search__label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      margin-bottom: 2px;
+      white-space: nowrap;
+    }
+    .hp-search__value {
+      font-size: var(--t-sm);
+      color: var(--stone);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .hp-search__value.has-value { color: var(--ink); }
+    .hp-search__input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: var(--t-sm);
+      color: var(--ink);
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      caret-color: var(--sage);
+    }
+    .hp-search__input::placeholder { color: var(--stone); }
+
+    /* Search button */
+    .hp-search__btn-wrap {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      padding-right: 8px;
+      flex-shrink: 0;
     }
-    .footer__logo { font-family: var(--serif); font-size: 18px; color: var(--ink); }
-    .footer__links { display: flex; gap: var(--s6); }
-    .footer__links a { font-size: var(--t-sm); color: var(--stone); }
-    .footer__links a:hover { color: var(--ink); }
-    .breadcrumb { display: none; }
-    .breadcrumb__inner {
-      max-width: var(--max-content);
-      margin: 0 auto;
-      padding: 0 var(--s7);
+    .hp-search__btn {
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      background: var(--sage);
+      color: var(--white);
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 0 var(--s6) 0 var(--s5);
+      height: 50px;
+      font-family: var(--ui);
+      font-size: var(--t-sm);
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      transition: background var(--dur-fast), transform var(--dur-fast);
+      white-space: nowrap;
+    }
+    .hp-search__btn:hover { background: #4e6349; transform: scale(1.02); }
+    .hp-search__btn svg { flex-shrink: 0; }
+
+    /* ── DROPDOWNS ──────────────────────────────────────────────── */
+    @keyframes dd-enter {
+      0%   { opacity: 0; transform: translateY(-10px) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0)     scale(1); }
+    }
+    .hp-search__dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 0;
+      background: var(--white);
+      border-radius: 24px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08);
+      z-index: 200;
+      overflow-y: auto;
+      text-align: left;
+      height: 400px;
+    }
+    .hp-search__dropdown.is-open {
+      display: block;
+      animation: dd-enter 0.7s cubic-bezier(0.34, 1.28, 0.64, 1) both;
+    }
+
+    /* Interest dropdown */
+    #dd-interest {
+      width: 560px;
+      left: 0;
+    }
+    .dd-section-title {
+      font-family: var(--ui);
+      font-size: var(--t-xs);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--stone);
+      padding: var(--s2) var(--s6) var(--s1);
+      flex-shrink: 0;
+    }
+    #dd-interest .dd-section-title:first-child {
+      padding-top: 18px;
+      padding-bottom: 8px;
+    }
+    .dd-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0 var(--s6) var(--s3);
+    }
+    .dd-chip {
+      font-size: var(--t-sm);
+      color: var(--charcoal);
+      background: var(--parchment);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-pill);
+      padding: 4px var(--s3);
+      cursor: pointer;
+      transition: all var(--dur-fast);
+      white-space: nowrap;
+    }
+    .dd-chip:hover, .dd-chip.is-selected {
+      background: var(--sage-pale);
+      border-color: var(--sage-mid);
+      color: var(--sage);
+    }
+    .dd-divider { height: 1px; background: var(--border); margin: 0 var(--s6); }
+    .dd-categories {
+      max-height: 240px;
+      overflow-y: auto;
+      padding: var(--s1) 0 var(--s2);
+    }
+    .dd-categories::-webkit-scrollbar { width: 4px; }
+    .dd-categories::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 2px; }
+    .dd-category {
       display: flex;
       align-items: center;
       gap: var(--s3);
-      font-size: var(--t-sm);
-      color: var(--stone);
+      padding: 7px var(--s6);
+      cursor: pointer;
+      transition: background var(--dur-fast);
     }
-    .breadcrumb__inner a { color: var(--stone); }
-    .breadcrumb__inner a:hover { color: var(--ink); }
-    .breadcrumb__sep { color: var(--mist); }
-    .breadcrumb__current { color: var(--ink); font-weight: 500; }
+    .dd-category:hover { background: var(--parchment); }
+    .dd-category.is-selected { background: var(--sage-pale); }
+    .dd-category__icon {
+      width: 30px; height: 30px;
+      background: var(--cloud);
+      border-radius: var(--r-md);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+    .dd-category__name {
+      font-size: var(--t-sm);
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .dd-category__desc {
+      font-size: var(--t-xs);
+      color: var(--stone);
+      margin-top: 1px;
+    }
+
+    /* Destination dropdown */
+    #dd-destination {
+      width: 560px;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    #dd-destination.is-open {
+      display: flex;
+    }
+    .dd-dest-top {
+      padding: 16px var(--s5);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .dd-dest-search {
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      background: var(--cloud);
+      border-radius: var(--r-pill);
+      padding: 0 var(--s5);
+      height: 32px;
+    }
+    .dd-dest-search input {
+      border: none; outline: none;
+      background: transparent;
+      font-size: var(--t-sm);
+      color: var(--ink);
+      width: 100%;
+      height: 100%;
+    }
+    .dd-dest-search input::placeholder { color: var(--stone); }
+    .dd-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      flex: 1;
+      min-height: 0;
+    }
+    .dd-cols-left,
+    .dd-cols > div {
+      display: flex;
+      flex-direction: column;
+    }
+    .dd-cols-left { border-right: 1px solid var(--border); }
+    .dd-place {
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      padding: 0 var(--s5);
+      cursor: pointer;
+      transition: background var(--dur-fast);
+      flex: 1;
+      max-height: 48px;
+    }
+    .dd-place:hover { background: var(--parchment); }
+    .dd-place__icon {
+      width: 30px; height: 30px;
+      border-radius: var(--r-sm);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+      overflow: hidden;
+      background: var(--cloud);
+    }
+    .dd-place__icon img {
+      width: 16px; height: 16px;
+      object-fit: cover;
+      display: block;
+    }
+    .dd-place__name { font-size: var(--t-sm); color: var(--ink); font-weight: 500; line-height: 1.2; }
+    .dd-place__count { font-size: 10px; color: var(--stone); }
+
+    /* Dates dropdown */
+    #dd-dates {
+      width: 680px;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    #dd-dates.is-open { display: flex; }
+    .dd-dates-header {
+      display: flex;
+      gap: var(--s2);
+      padding: var(--s3) var(--s6);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .dd-date-mode {
+      flex: 1;
+      text-align: center;
+      font-size: var(--t-sm);
+      font-weight: 500;
+      color: var(--stone);
+      padding: 6px var(--s3);
+      border-radius: var(--r-pill);
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all var(--dur-fast);
+    }
+    .dd-date-mode:hover { background: var(--cloud); color: var(--ink); }
+    .dd-date-mode.is-active { background: var(--ink); color: var(--white); }
+    /* Year nav */
+    .dd-year-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      padding: 14px var(--s6) 10px;
+    }
+    .dd-year-btn {
+      font-family: var(--sans);
+      font-size: var(--t-sm);
+      font-weight: 500;
+      color: var(--stone);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      transition: color var(--dur-fast);
+    }
+    .dd-year-btn:hover { color: var(--ink); }
+    .dd-year-btn.is-active { color: var(--ink); font-weight: 700; }
+
+    /* Month grid */
+    .dd-months {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding: 0 var(--s6) var(--s5);
+    }
+    .dd-month-tile {
+      text-align: center;
+      padding: 14px var(--s3);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      cursor: pointer;
+      transition: all var(--dur-fast);
+    }
+    .dd-month-tile:hover { border-color: var(--ink); }
+    .dd-month-tile.is-selected { border: 2px solid var(--ink); }
+    .dd-month-tile__month { font-weight: 600; font-size: var(--t-sm); color: var(--ink); line-height: 1.3; }
+    .dd-month-tile__year { font-size: 11px; color: var(--stone); margin-top: 2px; }
+    .dd-month-tile.is-past { opacity: 0.45; cursor: not-allowed; pointer-events: none; border-color: var(--border); }
+
+    /* ── Dual calendar (Date Range) ─────────────────────────────── */
+    .dd-cal {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+    .dd-cal__months {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      flex: 1;
+      min-height: 0;
+    }
+    .dd-cal__sep { background: var(--border); }
+    .dd-cal__month {
+      padding: 8px 16px 10px;
+      display: flex;
+      flex-direction: column;
+    }
+    .dd-cal__nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .dd-cal__nav-title {
+      font-weight: 600;
+      font-size: var(--t-sm);
+      color: var(--ink);
+      flex: 1;
+      text-align: center;
+    }
+    .dd-cal__nav-btn {
+      width: 26px; height: 26px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1;
+      transition: background var(--dur-fast);
+      flex-shrink: 0;
+    }
+    .dd-cal__nav-btn:hover { background: var(--cloud); }
+    .dd-cal__nav-btn.is-hidden { visibility: hidden; pointer-events: none; }
+    .dd-cal__weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 10px;
+      font-family: var(--ui);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--stone);
+      padding-bottom: 4px;
+      margin-bottom: 2px;
+      border-bottom: 1px solid var(--border);
+    }
+    .dd-cal__days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      flex: 1;
+      align-content: start;
+    }
+    .dd-cal__day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background var(--dur-fast), color var(--dur-fast);
+      color: var(--ink);
+      user-select: none;
+      position: relative;
+    }
+    .dd-cal__day.is-empty { pointer-events: none; }
+    .dd-cal__day.is-past  { color: var(--mist); pointer-events: none; }
+    .dd-cal__day.is-today { font-weight: 700; }
+    .dd-cal__day:not(.is-past):not(.is-empty):not(.is-start):not(.is-end):hover { background: var(--cloud); }
+    .dd-cal__day.is-start,
+    .dd-cal__day.is-end   { background: var(--ink) !important; color: var(--white) !important; font-weight: 600; }
+    .dd-cal__day.is-in-range { background: var(--parchment); border-radius: 0; }
+    .dd-cal__day.is-start { border-radius: 50% 0 0 50%; }
+    .dd-cal__day.is-end   { border-radius: 0 50% 50% 0; }
+    .dd-cal__day.is-start.is-end { border-radius: 50%; }
+    .dd-cal__footer {
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .dd-cal__foot-sep { background: var(--border); }
+    .dd-cal__foot-col {
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background var(--dur-fast);
+    }
+    .dd-cal__foot-col:hover { background: var(--parchment); }
+    .dd-cal__foot-label {
+      font-size: 10px;
+      font-family: var(--ui);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 2px;
+    }
+    .dd-cal__foot-value {
+      font-size: var(--t-sm);
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .dd-cal__foot-value.is-placeholder { color: var(--stone); font-weight: 400; }
+
+    /* ── "WONDERING WHERE TO START" button ─────────────────────── */
+    .hp-hero__explore {
+      position: relative;
+      z-index: 2;
+      margin-top: 80px;
+    }
+    .hp-hero__explore-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s3);
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: var(--white);
+      font-size: var(--t-sm);
+      font-weight: 400;
+      padding: 12px var(--s5);
+      border-radius: var(--r-pill);
+      cursor: pointer;
+      transition: all var(--dur-mid) var(--ease-out);
+    }
+    .hp-hero__explore-btn:hover {
+      background: rgba(255,255,255,0.25);
+      border-color: rgba(255,255,255,0.4);
+      transform: translateY(-1px);
+    }
+    .hp-hero__explore-btn svg { opacity: 0.8; }
+
+    /* ── SCROLL INDICATOR ───────────────────────────────────────── */
+    .hp-hero__scroll {
+      position: absolute;
+      bottom: var(--s8);
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--s2);
+      opacity: 0.5;
+      animation: bounce 2.4s ease-in-out infinite;
+    }
+    .hp-hero__scroll span {
+      font-family: var(--ui);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50%       { transform: translateX(-50%) translateY(6px); }
+    }
+
+    /* ── BACKDROP (closes dropdowns on outside click) ───────────── */
+    .hp-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+    }
+    .hp-backdrop.is-open { display: block; }
+
+
+    /* ── GUIDED SEARCH FLOW ─────────────────────────────────────── */
+    /* Hide the search bar + ghost button when GS flow is active */
+    .hp-hero.gs-active .hp-hero__content {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s ease;
+    }
+
+    /* Full-screen container — no panel/modal, content sits over video */
+    .gs-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 600;
+      display: none;
+      pointer-events: none;
+    }
+    .gs-overlay.is-open { display: block; pointer-events: all; }
+
+    /* Content column — mirrors Figma: x=320/1920=16.67%, width=1280/1920=66.67% */
+    .gs-content {
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 16.67%;
+      width: 66.67%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-bottom: 80px; /* offset upward slightly like Figma */
+    }
+
+    /* Step counter */
+    .gs-counter-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .gs-back {
+      width: 28px;
+      height: 20px;
+      border: none;
+      background: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: rgba(255,255,255,0.60);
+      transition: color var(--dur-fast);
+      flex-shrink: 0;
+      padding: 0;
+    }
+    .gs-back:hover { color: rgba(255,255,255,1); }
+    .gs-back svg { display: block; }
+    .gs-back.is-hidden { display: none; }
+    .gs-counter {
+      font-family: var(--ui);
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.04em;
+    }
+    .gs-counter__total { opacity: 0.55; }
+
+    /* Question row: number + text side by side, 60px, gap 24px */
+    .gs-question-row {
+      display: flex;
+      align-items: baseline;
+      gap: 24px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .gs-question-num {
+      font-family: var(--serif);
+      font-size: clamp(36px, 3.5vw, 60px);
+      font-weight: 500;
+      color: var(--white);
+      line-height: 1;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .gs-question {
+      font-family: var(--serif);
+      font-size: clamp(28px, 3.2vw, 56px);
+      font-weight: 500;
+      color: var(--white);
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+    }
+    /* "A little about you" heading style */
+    .gs-question-row.is-headline .gs-question {
+      font-size: clamp(28px, 3.2vw, 56px);
+    }
+
+    /* Subtext */
+    .gs-subtext {
+      font-family: var(--sans);
+      font-size: 16px;
+      color: rgba(255,255,255,0.70);
+      line-height: 1.6;
+      max-width: 783px;
+      margin-bottom: 24px;
+    }
+
+    /* Label */
+    .gs-label {
+      font-family: var(--ui);
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,1.0);
+      margin-bottom: 16px;
+    }
+
+    /* Options container — 2-column grid, max 805px wide */
+    .gs-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      max-width: 805px;
+    }
+
+    /* Individual option */
+    .gs-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      cursor: pointer;
+      transition: background var(--dur-fast);
+      user-select: none;
+      border-radius: 8px;
+      min-height: 52px;
+    }
+    .gs-option:hover { background: rgba(255,255,255,0.08); }
+    .gs-option.is-selected { background: rgba(255,255,255,0.14); }
+
+    .gs-option__emoji {
+      font-size: 20px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 8px;
+    }
+    .gs-option.is-selected .gs-option__emoji { border-color: rgba(255,255,255,0.50); }
+
+    .gs-option__text { flex: 1; }
+    .gs-option__label {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.2;
+    }
+    .gs-option__desc {
+      font-size: 11px;
+      color: rgba(255,255,255,0.55);
+      margin-top: 2px;
+    }
+
+    /* Card options (icon + label, 3-col grid) */
+    .gs-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 805px;
+    }
+    .gs-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 28px 16px 24px;
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background var(--dur-fast), border-color var(--dur-fast);
+      user-select: none;
+    }
+    .gs-card:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: rgba(255,255,255,0.30);
+    }
+    .gs-card.is-selected {
+      background: rgba(255,255,255,0.16);
+      border-color: rgba(255,255,255,0.60);
+    }
+    .gs-card__icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.50;
+    }
+    .gs-card__icon img {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+    .gs-card.is-selected .gs-card__icon { opacity: 1; }
+    .gs-card__text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .gs-card__label {
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      text-align: center;
+      line-height: 1.3;
+    }
+    .gs-card.is-selected .gs-card__label { color: var(--white); }
+    .gs-card__desc {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.45);
+      text-align: center;
+      line-height: 1.3;
+    }
+    .gs-card.is-selected .gs-card__desc { color: rgba(255,255,255,0.70); }
+    /* Options wrapper — used for isolated sub-step fade */
+    @keyframes gs-opts-fade {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .gs-opts-entering {
+      animation: gs-opts-fade 0.4s ease both;
+    }
+
+    /* Month cards (sub-step, multi-select) */
+    .gs-month-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background var(--dur-fast), border-color var(--dur-fast);
+      user-select: none;
+    }
+    .gs-month-card:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.30); }
+    .gs-month-card.is-selected { background: rgba(255,255,255,0.16); border-color: rgba(255,255,255,0.60); }
+    .gs-month-card__name {
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.85);
+      letter-spacing: 0.01em;
+    }
+    .gs-month-card__year {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(255,255,255,0.40);
+      letter-spacing: 0.02em;
+    }
+    .gs-month-card.is-selected .gs-month-card__name { color: var(--white); }
+    .gs-month-card.is-selected .gs-month-card__year { color: rgba(255,255,255,0.65); }
+
+    .gs-card--no-icon { justify-content: center; gap: 0; }
+    .gs-card--no-icon .gs-card__label { font-size: 14px; }
+    .gs-card__emoji {
+      font-size: 40px;
+      line-height: 1;
+      opacity: 0.50;
+      filter: none;
+    }
+    .gs-card.is-selected .gs-card__emoji { opacity: 1; }
+
+    .gs-option__check {
+      width: 18px; height: 18px;
+      border: 1.5px solid rgba(255,255,255,0.30);
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: all var(--dur-fast);
+      font-size: 10px;
+      color: transparent;
+    }
+    .gs-option.is-selected .gs-option__check {
+      background: var(--sage);
+      border-color: var(--sage);
+      color: var(--white);
+    }
+
+    /* Chip options (multi-select feelings) — wrap, white ghost */
+    .gs-chips-wrap {
+      max-width: 805px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .gs-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .gs-chip {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border: 1.5px solid rgba(255,255,255,0.30);
+      border-radius: var(--r-pill);
+      cursor: pointer;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.06);
+      transition: all var(--dur-fast);
+      user-select: none;
+    }
+    .gs-chip:hover { border-color: rgba(255,255,255,0.6); background: rgba(255,255,255,0.12); color: var(--white); }
+    .gs-chip.is-selected { border-color: var(--white); background: rgba(255,255,255,0.20); color: var(--white); }
+
+    /* Vertical divider between penultimate and last chip */
+    .gs-chip-divider {
+      display: inline-flex;
+      align-items: center;
+      align-self: center;
+      width: 1px;
+      height: 28px;
+      background: rgba(255,255,255,0.25);
+      margin: 0 4px;
+      flex-shrink: 0;
+    }
+
+    /* Reset link */
+    .gs-reset {
+      font-family: var(--ui);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.40);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+      display: block;
+      align-self: flex-start;
+      margin-top: 8px;
+    }
+    .gs-reset:hover { color: rgba(255,255,255,0.80); }
+
+    /* Country input */
+    .gs-country-wrap {
+      position: relative;
+      max-width: 500px;
+    }
+    .gs-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      border-radius: 12px;
+      padding: 14px 20px;
+      background: rgba(255,255,255,0.10);
+      transition: border-color var(--dur-fast), background var(--dur-fast);
+    }
+    .gs-input-wrap:focus-within { border-color: rgba(255,255,255,0.80); background: rgba(255,255,255,0.16); }
+    .gs-input-wrap svg { color: rgba(255,255,255,0.55); flex-shrink: 0; }
+    .gs-country-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: var(--sans);
+      font-size: 18px;
+      color: var(--white);
+      background: transparent;
+    }
+    .gs-country-input::placeholder { color: rgba(255,255,255,0.35); }
+
+    /* Country dropdown */
+    .gs-country-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0; right: 0;
+      background: rgba(20,22,20,0.96);
+      backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      max-height: 260px;
+      overflow-y: auto;
+      z-index: 10;
+      display: none;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255,255,255,0.20) transparent;
+    }
+    .gs-country-dropdown.is-open { display: block; }
+    .gs-country-dropdown::-webkit-scrollbar { width: 4px; }
+    .gs-country-dropdown::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.20); border-radius: 2px; }
+    .gs-country-option {
+      padding: 11px 20px;
+      font-family: var(--sans);
+      font-size: 15px;
+      color: rgba(255,255,255,0.80);
+      cursor: pointer;
+      transition: background var(--dur-fast), color var(--dur-fast);
+    }
+    .gs-country-option:hover { background: rgba(255,255,255,0.10); color: var(--white); }
+    .gs-country-option.is-selected { background: rgba(255,255,255,0.14); color: var(--white); font-weight: 500; }
+    .gs-country-option.is-highlighted { background: rgba(255,255,255,0.10); color: var(--white); }
+    .gs-country-empty {
+      padding: 14px 20px;
+      font-family: var(--sans);
+      font-size: 14px;
+      color: rgba(255,255,255,0.35);
+      font-style: italic;
+    }
+
+    /* Button row */
+    .gs-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .gs-continue {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--sage);
+      color: var(--white);
+      border: none;
+      border-radius: 999px;
+      padding: 0 40px;
+      height: 50px;
+      font-family: var(--ui);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background var(--dur-fast), transform var(--dur-fast), opacity var(--dur-fast);
+      white-space: nowrap;
+    }
+    .gs-continue:hover:not(:disabled) { background: #4e6349; transform: scale(1.02); }
+    .gs-continue:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .gs-enter-hint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 50px;
+      padding: 0 20px;
+      border: none;
+      font-family: var(--ui);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.28);
+      white-space: nowrap;
+      pointer-events: none;
+      transition: color var(--dur-fast);
+    }
+    .gs-enter-hint.is-active { color: rgba(255,255,255,0.65); }
+
+    /* Close button — top right */
+    .gs-counter-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .gs-close {
+      width: 36px; height: 36px;
+      border: 1.5px solid rgba(255,255,255,0.30);
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      color: rgba(255,255,255,0.70);
+      transition: all var(--dur-fast);
+      flex-shrink: 0;
+    }
+    .gs-close:hover { background: rgba(255,255,255,0.18); color: var(--white); border-color: rgba(255,255,255,0.6); }
+
+    /* Step transition animations */
+    @keyframes gs-step-in  { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes gs-step-out { to   { opacity: 0; transform: translateY(-10px); } }
+    .gs-content.is-entering { animation: gs-step-in  0.7s cubic-bezier(0.22,1,0.36,1) both; }
+    .gs-content.is-exiting  { animation: gs-step-out 0.2s ease forwards; }
+    /* Hidden state before the entrance animation fires */
+    .gs-content.is-hidden { opacity: 0; }
+
   </style>
 </head>
 <body>
 
-  <!-- ===== Site Header ===== -->
-  <header class="site-header">
+  <!-- ── NAVIGATION ──────────────────────────────────────────────── -->
+  <header class="site-header" id="hp-nav">
     <div class="site-header__inner">
       <nav class="site-header__nav">
         <a href="#">Retreats</a>
@@ -163,7 +1165,7 @@
         <a href="#">Inspiration</a>
         <a href="#">About</a>
       </nav>
-      <a href="#" class="site-header__logo">Queen of Retreats</a>
+      <a href="index.html" class="site-header__logo">Queen of Retreats</a>
       <div class="site-header__actions">
         <button class="btn btn--ghost" style="gap:6px">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -177,415 +1179,1086 @@
     </div>
   </header>
 
-  <!-- ===== Hero ===== -->
-  <section class="hero">
-    <img src="images/header_vale-de-moses.jpg"
-         alt="Quinta da Levada retreat in Alentejo"
-         class="hero__image">
-    <div class="hero__overlay"></div>
-    <!-- Title, subhead & ratings — vertically centred above booking bar -->
-    <div class="hero__center">
-      <p class="hero__eyebrow">GIANYAR &nbsp;·&nbsp; BALI &nbsp;·&nbsp; 7 nights</p>
-      <h1 class="hero__title">Elevation Barn - Bali</h1>
-      <p class="hero__subtitle">Retreats in a tropical oasis to help you find and fuel what matters most</p>
-      <div class="hero__meta">
-        <div class="hero__rating">
-          <span style="color:#c9a84c;">★★★★★</span>
-          <span>4.9 &nbsp;·&nbsp; 47 reviews</span>
+  <!-- ── BACKDROP ────────────────────────────────────────────────── -->
+  <div class="hp-backdrop" id="hp-backdrop"></div>
+
+  <!-- ── HERO ────────────────────────────────────────────────────── -->
+  <section class="hp-hero">
+
+    <!-- Background video -->
+    <video class="hp-hero__video" autoplay muted loop playsinline>
+      <source src="video/malibu.mp4" type="video/mp4">
+    </video>
+
+    <!-- Overlay -->
+    <div class="hp-hero__overlay"></div>
+
+    <!-- Hero content -->
+    <div class="hp-hero__content">
+      <p class="hp-hero__eyebrow">Expertly vetted · Personally selected</p>
+
+      <h1 class="hp-hero__headline">
+        Discover retreats to transform how you live your life
+      </h1>
+
+      <!-- ── SEARCH BAR ─────────────────────────────────────────── -->
+      <div class="hp-search">
+        <div class="hp-search__bar" id="hp-search-bar">
+
+          <!-- Section 1: Interest -->
+          <div class="hp-search__section" id="sec-interest" data-section="interest">
+            <div class="hp-search__label">I'm interested in</div>
+            <input
+              class="hp-search__input"
+              id="input-interest"
+              type="text"
+              placeholder="Yoga, meditation, detox…"
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="hp-search__divider"></div>
+
+          <!-- Section 2: Destination -->
+          <div class="hp-search__section" id="sec-destination" data-section="destination">
+            <div class="hp-search__label">Destination</div>
+            <input
+              class="hp-search__input"
+              id="input-destination"
+              type="text"
+              placeholder="Anywhere"
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="hp-search__divider"></div>
+
+          <!-- Section 3: Dates -->
+          <div class="hp-search__section" id="sec-dates" data-section="dates">
+            <div class="hp-search__label">When</div>
+            <div class="hp-search__value" id="val-dates">Any time</div>
+          </div>
+
+          <!-- Search button -->
+          <div class="hp-search__btn-wrap">
+            <button class="hp-search__btn" id="hp-search-submit">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              Search
+            </button>
+          </div>
         </div>
-        <div class="hero__vetted">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          QoR Vetted
+
+        <!-- ── DROPDOWN: Interest ──────────────────────────────── -->
+        <div class="hp-search__dropdown" id="dd-interest">
+          <div class="dd-section-title">Popular categories</div>
+          <div class="dd-chips">
+            <div class="dd-chip" data-value="Yoga">Yoga</div>
+            <div class="dd-chip" data-value="Meditation">Meditation</div>
+            <div class="dd-chip" data-value="Detox">Detox</div>
+            <div class="dd-chip" data-value="Fitness">Fitness</div>
+            <div class="dd-chip" data-value="Wellness">Wellness</div>
+            <div class="dd-chip" data-value="Mindfulness">Mindfulness</div>
+            <div class="dd-chip" data-value="Spiritual">Spiritual</div>
+            <div class="dd-chip" data-value="Adventure">Adventure</div>
+            <div class="dd-chip" data-value="Nature">Nature</div>
+          </div>
+          <div class="dd-divider"></div>
+          <div class="dd-section-title">Browse by type</div>
+          <div class="dd-categories">
+            <div class="dd-category" data-value="Yoga &amp; Movement">
+              <div class="dd-category__icon">🧘</div>
+              <div>
+                <div class="dd-category__name">Yoga &amp; Movement</div>
+                <div class="dd-category__desc">Hatha, vinyasa, yin, sound healing</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Meditation &amp; Mindfulness">
+              <div class="dd-category__icon">🌿</div>
+              <div>
+                <div class="dd-category__name">Meditation &amp; Mindfulness</div>
+                <div class="dd-category__desc">Silent retreats, breathwork, mindfulness</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Detox &amp; Cleanse">
+              <div class="dd-category__icon">✨</div>
+              <div>
+                <div class="dd-category__name">Detox &amp; Cleanse</div>
+                <div class="dd-category__desc">Juice fasts, gut health, digital detox</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Fitness &amp; Active">
+              <div class="dd-category__icon">🏃</div>
+              <div>
+                <div class="dd-category__name">Fitness &amp; Active</div>
+                <div class="dd-category__desc">Hiking, surfing, triathlon, bootcamp</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Mental Wellness">
+              <div class="dd-category__icon">🧠</div>
+              <div>
+                <div class="dd-category__name">Mental Wellness</div>
+                <div class="dd-category__desc">Burnout recovery, anxiety, stress</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Spiritual &amp; Healing">
+              <div class="dd-category__icon">🌸</div>
+              <div>
+                <div class="dd-category__name">Spiritual &amp; Healing</div>
+                <div class="dd-category__desc">Shamanic, energy work, plant medicine</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Creative &amp; Arts">
+              <div class="dd-category__icon">🎨</div>
+              <div>
+                <div class="dd-category__name">Creative &amp; Arts</div>
+                <div class="dd-category__desc">Painting, writing, photography, pottery</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Couples &amp; Relationships">
+              <div class="dd-category__icon">💛</div>
+              <div>
+                <div class="dd-category__name">Couples &amp; Relationships</div>
+                <div class="dd-category__desc">Reconnect, communication, tantra</div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- ── DROPDOWN: Destination ──────────────────────────── -->
+        <div class="hp-search__dropdown" id="dd-destination">
+          <div class="dd-dest-top">
+            <div class="dd-dest-search">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--stone); flex-shrink:0">
+                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" placeholder="Where do you want to go?" id="dest-search-input" autocomplete="off">
+            </div>
+          </div>
+          <div class="dd-cols">
+            <div class="dd-cols-left">
+              <div class="dd-section-title">Top destinations</div>
+              <div class="dd-place" data-value="Bali, Indonesia">
+                <div class="dd-place__icon"><img src="images/flags/Indonesia.png" alt="Indonesia"></div>
+                <div>
+                  <div class="dd-place__name">Bali, Indonesia</div>
+                  <div class="dd-place__count">142 retreats</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Portugal">
+                <div class="dd-place__icon"><img src="images/flags/portugal.png" alt="Portugal"></div>
+                <div>
+                  <div class="dd-place__name">Portugal</div>
+                  <div class="dd-place__count">96 retreats</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Spain">
+                <div class="dd-place__icon"><img src="images/flags/spain.png" alt="Spain"></div>
+                <div>
+                  <div class="dd-place__name">Spain</div>
+                  <div class="dd-place__count">190 retreats</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Greece">
+                <div class="dd-place__icon"><img src="images/flags/greece.png" alt="Greece"></div>
+                <div>
+                  <div class="dd-place__name">Greece</div>
+                  <div class="dd-place__count">264 retreats</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="France">
+                <div class="dd-place__icon"><img src="images/flags/france.png" alt="France"></div>
+                <div>
+                  <div class="dd-place__name">France</div>
+                  <div class="dd-place__count">173 retreats</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Vietnam">
+                <div class="dd-place__icon"><img src="images/flags/vietnam.png" alt="Vietnam"></div>
+                <div>
+                  <div class="dd-place__name">Vietnam</div>
+                  <div class="dd-place__count">39 retreats</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="dd-section-title">Explore by region</div>
+              <div class="dd-place" data-value="Europe">
+                <div class="dd-place__icon">🗺️</div>
+                <div>
+                  <div class="dd-place__name">Europe</div>
+                  <div class="dd-place__count">All countries</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Southeast Asia">
+                <div class="dd-place__icon">🌏</div>
+                <div>
+                  <div class="dd-place__name">Southeast Asia</div>
+                  <div class="dd-place__count">Thailand, Bali & more</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Caribbean">
+                <div class="dd-place__icon">🏖️</div>
+                <div>
+                  <div class="dd-place__name">Caribbean</div>
+                  <div class="dd-place__count">61 retreats</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Central America">
+                <div class="dd-place__icon">🦜</div>
+                <div>
+                  <div class="dd-place__name">Central America</div>
+                  <div class="dd-place__count">Costa Rica, Mexico & more</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Middle East">
+                <div class="dd-place__icon">🌅</div>
+                <div>
+                  <div class="dd-place__name">Middle East</div>
+                  <div class="dd-place__count">UAE, Jordan & more</div>
+                </div>
+              </div>
+              <div class="dd-place" data-value="Anywhere">
+                <div class="dd-place__icon">✈️</div>
+                <div>
+                  <div class="dd-place__name">Surprise me</div>
+                  <div class="dd-place__count">I'm open to anywhere</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── DROPDOWN: Dates ──────────────────────────────────── -->
+        <div class="hp-search__dropdown" id="dd-dates">
+          <div class="dd-dates-header">
+            <div class="dd-date-mode is-active" data-mode="range">Date range</div>
+            <div class="dd-date-mode" data-mode="flexible">Flexible dates</div>
+            <div class="dd-date-mode" data-mode="fixed">Specific month</div>
+          </div>
+
+          <!-- Specific month panel -->
+          <div id="dd-dates-months" style="display:none">
+            <div class="dd-year-nav" id="dd-year-nav">
+              <button class="dd-year-btn is-active" data-year="2026">2026</button>
+              <button class="dd-year-btn" data-year="2027">2027</button>
+              <button class="dd-year-btn" data-year="2028">2028</button>
+            </div>
+            <div class="dd-months" id="dd-months-grid"></div>
+          </div><!-- /#dd-dates-months -->
+
+          <!-- Date range calendar panel -->
+          <div class="dd-cal" id="dd-cal">
+            <div class="dd-cal__months">
+              <div class="dd-cal__month" id="cal-left"></div>
+              <div class="dd-cal__sep"></div>
+              <div class="dd-cal__month" id="cal-right"></div>
+            </div>
+            <div class="dd-cal__footer">
+              <div class="dd-cal__foot-col" id="cal-foot-checkin-col">
+                <div class="dd-cal__foot-label">Check in</div>
+                <div class="dd-cal__foot-value is-placeholder" id="cal-foot-checkin">Add date</div>
+              </div>
+              <div class="dd-cal__foot-sep"></div>
+              <div class="dd-cal__foot-col" id="cal-foot-checkout-col">
+                <div class="dd-cal__foot-label">Check out</div>
+                <div class="dd-cal__foot-value is-placeholder" id="cal-foot-checkout">Add date</div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /#dd-dates -->
+
+      </div><!-- /.hp-search -->
+
+      <!-- "Wondering where to start?" -->
+      <div class="hp-hero__explore">
+        <button class="hp-hero__explore-btn" id="btn-explore">
+          <img src="icons/spiritual.svg" width="14" height="14" style="filter:brightness(0) invert(1); opacity:0.85; display:block;" alt="">
+          I'm not sure where to start
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
       </div>
+
+    </div><!-- /.hp-hero__content -->
+
+    <!-- Scroll hint -->
+    <div class="hp-hero__scroll">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
     </div>
 
-    <!-- ===== Booking Bar — overlaid on hero ===== -->
-    <div class="booking-bar">
-      <div class="booking-bar__price">
-        <span class="booking-bar__from">From</span>
-        <span class="booking-bar__amount">£2,195</span>
-        <span class="booking-bar__per">per person</span>
-      </div>
-
-      <div class="booking-bar__divider"></div>
-
-      <div class="booking-bar__dates">
-        <p class="booking-bar__label">Select dates - (These can be changed later)</p>
-        <div class="widget-dates-scroll">
-          <div class="widget-date-pill is-limited">7–14 Jun ·&thinsp;3 left</div>
-          <div class="widget-date-pill">21–28 Jun</div>
-          <div class="widget-date-pill is-soldout">5–12 Jul</div>
-          <div class="widget-date-pill">19–26 Jul</div>
-          <div class="widget-date-pill is-limited">2–9 Aug ·&thinsp;2 left</div>
-          <div class="widget-date-pill">16–23 Aug</div>
-        </div>
-        <p class="booking-bar__availability">Only 3 spaces left on the dates shown</p>
-      </div>
-
-      <div class="booking-bar__divider"></div>
-
-      <div class="booking-bar__guests">
-        <p class="booking-bar__label">Guests</p>
-        <div class="stepper">
-          <button class="stepper__btn" disabled>−</button>
-          <span class="stepper__val">1</span>
-          <button class="stepper__btn">+</button>
-        </div>
-      </div>
-
-      <div class="booking-bar__divider"></div>
-
-      <div class="booking-bar__secondary-cta">
-        <a href="enquiry.html" class="btn btn--outline-light btn--lg">Enquire</a>
-      </div>
-
-      <div class="booking-bar__divider"></div>
-
-      <div class="booking-bar__cta">
-        <a href="booking.html" class="btn btn--primary btn--lg">Book This Retreat</a>
-        <p class="booking-bar__note">No payment today · 25% deposit to secure</p>
-      </div>
+    <!-- ── GUIDED SEARCH FLOW ────────────────────────────────────── -->
+    <div class="gs-overlay" id="gs-overlay">
+      <div class="gs-content" id="gs-content"></div>
     </div>
 
   </section>
 
-  <!-- ===== Trust Bar ===== -->
-  <div class="trust-bar">
-    <div class="container">
-      <div class="trust-bar__inner">
-        <div class="trust-bar__item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          QoR Curated &amp; Quality Checked
-        </div>
-        <div class="trust-bar__item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-          Free cancellation up to 90 days
-        </div>
-        <div class="trust-bar__item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          Max 12 guests
-        </div>
-        <div class="trust-bar__item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          Secure deposit — 25% to book
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ===== Breadcrumb ===== -->
-  <div class="breadcrumb">
-    <div class="breadcrumb__inner">
-      <a href="#">Home</a>
-      <span class="breadcrumb__sep">/</span>
-      <a href="#">Destinations</a>
-      <span class="breadcrumb__sep">/</span>
-      <a href="#">Portugal</a>
-      <span class="breadcrumb__sep">/</span>
-      <a href="#">Alentejo</a>
-      <span class="breadcrumb__sep">/</span>
-      <span class="breadcrumb__current">Quinta da Levada</span>
-    </div>
-  </div>
-
-
-  <!-- ===== Main Content ===== -->
-  <div class="page-body">
-
-    <!-- Left: Tabbed content -->
-    <div class="tabs-scope">
-      <div class="tabs">
-        <div class="tabs__list">
-          <button class="tabs__tab is-active" data-tab="overview">Overview</button>
-          <button class="tabs__tab" data-tab="included">What's Included</button>
-          <button class="tabs__tab" data-tab="accommodation">Accommodation</button>
-          <button class="tabs__tab" data-tab="programme">Programme</button>
-          <button class="tabs__tab" data-tab="reviews">Reviews</button>
-          <button class="tabs__tab" data-tab="location">Location</button>
-        </div>
-      </div>
-
-      <!-- Tab: Overview -->
-      <div class="tab-panel is-active" data-panel="overview">
-        <div class="section">
-          <p style="font-family: var(--serif); font-size: var(--t-xl); line-height: 1.5; color: var(--ink); margin-bottom: var(--s6); font-weight: 300;">
-            Set in a restored 18th-century farmhouse in the golden hills of Alentejo, Quinta da Levada is a place to <em>slow down, go inward, and return to yourself.</em>
-          </p>
-          <p style="color: var(--stone); line-height: 1.8; margin-bottom: var(--s4);">
-            Seven days of restorative yoga, guided forest bathing, and somatic movement — held alongside long farm-to-table lunches, evenings under the stars, and the deep, unhurried quiet of the Portuguese countryside. This is not a programme about doing more. It's about arriving, fully, at rest.
-          </p>
-          <p style="color: var(--stone); line-height: 1.8;">
-            Led by internationally-trained facilitators with backgrounds in trauma-informed yoga, nature therapy, and integrative coaching. Suitable for all experience levels. Maximum 12 guests ensures a genuinely intimate experience.
-          </p>
-
-          <div class="highlight-stats">
-            <div class="highlight-stat">
-              <div class="highlight-stat__value">7</div>
-              <div class="highlight-stat__label">Nights</div>
-            </div>
-            <div class="highlight-stat">
-              <div class="highlight-stat__value">12</div>
-              <div class="highlight-stat__label">Max guests</div>
-            </div>
-            <div class="highlight-stat">
-              <div class="highlight-stat__value">4.9</div>
-              <div class="highlight-stat__label">Guest rating</div>
-            </div>
-            <div class="highlight-stat">
-              <div class="highlight-stat__value">6</div>
-              <div class="highlight-stat__label">Dates in 2026</div>
-            </div>
-          </div>
-
-          <p class="label-caps" style="margin-bottom: var(--s4);">Led by</p>
-          <div style="display:flex; gap: var(--s5); align-items: flex-start;">
-            <div style="width:60px; height:60px; border-radius:50%; background:var(--sand-mid); flex-shrink:0;"></div>
-            <div>
-              <div style="font-weight: 600; color: var(--ink); margin-bottom: var(--s1);">Sofia Nunes &amp; Jamie Carvalho</div>
-              <div style="font-size: var(--t-sm); color: var(--stone); line-height: 1.6;">Trauma-informed yoga teacher &amp; nature therapy guide. Combined 22 years of retreat facilitation across Europe and Southeast Asia.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab: What's Included -->
-      <div class="tab-panel" data-panel="included">
-        <div class="section">
-          <div class="section-head">
-            <h2>Everything you need, included</h2>
-            <p>All the essentials — and the extras that make the difference.</p>
-          </div>
-          <div class="includes-grid">
-            <div class="include-item">Return transfers from Lisbon Airport</div>
-            <div class="include-item">7 nights accommodation</div>
-            <div class="include-item">All meals — breakfast, lunch &amp; dinner</div>
-            <div class="include-item">Filtered water &amp; herbal teas throughout</div>
-            <div class="include-item">2× daily yoga &amp; movement sessions</div>
-            <div class="include-item">Daily meditation practice</div>
-            <div class="include-item">2× guided forest bathing walks</div>
-            <div class="include-item">Closing ceremony &amp; farewell dinner</div>
-            <div class="include-item">Welcome gift &amp; retreat journal</div>
-            <div class="include-item">Wi-Fi (deliberately limited)</div>
-            <div class="include-item">Yoga props &amp; all equipment</div>
-            <div class="include-item">Pre-arrival 1:1 call with a facilitator</div>
-          </div>
-          <div class="divider"></div>
-          <p class="label-caps" style="margin-bottom: var(--s4);">Not included</p>
-          <div style="display:flex; flex-direction: column; gap: var(--s2); color: var(--stone); font-size: var(--t-sm);">
-            <div>— Flights to/from Lisbon</div>
-            <div>— Alcohol (available to purchase on-site)</div>
-            <div>— Optional 1:1 private coaching sessions (£85/session)</div>
-            <div>— Travel insurance (strongly recommended)</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab: Accommodation -->
-      <div class="tab-panel" data-panel="accommodation">
-        <div class="section">
-          <div class="section-head">
-            <h2>Your accommodation</h2>
-            <p>Three room types, each designed for rest and retreat.</p>
-          </div>
-          <div class="room-preview-grid">
-            <div class="room-preview-card">
-              <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg"
-                   alt="Shared Garden Room" class="room-preview-card__img">
-              <div class="room-preview-card__body">
-                <div class="room-preview-card__name">Shared Garden Room</div>
-                <div class="room-preview-card__detail">Twin share · Garden view · En-suite</div>
-                <div class="room-preview-card__price">From £2,195 <span style="font-weight:400; color: var(--stone)">per person</span></div>
-              </div>
-            </div>
-            <div class="room-preview-card">
-              <img src="images/header_casa-ana_20230628180415.jpg"
-                   alt="Private Valley Room" class="room-preview-card__img">
-              <div class="room-preview-card__body">
-                <div class="room-preview-card__name">Private Valley Room</div>
-                <div class="room-preview-card__detail">Double or twin · Valley view · En-suite</div>
-                <div class="room-preview-card__price">From £2,895 <span style="font-weight:400; color: var(--stone)">per person</span></div>
-              </div>
-            </div>
-            <div class="room-preview-card">
-              <img src="images/header_les-marguerites.jpg"
-                   alt="Quinta Suite" class="room-preview-card__img">
-              <div class="room-preview-card__body">
-                <div class="room-preview-card__name">Quinta Suite</div>
-                <div class="room-preview-card__detail">Junior suite · Private terrace · Deep soak bath</div>
-                <div class="room-preview-card__price">From £3,750 <span style="font-weight:400; color: var(--stone)">per person</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab: Programme -->
-      <div class="tab-panel" data-panel="programme">
-        <div class="section">
-          <div class="section-head">
-            <h2>Your week at Quinta da Levada</h2>
-            <p>A gentle rhythm, held by nature and each other.</p>
-          </div>
-          <div class="programme-day">
-            <div class="programme-day__label">Day 1</div>
-            <div class="programme-day__content">
-              <div class="programme-day__title">Arrival &amp; Settling</div>
-              <div class="programme-day__desc">Transfer from Lisbon, welcome lunch, orientation walk and opening circle. Early evening yin yoga to decompress from travel. Communal dinner.</div>
-            </div>
-          </div>
-          <div class="programme-day">
-            <div class="programme-day__label">Days 2–3</div>
-            <div class="programme-day__content">
-              <div class="programme-day__title">Deepening</div>
-              <div class="programme-day__desc">Morning movement (vinyasa or restorative), guided meditation, afternoon forest bathing, workshops on breath and somatic awareness. Free time for rest or journalling.</div>
-            </div>
-          </div>
-          <div class="programme-day">
-            <div class="programme-day__label">Days 4–5</div>
-            <div class="programme-day__content">
-              <div class="programme-day__title">Stillness &amp; Integration</div>
-              <div class="programme-day__desc">Morning silence practice, embodied movement, afternoon free time for pool, walking trails or 1:1 sessions. Evening sharing circles.</div>
-            </div>
-          </div>
-          <div class="programme-day">
-            <div class="programme-day__label">Days 6–7</div>
-            <div class="programme-day__content">
-              <div class="programme-day__title">Closing &amp; Return</div>
-              <div class="programme-day__desc">Integration practices, letter-writing workshop, closing ceremony and farewell dinner. Morning 7: departure after a final breakfast, return transfer to Lisbon.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab: Reviews -->
-      <div class="tab-panel" data-panel="reviews">
-        <div class="section">
-          <div class="aggregate-rating">
-            <div class="agg-score">4.9</div>
-            <div class="agg-details">
-              <div class="agg-stars">★★★★★</div>
-              <p style="font-size: var(--t-sm); color: var(--stone); margin-top: var(--s2);">Based on 47 guest reviews</p>
-            </div>
-          </div>
-
-          <div class="reviews-grid">
-            <div class="review-card">
-              <p class="review-card__quote">"The most present I've felt in years. I arrived exhausted and depleted. I left feeling like myself again."</p>
-              <p class="review-card__author"><strong>Sarah M.</strong> — London · June 2025</p>
-            </div>
-            <div class="review-card">
-              <p class="review-card__quote">"Sofia and Jamie hold the space with such warmth. The food alone is worth the trip — and I say that as someone who came for the yoga."</p>
-              <p class="review-card__author"><strong>David K.</strong> — Dublin · September 2025</p>
-            </div>
-            <div class="review-card">
-              <p class="review-card__quote">"I've done a lot of retreats. This one is different. It doesn't try to fix you. It just gives you the space to remember who you already are."</p>
-              <p class="review-card__author"><strong>Priya S.</strong> — Manchester · August 2025</p>
-            </div>
-            <div class="review-card">
-              <p class="review-card__quote">"Genuinely transformative. The quality of everything — the facilitation, the food, the setting — exceeded every expectation."</p>
-              <p class="review-card__author"><strong>Alix R.</strong> — Paris · July 2025</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Tab: Location -->
-      <div class="tab-panel" data-panel="location">
-        <div class="section">
-          <div class="section-head">
-            <h2>Alentejo, Portugal</h2>
-            <p>A land of cork forests, ancient olive groves, and extraordinary quiet.</p>
-          </div>
-          <p style="color: var(--stone); line-height: 1.8; margin-bottom: var(--s5);">
-            Quinta da Levada sits in the Val do Guadiana, approximately 2.5 hours from Lisbon by car. Return transfers from Lisbon Humberto Delgado Airport are included in all packages.
-          </p>
-          <div class="map-placeholder">
-            [ Interactive map — Alentejo, Portugal ]
-          </div>
-          <div style="display: flex; gap: var(--s7); margin-top: var(--s6);">
-            <div>
-              <p class="label-caps" style="margin-bottom: var(--s2);">Nearest Airport</p>
-              <p style="font-size: var(--t-sm); color: var(--stone);">Lisbon (LIS) — 2h 30m by road</p>
-            </div>
-            <div>
-              <p class="label-caps" style="margin-bottom: var(--s2);">Nearest Town</p>
-              <p style="font-size: var(--t-sm); color: var(--stone);">Mértola — 20 minutes</p>
-            </div>
-            <div>
-              <p class="label-caps" style="margin-bottom: var(--s2);">Best time to visit</p>
-              <p style="font-size: var(--t-sm); color: var(--stone);">April–October</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div><!-- end tabs-scope -->
-
-  </div><!-- end page-body -->
-
-  <!-- ===== Footer ===== -->
-  <footer class="footer">
-    <div class="footer__inner">
-      <div class="footer__logo">Queen of Retreats</div>
-      <div class="footer__links">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">Contact</a>
-        <a href="#">For Retreat Owners</a>
-      </div>
-      <p style="font-size: var(--t-xs); color: var(--mist);">© 2026 Queen of Retreats</p>
-    </div>
-  </footer>
-
   <script>
-    // Tabs (inline for index page)
-    document.querySelectorAll('.tabs__tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        const tabList = tab.closest('.tabs');
-        const target  = tab.dataset.tab;
-        const scope   = tab.closest('.tabs-scope') || document;
-        tabList.querySelectorAll('.tabs__tab').forEach(t => t.classList.remove('is-active'));
-        tab.classList.add('is-active');
-        scope.querySelectorAll('.tab-panel').forEach(panel => {
-          panel.classList.toggle('is-active', panel.dataset.panel === target);
-        });
-      });
-    });
-
-    // Widget date pill selection
-    document.querySelectorAll('.widget-date-pill:not(.is-soldout)').forEach(pill => {
-      pill.addEventListener('click', () => {
-        document.querySelectorAll('.widget-date-pill').forEach(p => p.classList.remove('is-active'));
-        pill.classList.add('is-active');
-      });
-    });
-
-    // Widget stepper
-    const steps = document.querySelector('.booking-bar .stepper');
-    if (steps) {
-      const minus = steps.querySelector('.stepper__btn:first-child');
-      const plus  = steps.querySelector('.stepper__btn:last-child');
-      const val   = steps.querySelector('.stepper__val');
-      let count   = 1;
-      minus.addEventListener('click', () => {
-        if (count > 1) { count--; val.textContent = count; minus.disabled = count <= 1; }
-      });
-      plus.addEventListener('click', () => {
-        if (count < 12) { count++; val.textContent = count; minus.disabled = false; }
-      });
-    }
-  </script>
-
-  <script>
-    // Transparent header → white on scroll past hero
+    /* ── Nav: transparent → white on scroll ─────────────────────── */
     const header = document.querySelector('.site-header');
-    const hero = document.querySelector('.hero');
     function updateHeader() {
-      const threshold = hero ? hero.offsetHeight - header.offsetHeight : 100;
-      header.classList.toggle('is-scrolled', window.scrollY > threshold);
+      header.classList.toggle('is-scrolled', window.scrollY > 40);
     }
     window.addEventListener('scroll', updateHeader, { passive: true });
     updateHeader();
+
+    /* ── Search bar interaction ──────────────────────────────────── */
+    const searchBar   = document.getElementById('hp-search-bar');
+    const backdrop    = document.getElementById('hp-backdrop');
+    const sections    = document.querySelectorAll('.hp-search__section');
+    const dropdowns   = document.querySelectorAll('.hp-search__dropdown');
+    const hero        = document.querySelector('.hp-hero');
+
+    // State
+    const state = { activeSection: null };
+
+    function openSection(sectionId) {
+      // Close all first
+      closeAll();
+
+      const sec = document.getElementById('sec-' + sectionId);
+      const dd  = document.getElementById('dd-' + sectionId);
+
+      if (!sec || !dd) return;
+
+      sec.classList.add('is-active');
+      dd.classList.add('is-open');
+      searchBar.classList.add('has-active');
+      backdrop.classList.add('is-open');
+      hero.classList.add('search-active');
+      state.activeSection = sectionId;
+
+      // Centre dropdown under its section
+      const searchContainer = document.querySelector('.hp-search');
+      const containerRect   = searchContainer.getBoundingClientRect();
+      const secRect         = sec.getBoundingClientRect();
+      const secCentre       = secRect.left + secRect.width / 2 - containerRect.left;
+      const ddWidth         = dd.offsetWidth;
+      let   ddLeft          = secCentre - ddWidth / 2;
+      // Clamp so it doesn't bleed off the search container
+      ddLeft = Math.max(0, Math.min(ddLeft, containerRect.width - ddWidth));
+      dd.style.left      = ddLeft + 'px';
+      dd.style.transform = 'none';
+
+      // Height is fixed via CSS (400px)
+
+      // Render calendar if dates dropdown opens on range mode (the default)
+      if (sectionId === 'dates') {
+        const activeMode = document.querySelector('.dd-date-mode.is-active');
+        if (activeMode && activeMode.dataset.mode === 'range') renderCalendars();
+      }
+
+      // Focus input if present
+      const inp = sec.querySelector('input');
+      if (inp) inp.focus();
+    }
+
+    function closeAll() {
+      sections.forEach(s => s.classList.remove('is-active'));
+      dropdowns.forEach(d => d.classList.remove('is-open'));
+      searchBar.classList.remove('has-active');
+      backdrop.classList.remove('is-open');
+      hero.classList.remove('search-active');
+      state.activeSection = null;
+    }
+
+    // Section click handlers
+    sections.forEach(sec => {
+      sec.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = sec.dataset.section;
+        if (state.activeSection === id) {
+          closeAll();
+        } else {
+          openSection(id);
+        }
+      });
+    });
+
+    // Backdrop closes all
+    backdrop.addEventListener('click', closeAll);
+
+    // Prevent dropdown clicks from closing
+    dropdowns.forEach(dd => {
+      dd.addEventListener('click', e => e.stopPropagation());
+    });
+
+    /* ── Interest: chip & category selection ─────────────────────── */
+    document.querySelectorAll('.dd-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.dd-chip').forEach(c => c.classList.remove('is-selected'));
+        chip.classList.add('is-selected');
+        const inp = document.getElementById('input-interest');
+        inp.value = chip.dataset.value;
+        inp.dispatchEvent(new Event('input'));
+        setTimeout(closeAll, 200);
+      });
+    });
+
+    document.querySelectorAll('.dd-category').forEach(cat => {
+      cat.addEventListener('click', () => {
+        document.querySelectorAll('.dd-category').forEach(c => c.classList.remove('is-selected'));
+        cat.classList.add('is-selected');
+        const inp = document.getElementById('input-interest');
+        inp.value = cat.dataset.value;
+        setTimeout(closeAll, 200);
+      });
+    });
+
+    // Interest typeahead: reopen dropdown on typing
+    document.getElementById('input-interest').addEventListener('input', (e) => {
+      if (e.target.value && state.activeSection !== 'interest') {
+        openSection('interest');
+      }
+    });
+    document.getElementById('input-interest').addEventListener('focus', () => {
+      openSection('interest');
+    });
+
+    /* ── Destination: place selection ────────────────────────────── */
+    document.querySelectorAll('.dd-place').forEach(place => {
+      place.addEventListener('click', () => {
+        const inp = document.getElementById('input-destination');
+        inp.value = place.dataset.value;
+        setTimeout(closeAll, 200);
+      });
+    });
+
+    // Destination search input syncs to bar input
+    document.getElementById('dest-search-input').addEventListener('input', (e) => {
+      document.getElementById('input-destination').value = e.target.value;
+    });
+
+    document.getElementById('input-destination').addEventListener('focus', () => {
+      openSection('destination');
+    });
+    document.getElementById('input-destination').addEventListener('input', (e) => {
+      document.getElementById('dest-search-input').value = e.target.value;
+    });
+
+    /* ── Dates: mode tabs ────────────────────────────────────────── */
+    document.querySelectorAll('.dd-date-mode').forEach(mode => {
+      mode.addEventListener('click', () => {
+        document.querySelectorAll('.dd-date-mode').forEach(m => m.classList.remove('is-active'));
+        mode.classList.add('is-active');
+        const m = mode.dataset.mode;
+        document.getElementById('dd-dates-months').style.display = m === 'range' ? 'none' : 'block';
+        document.getElementById('dd-cal').style.display           = m === 'range' ? 'flex' : 'none';
+        if (m === 'range') renderCalendars();
+      });
+    });
+
+    /* ── Dates: specific month tab ───────────────────────────────── */
+    const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    let selectedMonthValue = null;
+    let activeMonthYear = 2026;
+
+    function renderMonthGrid() {
+      const grid = document.getElementById('dd-months-grid');
+      if (!grid) return;
+      grid.innerHTML = MONTH_NAMES.map((m, idx) => {
+        const val = `${m} ${activeMonthYear}`;
+        const isPast = activeMonthYear === 2026 && idx < 4; // Jan–Apr 2026
+        const classes = ['dd-month-tile',
+          selectedMonthValue === val ? 'is-selected' : '',
+          isPast ? 'is-past' : ''
+        ].filter(Boolean).join(' ');
+        return `<div class="${classes}"${isPast ? '' : ` data-value="${val}"`}>
+          <div class="dd-month-tile__month">${m}</div>
+          <div class="dd-month-tile__year">${activeMonthYear}</div>
+        </div>`;
+      }).join('');
+      grid.querySelectorAll('.dd-month-tile:not(.is-past)').forEach(tile => {
+        tile.addEventListener('click', () => {
+          selectedMonthValue = tile.dataset.value;
+          document.getElementById('val-dates').textContent = selectedMonthValue;
+          document.getElementById('val-dates').classList.add('has-value');
+          renderMonthGrid();
+          setTimeout(closeAll, 300);
+        });
+      });
+    }
+
+    document.getElementById('dd-year-nav').addEventListener('click', (e) => {
+      const btn = e.target.closest('.dd-year-btn');
+      if (!btn) return;
+      activeMonthYear = parseInt(btn.dataset.year);
+      document.querySelectorAll('.dd-year-btn').forEach(b => b.classList.toggle('is-active', b === btn));
+      renderMonthGrid();
+    });
+
+    renderMonthGrid();
+
+    /* ── Dual calendar ───────────────────────────────────────────── */
+    const CAL_MONTHS   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const CAL_WEEKDAYS = ['M','T','W','T','F','S','S'];
+    const calState = { leftYear: 2026, leftMonth: 3, rangeStart: null, rangeEnd: null, hoverDate: null };
+
+    function renderCalendars() {
+      let rYear = calState.leftYear, rMonth = calState.leftMonth + 1;
+      if (rMonth > 11) { rMonth = 0; rYear++; }
+      renderMonth('cal-left',  calState.leftYear, calState.leftMonth, true);
+      renderMonth('cal-right', rYear, rMonth, false);
+    }
+
+    function renderMonth(id, year, month, isLeft) {
+      const today    = new Date(2026, 3, 9);
+      const firstDow = ((new Date(year, month, 1).getDay() + 6) % 7);
+      const daysInM  = new Date(year, month + 1, 0).getDate();
+      const prevBtn  = isLeft  ? `<button class="dd-cal__nav-btn" id="cal-prev">&#8249;</button>` : `<button class="dd-cal__nav-btn is-hidden"></button>`;
+      const nextBtn  = !isLeft ? `<button class="dd-cal__nav-btn" id="cal-next">&#8250;</button>` : `<button class="dd-cal__nav-btn is-hidden"></button>`;
+
+      let html = `<div class="dd-cal__nav">${prevBtn}<div class="dd-cal__nav-title">${CAL_MONTHS[month]} ${year}</div>${nextBtn}</div>`;
+      html += `<div class="dd-cal__weekdays">${CAL_WEEKDAYS.map(d=>`<div>${d}</div>`).join('')}</div>`;
+      html += `<div class="dd-cal__days">`;
+      for (let i = 0; i < firstDow; i++) html += `<div class="dd-cal__day is-empty"></div>`;
+      for (let d = 1; d <= daysInM; d++) {
+        const date    = new Date(year, month, d);
+        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        let cls = 'dd-cal__day';
+        if (date < today && date.toDateString() !== today.toDateString()) cls += ' is-past';
+        if (date.toDateString() === today.toDateString()) cls += ' is-today';
+        const rs = calState.rangeStart, re = calState.rangeEnd || calState.hoverDate;
+        if (rs && date.toDateString() === rs.toDateString()) cls += ' is-start';
+        if (re && date.toDateString() === re.toDateString()) cls += ' is-end';
+        if (rs && re && date > rs && date < re) cls += ' is-in-range';
+        html += `<div class="${cls}" data-date="${dateStr}">${d}</div>`;
+      }
+      html += `</div>`;
+
+      const el = document.getElementById(id);
+      el.innerHTML = html;
+
+      const p = el.querySelector('#cal-prev'), n = el.querySelector('#cal-next');
+      if (p) p.addEventListener('click', () => { calState.leftMonth--; if (calState.leftMonth < 0) { calState.leftMonth = 11; calState.leftYear--; } renderCalendars(); });
+      if (n) n.addEventListener('click', () => { calState.leftMonth++; if (calState.leftMonth > 11) { calState.leftMonth = 0; calState.leftYear++; } renderCalendars(); });
+
+      // Click handlers on individual cells — stable, recreated only on full re-render
+      el.querySelectorAll('.dd-cal__day:not(.is-empty):not(.is-past)').forEach(dayEl => {
+        dayEl.addEventListener('click', () => {
+          const date = new Date(dayEl.dataset.date);
+          if (!calState.rangeStart || (calState.rangeStart && calState.rangeEnd)) {
+            calState.rangeStart = date; calState.rangeEnd = null;
+          } else {
+            if (date >= calState.rangeStart) calState.rangeEnd = date;
+            else { calState.rangeStart = date; calState.rangeEnd = null; }
+          }
+          calState.hoverDate = null;
+          updateCalFooter(); renderCalendars();
+        });
+      });
+    }
+
+    // Hover handled via event delegation on the stable container — never destroyed on re-render
+    (function initCalHover() {
+      const calEl = document.getElementById('dd-cal');
+      calEl.addEventListener('mouseover', (e) => {
+        if (!calState.rangeStart || calState.rangeEnd) return;
+        const day = e.target.closest('.dd-cal__day');
+        if (!day || day.classList.contains('is-empty') || day.classList.contains('is-past')) return;
+        const newDate = new Date(day.dataset.date);
+        if (!calState.hoverDate || calState.hoverDate.getTime() !== newDate.getTime()) {
+          calState.hoverDate = newDate;
+          renderCalendars();
+        }
+      });
+      calEl.addEventListener('mouseleave', () => {
+        if (!calState.rangeStart || calState.rangeEnd) return;
+        calState.hoverDate = null;
+        renderCalendars();
+      });
+    })();
+
+    function updateCalFooter() {
+      const fmt = d => d ? d.toLocaleDateString('en-GB', { day:'numeric', month:'short' }) : null;
+      const ci = document.getElementById('cal-foot-checkin'),  co = document.getElementById('cal-foot-checkout');
+      ci.textContent = fmt(calState.rangeStart) || 'Add date';
+      co.textContent = fmt(calState.rangeEnd)   || 'Add date';
+      ci.classList.toggle('is-placeholder', !calState.rangeStart);
+      co.classList.toggle('is-placeholder', !calState.rangeEnd);
+      if (calState.rangeStart && calState.rangeEnd) {
+        document.getElementById('val-dates').textContent = fmt(calState.rangeStart) + ' – ' + fmt(calState.rangeEnd);
+        document.getElementById('val-dates').classList.add('has-value');
+      }
+    }
+
+    /* ── Search button ───────────────────────────────────────────── */
+    document.getElementById('hp-search-submit').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const interest    = document.getElementById('input-interest').value;
+      const destination = document.getElementById('input-destination').value;
+      const dates       = document.getElementById('val-dates').textContent;
+      // For now navigate to index.html — wire to listing page later
+      window.location.href = 'listings.html';
+    });
+
+    /* ── GUIDED SEARCH FLOW ─────────────────────────────────────── */
+    const ALL_COUNTRIES = [
+      'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria',
+      'Azerbaijan','Bahamas','Bahrain','Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan',
+      'Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria','Burkina Faso','Burundi','Cabo Verde','Cambodia',
+      'Cameroon','Canada','Central African Republic','Chad','Chile','China','Colombia','Comoros','Congo','Costa Rica',
+      'Croatia','Cuba','Cyprus','Czech Republic','Denmark','Djibouti','Dominica','Dominican Republic','Ecuador','Egypt',
+      'El Salvador','Equatorial Guinea','Eritrea','Estonia','Eswatini','Ethiopia','Fiji','Finland','France','Gabon',
+      'Gambia','Georgia','Germany','Ghana','Greece','Grenada','Guatemala','Guinea','Guinea-Bissau','Guyana',
+      'Haiti','Honduras','Hungary','Iceland','India','Indonesia','Iran','Iraq','Ireland','Israel',
+      'Italy','Jamaica','Japan','Jordan','Kazakhstan','Kenya','Kiribati','Kuwait','Kyrgyzstan','Laos',
+      'Latvia','Lebanon','Lesotho','Liberia','Libya','Liechtenstein','Lithuania','Luxembourg','Madagascar','Malawi',
+      'Malaysia','Maldives','Mali','Malta','Marshall Islands','Mauritania','Mauritius','Mexico','Micronesia','Moldova',
+      'Monaco','Mongolia','Montenegro','Morocco','Mozambique','Myanmar','Namibia','Nauru','Nepal','Netherlands',
+      'New Zealand','Nicaragua','Niger','Nigeria','North Korea','North Macedonia','Norway','Oman','Pakistan','Palau',
+      'Palestine','Panama','Papua New Guinea','Paraguay','Peru','Philippines','Poland','Portugal','Qatar','Romania',
+      'Russia','Rwanda','Saint Kitts and Nevis','Saint Lucia','Saint Vincent and the Grenadines','Samoa','San Marino','São Tomé and Príncipe','Saudi Arabia','Senegal',
+      'Serbia','Seychelles','Sierra Leone','Singapore','Slovakia','Slovenia','Solomon Islands','Somalia','South Africa','South Korea',
+      'South Sudan','Spain','Sri Lanka','Sudan','Suriname','Sweden','Switzerland','Syria','Taiwan','Tajikistan',
+      'Tanzania','Thailand','Timor-Leste','Togo','Tonga','Trinidad and Tobago','Tunisia','Turkey','Turkmenistan','Tuvalu',
+      'Uganda','Ukraine','United Arab Emirates','United Kingdom','United States','Uruguay','Uzbekistan','Vanuatu','Vatican City','Venezuela',
+      'Vietnam','Yemen','Zambia','Zimbabwe'
+    ];
+
+    const GS_STEPS = [
+      {
+        num: '1', total: '/ 6', heading: '1.',
+        question: 'What type of retreat are you interestd in?',
+        subtext: 'Tell us the kind of retreat you\'re looking for and what kind of experience you hope for, by answering some simple questions.',
+        label: 'CHOOSE YOUR TYPE OF RETREAT FIRST',
+        type: 'single',
+        options: [
+          { emoji: '🤷', label: 'I don\'t know yet',           desc: 'We can suggest retreats based on further questions' },
+          { emoji: '🧘', label: 'Yoga & Meditation',           desc: 'Meditation, silence, breathwork' },
+          { emoji: '🏃', label: 'Fitness & Adventure',         desc: 'Hiking, surfing, cycling, running' },
+          { emoji: '🌸', label: 'Personal Growth & Coaching',  desc: 'Life coaching, leadership, mentoring' },
+          { emoji: '🎨', label: 'Creative & Cultural',         desc: 'Writing, art, music, photography, acting' },
+          { emoji: '💛', label: 'Health & Healing',            desc: 'Detox, ayurveda, nutrition, hormone health' },
+          { emoji: '🧠', label: 'Emotional & Mental Support',  desc: 'Anxiety, depression, trauma, grief' },
+          { emoji: '🌿', label: 'Nature & Outdoors',           desc: 'Rewilding, forest bathing, safari, wildlife' },
+        ]
+      },
+      {
+        num: '2', total: '/ 6', heading: '2.',
+        question: 'Do you know the feeling you want?',
+        subtext: 'We\'ve suggested a number of feelings you might want from a retreat. We\'ll take this into consideration when making any recommendations.',
+        label: 'CHOOSE THE TYPES OF FEELING YOU\'RE AFTER — YOU CAN CHOOSE AS MANY AS YOU LIKE',
+        type: 'chips',
+        options: [
+          { label: 'Meditate' }, { label: 'Recover' }, { label: 'Let go' },
+          { label: 'Connect' }, { label: 'Find meaning' }, { label: 'Heal' },
+          { label: 'Feel better' }, { label: 'Build confidence' }, { label: 'Escape' },
+          { label: 'Cleanse' }, { label: 'Deep dive' }, { label: 'Indulge' },
+          { label: 'Balance' }, { label: 'Slow down' },
+          { label: 'Experience something special' }, { label: 'Feel safe' }, { label: 'Restore energy' },
+          { label: 'Process' }, { label: 'Be present' }, { label: 'Transform' },
+          { label: 'Grow' }, { label: 'Move forward' }, { label: 'Commit' }, { label: 'Get help' }, { label: 'Recover safely' }, { label: 'I don\'t know', divider: true },
+        ]
+      },
+      {
+        num: '3', total: '/ 6', heading: '3.',
+        question: 'Do you know the setting you might like?',
+        subtext: 'Tell us the type of location you would like to go on your retreat.',
+        label: 'CHOOSE THE TYPES OF LOCATION YOU\'RE AFTER',
+        type: 'cards',
+        options: [
+          { icon: 'icons/lakes.svg',      label: 'Lakes & Rivers'    },
+          { icon: 'icons/beach.svg',       label: 'Beach'             },
+          { icon: 'icons/healing.svg',  label: 'Winter Sun'        },
+          { icon: 'icons/nature.svg',   label: 'Forest & Woodland' },
+          { icon: 'icons/adventure.svg',     label: 'Mountains'         },
+          { icon: null,                    label: 'I don\'t know'     },
+        ]
+      },
+      {
+        num: '4', total: '/ 6', heading: '4.',
+        question: 'Do you know how far you want to travel?',
+        subtext: 'Tell us how far you\'re willing to travel and we can suggest a range of options.',
+        label: 'CHOOSE THE RANGE YOU\'RE WILLING TO TRAVEL',
+        type: 'cards',
+        cardHeight: 240,
+        cardCols: 3,
+        options: [
+          { icon: 'icons/worldwide.svg',  label: 'Worldwide'       },
+          { icon: 'icons/continent.svg',  label: 'Same continent'  },
+          { icon: 'icons/country.svg',    label: 'Same country'    },
+        ]
+      },
+      {
+        num: '5', total: '/ 6', heading: '5.',
+        question: 'When do you want to go?',
+        subtext: 'Let us know how fixed your dates are and we\'ll tailor our recommendations accordingly.',
+        label: 'HOW FLEXIBLE ARE YOUR DATES?',
+        type: 'cards',
+        cardHeight: 240,
+        cardCols: 3,
+        options: [
+          { icon: 'icons/exact-dates.svg', label: 'Exact dates'         },
+          { icon: 'icons/rough-dates.svg',   label: 'I have a rough idea' },
+          { emoji: '🤷',                    label: 'I don\'t know yet'   },
+        ],
+        subStep: {
+          label: 'CHOOSE ALL MONTHS THAT WORK FOR YOU.',
+          type: 'month-cards',
+          cardHeight: 72,
+          cardCols: 4,
+          options: [
+            { label: 'May',  year: '2026' }, { label: 'Jun',  year: '2026' },
+            { label: 'Jul',  year: '2026' }, { label: 'Aug',  year: '2026' },
+            { label: 'Sep',  year: '2026' }, { label: 'Oct',  year: '2026' },
+            { label: 'Nov',  year: '2026' }, { label: 'Dec',  year: '2026' },
+            { label: 'Jan',  year: '2027' }, { label: 'Feb',  year: '2027' },
+            { label: 'Mar',  year: '2027' }, { label: 'Apr',  year: '2027' },
+          ]
+        }
+      },
+      {
+        num: '6', total: '/ 6', heading: '6.',
+        question: 'How many people are you travelling with?',
+        subtext: 'Let us know your group size so we can match you with the right retreat options.',
+        label: 'CHOOSE YOUR GROUP SIZE',
+        type: 'cards',
+        cardHeight: 240,
+        cardCols: 4,
+        options: [
+          { icon: 'icons/user.svg',  label: 'Just me',      desc: 'Solo retreat'        },
+          { icon: 'icons/couples.svg',     label: 'Two of us',    desc: 'Couple or friends'   },
+          { icon: 'icons/small-group.svg',  label: 'Small group',  desc: '3 – 5 people'        },
+          { icon: 'icons/large-group.svg',     label: 'Larger group', desc: '6 or more'           },
+        ]
+      },
+      {
+        num: 'A little about you.', total: '', heading: '',
+        question: 'Your location?',
+        subtext: 'We just need to know where you currently live to get the best results.',
+        label: 'TYPE OR CHOOSE A COUNTRY FROM THE MENU BELOW',
+        type: 'country',
+        options: []
+      },
+    ];
+
+    const gsState = { step: 0, subStep: 0, active: false, selections: GS_STEPS.map(() => []), subSelections: {} };
+
+    function gsOpen() {
+      gsState.active = true;
+      gsState.step = 0;
+      gsState.subStep = 0;
+      gsState.selections = GS_STEPS.map(() => []);
+      gsState.subSelections = {};
+
+      // Stage 1: darken + blur background, fade out search block simultaneously
+      hero.classList.add('search-active', 'gs-active');
+
+      // Stage 2: show overlay with content hidden, render it
+      const overlay = document.getElementById('gs-overlay');
+      const content = document.getElementById('gs-content');
+      overlay.classList.add('is-open');
+      content.classList.add('is-hidden');
+      gsRender();
+
+      // Stage 3: after background has darkened (~900ms), fade up the step content
+      setTimeout(() => {
+        content.classList.remove('is-hidden');
+        content.classList.add('is-entering');
+        setTimeout(() => content.classList.remove('is-entering'), 700);
+      }, 900);
+    }
+
+    function gsClose() {
+      gsState.active = false;
+      const overlay = document.getElementById('gs-overlay');
+      overlay.classList.remove('is-open');
+      hero.classList.remove('search-active', 'gs-active');
+    }
+
+    function gsRender() {
+      const step      = GS_STEPS[gsState.step];
+      const inSubStep = gsState.subStep > 0 && !!step.subStep;
+      const activeStep = inSubStep ? step.subStep : step;
+      const sel       = inSubStep
+        ? (gsState.subSelections[gsState.step] || [])
+        : gsState.selections[gsState.step];
+      const isLast    = gsState.step === GS_STEPS.length - 1 && !inSubStep;
+      const isHeadline = step.num === 'A little about you.';
+
+      const continueDisabled = sel.length === 0 ? 'disabled' : '';
+      const btnLabel = isLast ? 'FIND RETREATS' : 'CONTINUE';
+
+      let optionsHtml = '';
+      if (activeStep.type === 'month-cards') {
+        const h = activeStep.cardHeight || 72;
+        const cols = activeStep.cardCols || 4;
+        const cardStyle = `style="height:${h}px"`;
+        const gridStyle = `style="grid-template-columns:repeat(${cols},1fr); width:100%; max-width:805px"`;
+        optionsHtml = `
+          <div class="gs-cards" ${gridStyle}>
+            ${activeStep.options.map((opt, i) => `
+              <div class="gs-month-card${sel.includes(i) ? ' is-selected' : ''}" data-index="${i}" ${cardStyle}>
+                <div class="gs-month-card__name">${opt.label}</div>
+                <div class="gs-month-card__year">${opt.year}</div>
+              </div>`).join('')}
+          </div>`;
+      } else if (activeStep.type === 'cards') {
+        const h = activeStep.cardHeight || null;
+        const cardStyle = h ? `style="height:${h}px; width:${h}px"` : '';
+        const gridStyle = activeStep.cardCols ? `style="grid-template-columns:repeat(${activeStep.cardCols},auto); justify-content:start"` : '';
+        optionsHtml = `
+          <div class="gs-cards" ${gridStyle}>
+            ${activeStep.options.map((opt, i) => `
+              <div class="gs-card${sel.includes(i) ? ' is-selected' : ''}${(!opt.icon && !opt.emoji) ? ' gs-card--no-icon' : ''}" data-index="${i}" ${cardStyle}>
+                ${opt.icon ? `<div class="gs-card__icon"><img src="${opt.icon}" alt="${opt.label}"></div>` : ''}
+                ${opt.emoji ? `<div class="gs-card__icon gs-card__emoji">${opt.emoji}</div>` : ''}
+                <div class="gs-card__text">
+                  <div class="gs-card__label">${opt.label}</div>
+                  ${opt.desc ? `<div class="gs-card__desc">${opt.desc}</div>` : ''}
+                </div>
+              </div>`).join('')}
+          </div>`;
+      } else if (step.type === 'chips') {
+        optionsHtml = `
+          <div class="gs-chips-wrap">
+            <div class="gs-chips">
+              ${step.options.map((opt, i) => `
+                ${opt.divider ? '<span class="gs-chip-divider"></span>' : ''}
+                <div class="gs-chip${sel.includes(i) ? ' is-selected' : ''}" data-index="${i}">${opt.label}</div>
+              `).join('')}
+            </div>
+            <button class="gs-reset" id="gs-reset">Reset</button>
+          </div>`;
+      } else if (step.type === 'country') {
+        optionsHtml = `
+          <div class="gs-country-wrap" id="gs-country-wrap">
+            <div class="gs-input-wrap">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <input class="gs-country-input" id="gs-country-input" type="text" placeholder="Start typing a country…" autocomplete="off" value="${sel[0] || ''}">
+            </div>
+            <div class="gs-country-dropdown" id="gs-country-dropdown"></div>
+          </div>`;
+      } else {
+        optionsHtml = `<div class="gs-options">
+          ${step.options.map((opt, i) => `
+            <div class="gs-option${sel.includes(i) ? ' is-selected' : ''}" data-index="${i}">
+              <div class="gs-option__emoji">${opt.emoji}</div>
+              <div class="gs-option__text">
+                <div class="gs-option__label">${opt.label}</div>
+                ${opt.desc ? `<div class="gs-option__desc">${opt.desc}</div>` : ''}
+              </div>
+            </div>`).join('')}
+        </div>`;
+      }
+
+      const content = document.getElementById('gs-content');
+      content.innerHTML = `
+        <div class="gs-counter-row">
+          <div class="gs-counter-left">
+            <button class="gs-back${gsState.step === 0 && gsState.subStep === 0 ? ' is-hidden' : ''}" id="gs-back" aria-label="Back">
+              <svg width="22" height="12" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 6H1M1 6L6 1M1 6L6 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="gs-counter">
+              <span class="gs-counter__num">${step.num}</span>
+              ${step.total ? `<span class="gs-counter__total">&nbsp;${step.total}</span>` : ''}
+            </div>
+          </div>
+          <button class="gs-close" id="gs-close" aria-label="Close">&#x2715;</button>
+        </div>
+        <div class="gs-question-row${isHeadline ? ' is-headline' : ''}">
+          ${step.heading ? `<div class="gs-question-num">${step.heading}</div>` : ''}
+          <div class="gs-question">${step.question}</div>
+        </div>
+        <div class="gs-subtext">${step.subtext}</div>
+        <div class="gs-label">${activeStep.label}</div>
+        <div id="gs-opts-wrap" class="${gsState.subStepEntering ? 'gs-opts-entering' : ''}">${optionsHtml}</div>
+        <div class="gs-actions">
+          <button class="gs-continue" id="gs-continue" ${continueDisabled}>
+            ${btnLabel} &nbsp;→
+          </button>
+          <div class="gs-enter-hint${sel.length > 0 ? ' is-active' : ''}">PRESS ENTER &nbsp;⮐</div>
+        </div>
+      `;
+
+      // Bind interactions
+      if (activeStep.type === 'month-cards') {
+        content.querySelectorAll('.gs-month-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const idx = parseInt(card.dataset.index);
+            const s = gsState.subSelections[gsState.step] || [];
+            const pos = s.indexOf(idx);
+            if (pos === -1) s.push(idx); else s.splice(pos, 1);
+            gsState.subSelections[gsState.step] = s;
+            gsRender();
+          });
+        });
+      } else if (activeStep.type === 'cards') {
+        content.querySelectorAll('.gs-card').forEach(card => {
+          card.addEventListener('click', () => {
+            gsState.selections[gsState.step] = [parseInt(card.dataset.index)];
+            gsRender();
+          });
+        });
+      } else if (step.type === 'chips') {
+        const dontKnowIdx = step.options.findIndex(o => o.divider);
+        content.querySelectorAll('.gs-chip').forEach(chip => {
+          chip.addEventListener('click', () => {
+            const idx = parseInt(chip.dataset.index);
+            const s = gsState.selections[gsState.step];
+            if (idx === dontKnowIdx) {
+              // "I don't know" — single select, clears all others
+              const alreadySelected = s.includes(idx);
+              gsState.selections[gsState.step] = alreadySelected ? [] : [idx];
+            } else {
+              // Regular multi-select — remove "I don't know" if present
+              const withoutDontKnow = s.filter(i => i !== dontKnowIdx);
+              const pos = withoutDontKnow.indexOf(idx);
+              if (pos === -1) withoutDontKnow.push(idx); else withoutDontKnow.splice(pos, 1);
+              gsState.selections[gsState.step] = withoutDontKnow;
+            }
+            gsRender();
+          });
+        });
+        content.querySelector('#gs-reset').addEventListener('click', () => {
+          gsState.selections[gsState.step] = [];
+          gsRender();
+        });
+      } else if (step.type === 'country') {
+        const input    = document.getElementById('gs-country-input');
+        const dropdown = document.getElementById('gs-country-dropdown');
+        let highlightIdx = -1;
+
+        function renderDropdown(query) {
+          const q = query.trim().toLowerCase();
+          if (q.length === 0) { dropdown.classList.remove('is-open'); return; }
+          const matches = ALL_COUNTRIES.filter(c => c.toLowerCase().startsWith(q))
+            .concat(ALL_COUNTRIES.filter(c => !c.toLowerCase().startsWith(q) && c.toLowerCase().includes(q)));
+          highlightIdx = -1;
+          dropdown.innerHTML = matches.length === 0
+            ? `<div class="gs-country-empty">No countries found</div>`
+            : matches.map(c =>
+                `<div class="gs-country-option${gsState.selections[gsState.step][0] === c ? ' is-selected' : ''}" data-country="${c}">${c}</div>`
+              ).join('');
+          dropdown.classList.add('is-open');
+        }
+
+        function selectCountry(name) {
+          input.value = name;
+          gsState.selections[gsState.step] = [name];
+          document.getElementById('gs-continue').disabled = false;
+          dropdown.classList.remove('is-open');
+        }
+
+        input.addEventListener('input', () => {
+          const val = input.value.trim();
+          gsState.selections[gsState.step] = ALL_COUNTRIES.includes(input.value.trim()) ? [input.value.trim()] : [];
+          document.getElementById('gs-continue').disabled = !ALL_COUNTRIES.includes(input.value.trim());
+          renderDropdown(input.value);
+        });
+
+
+        input.addEventListener('keydown', (e) => {
+          const items = dropdown.querySelectorAll('.gs-country-option');
+          if (!items.length) return;
+          if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            highlightIdx = Math.min(highlightIdx + 1, items.length - 1);
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            highlightIdx = Math.max(highlightIdx - 1, 0);
+          } else if (e.key === 'Enter' && highlightIdx >= 0) {
+            e.stopPropagation();
+            selectCountry(items[highlightIdx].dataset.country);
+            return;
+          } else { return; }
+          items.forEach((el, i) => el.classList.toggle('is-highlighted', i === highlightIdx));
+          items[highlightIdx]?.scrollIntoView({ block: 'nearest' });
+        });
+
+        dropdown.addEventListener('mousedown', (e) => {
+          const opt = e.target.closest('.gs-country-option');
+          if (opt) { e.preventDefault(); selectCountry(opt.dataset.country); }
+        });
+
+        document.addEventListener('click', function closeDropdown(e) {
+          if (!document.getElementById('gs-country-wrap')?.contains(e.target)) {
+            dropdown.classList.remove('is-open');
+            document.removeEventListener('click', closeDropdown);
+          }
+        });
+
+        input.focus();
+      } else {
+        content.querySelectorAll('.gs-option').forEach(opt => {
+          opt.addEventListener('click', () => {
+            gsState.selections[gsState.step] = [parseInt(opt.dataset.index)];
+            gsRender();
+          });
+        });
+      }
+
+      content.querySelector('#gs-continue').addEventListener('click', gsAdvance);
+    }
+
+    function gsBack() {
+      if (gsState.step === 0 && gsState.subStep === 0) return;
+      const content = document.getElementById('gs-content');
+      content.classList.add('is-exiting');
+      setTimeout(() => {
+        if (gsState.subStep > 0) {
+          gsState.subStep = 0;
+        } else {
+          gsState.step--;
+          // If the previous step had a subStep we completed, stay on its main view
+          gsState.subStep = 0;
+        }
+        content.classList.remove('is-exiting');
+        gsRender();
+        content.classList.add('is-entering');
+        setTimeout(() => content.classList.remove('is-entering'), 350);
+      }, 200);
+    }
+
+    function gsAdvance() {
+      const btn = document.getElementById('gs-continue');
+      if (btn && btn.disabled) return;
+      const step = GS_STEPS[gsState.step];
+      const content = document.getElementById('gs-content');
+      // If this step has a subStep and we haven't entered it yet, go to subStep
+      if (step.subStep && gsState.subStep === 0) {
+        gsState.subStep = 1;
+        gsState.subStepEntering = true;
+        gsRender();
+        gsState.subStepEntering = false;
+      } else if (gsState.step < GS_STEPS.length - 1) {
+        content.classList.add('is-exiting');
+        setTimeout(() => {
+          gsState.step++;
+          gsState.subStep = 0;
+          content.classList.remove('is-exiting');
+          gsRender();
+          content.classList.add('is-entering');
+          setTimeout(() => content.classList.remove('is-entering'), 350);
+        }, 200);
+      } else {
+        window.location.href = 'listings.html';
+      }
+    }
+
+    document.getElementById('btn-explore').addEventListener('click', gsOpen);
+
+    // Delegate close button — stable container, survives re-renders
+    document.getElementById('gs-overlay').addEventListener('click', (e) => {
+      if (e.target.closest('#gs-close')) gsClose();
+      if (e.target.closest('#gs-back')) gsBack();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!gsState.active) return;
+      if (e.key === 'Enter') { e.preventDefault(); gsAdvance(); }
+      if (e.key === 'Escape') gsClose();
+    });
+
   </script>
 
 </body>

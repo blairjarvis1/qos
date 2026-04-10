@@ -189,7 +189,7 @@
         <a href="#">Inspiration</a>
         <a href="#">About</a>
       </nav>
-      <a href="#" class="site-header__logo">Queen of Retreats</a>
+      <a href="index.html" class="site-header__logo">Queen of Retreats</a>
       <div class="site-header__actions">
         <button class="btn btn--ghost" style="gap:6px">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -527,20 +527,6 @@
 
   </div><!-- end page-body -->
 
-  <!-- ===== Footer ===== -->
-  <footer class="footer">
-    <div class="footer__inner">
-      <div class="footer__logo">Queen of Retreats</div>
-      <div class="footer__links">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">Contact</a>
-        <a href="#">For Retreat Owners</a>
-      </div>
-      <p style="font-size: var(--t-xs); color: var(--mist);">© 2026 Queen of Retreats</p>
-    </div>
-  </footer>
-
   <script>
     // Tabs (inline for index page)
     document.querySelectorAll('.tabs__tab').forEach(tab => {
@@ -591,6 +577,70 @@
     window.addEventListener('scroll', updateHeader, { passive: true });
     updateHeader();
   </script>
+
+  <!-- ── FOOTER ──────────────────────────────────────────────────── -->
+  <footer style="background: var(--ink); color: var(--white); padding: 64px 48px 40px;">
+    <div style="max-width: 1320px; margin: 0 auto;">
+
+      <!-- Top row -->
+      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.12);">
+
+        <!-- Brand -->
+        <div>
+          <a href="index.html" style="font-family: var(--serif); font-size: 22px; color: var(--white); margin-bottom: 16px; text-decoration: none; display: block;">Queen of Retreats</a>
+          <p style="font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.55); max-width: 280px;">Expertly vetted, personally selected retreats from around the world. We only list what we truly believe in.</p>
+        </div>
+
+        <!-- Retreats -->
+        <div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.40); margin-bottom: 16px;">Retreats</div>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Yoga &amp; Meditation</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Health &amp; Healing</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Fitness &amp; Adventure</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Personal Growth</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Creative &amp; Cultural</a></li>
+          </ul>
+        </div>
+
+        <!-- Destinations -->
+        <div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.40); margin-bottom: 16px;">Destinations</div>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Portugal</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Spain</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Greece</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Indonesia</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">France</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.40); margin-bottom: 16px;">Company</div>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">About Us</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">How It Works</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">List Your Retreat</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Inspiration</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Contact</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom row -->
+      <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 28px;">
+        <p style="font-size: 12px; color: rgba(255,255,255,0.35); margin: 0;">© 2026 Queen of Retreats. All rights reserved.</p>
+        <div style="display: flex; gap: 24px;">
+          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none;">Privacy Policy</a>
+          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none;">Terms of Use</a>
+          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none;">Cookie Settings</a>
+        </div>
+      </div>
+
+    </div>
+  </footer>
 
 </body>
 </html>
