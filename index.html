@@ -232,32 +232,53 @@
     .hp-search__btn svg { flex-shrink: 0; }
 
     /* ── DROPDOWNS ──────────────────────────────────────────────── */
-    @keyframes dd-enter {
-      0%   { opacity: 0; transform: translateY(-10px) scale(0.96); }
-      100% { opacity: 1; transform: translateY(0)     scale(1); }
+
+    /* Single morphing background panel */
+    #dd-morph-bg {
+      position: absolute;
+      top: calc(100% + 12px);
+      height: 400px;
+      background: var(--white);
+      border-radius: 24px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08);
+      z-index: 198;
+      pointer-events: none;
+      opacity: 0;
+      transition:
+        left 0.44s cubic-bezier(0.34, 1.1, 0.64, 1),
+        width 0.44s cubic-bezier(0.34, 1.1, 0.64, 1),
+        opacity 0.22s ease;
     }
+    #dd-morph-bg.is-visible { opacity: 1; }
+
+    /* Content containers — transparent, float above morph bg */
     .hp-search__dropdown {
       display: none;
       position: absolute;
       top: calc(100% + 12px);
       left: 0;
-      background: var(--white);
-      border-radius: 24px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08);
       z-index: 200;
       overflow-y: auto;
       text-align: left;
       height: 400px;
+      opacity: 0;
+      transition: opacity 0.16s ease;
     }
-    .hp-search__dropdown.is-open {
-      display: block;
-      animation: dd-enter 0.7s cubic-bezier(0.34, 1.28, 0.64, 1) both;
-    }
+    .hp-search__dropdown.is-open { display: block; }
+    .hp-search__dropdown.is-content-visible { opacity: 1; }
 
     /* Interest dropdown */
     #dd-interest {
-      width: 560px;
+      width: 620px;
       left: 0;
+    }
+    #dd-interest.is-open { display: flex; flex-direction: column; }
+    .dd-interest-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 20px 14px;
+      flex-shrink: 0;
     }
     .dd-section-title {
       font-family: var(--ui);
@@ -266,70 +287,48 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--stone);
-      padding: var(--s2) var(--s6) var(--s1);
-      flex-shrink: 0;
     }
-    #dd-interest .dd-section-title:first-child {
-      padding-top: 18px;
-      padding-bottom: 8px;
+    #dd-destination .dd-section-title {
+      padding: 12px 0 6px 24px;
     }
-    .dd-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 0 var(--s6) var(--s3);
-    }
-    .dd-chip {
-      font-size: var(--t-sm);
-      color: var(--charcoal);
-      background: var(--parchment);
-      border: 1.5px solid var(--border);
-      border-radius: var(--r-pill);
-      padding: 4px var(--s3);
-      cursor: pointer;
-      transition: all var(--dur-fast);
-      white-space: nowrap;
-    }
-    .dd-chip:hover, .dd-chip.is-selected {
-      background: var(--sage-pale);
-      border-color: var(--sage-mid);
-      color: var(--sage);
-    }
-    .dd-divider { height: 1px; background: var(--border); margin: 0 var(--s6); }
     .dd-categories {
-      max-height: 240px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      padding: 0 12px 16px;
       overflow-y: auto;
-      padding: var(--s1) 0 var(--s2);
     }
     .dd-categories::-webkit-scrollbar { width: 4px; }
     .dd-categories::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 2px; }
     .dd-category {
       display: flex;
       align-items: center;
-      gap: var(--s3);
-      padding: 7px var(--s6);
+      gap: 14px;
+      padding: 12px 10px;
+      border-radius: 12px;
       cursor: pointer;
       transition: background var(--dur-fast);
     }
     .dd-category:hover { background: var(--parchment); }
     .dd-category.is-selected { background: var(--sage-pale); }
     .dd-category__icon {
-      width: 30px; height: 30px;
+      width: 48px; height: 48px;
       background: var(--cloud);
-      border-radius: var(--r-md);
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
-      font-size: 14px;
+      font-size: 22px;
     }
     .dd-category__name {
-      font-size: var(--t-sm);
-      font-weight: 500;
+      font-size: 15px;
+      font-weight: 600;
       color: var(--ink);
+      margin-bottom: 3px;
     }
     .dd-category__desc {
       font-size: var(--t-xs);
       color: var(--stone);
-      margin-top: 1px;
+      line-height: 1.4;
     }
 
     /* Want dropdown */
@@ -1333,77 +1332,63 @@
           </div>
         </div>
 
+        <!-- Morphing background panel -->
+        <div id="dd-morph-bg"></div>
+
         <!-- ── DROPDOWN: Interest ──────────────────────────────── -->
         <div class="hp-search__dropdown" id="dd-interest">
-          <div class="dd-section-title">Popular categories</div>
-          <div class="dd-chips">
-            <div class="dd-chip" data-value="Yoga">Yoga</div>
-            <div class="dd-chip" data-value="Meditation">Meditation</div>
-            <div class="dd-chip" data-value="Detox">Detox</div>
-            <div class="dd-chip" data-value="Fitness">Fitness</div>
-            <div class="dd-chip" data-value="Wellness">Wellness</div>
-            <div class="dd-chip" data-value="Mindfulness">Mindfulness</div>
-            <div class="dd-chip" data-value="Spiritual">Spiritual</div>
-            <div class="dd-chip" data-value="Adventure">Adventure</div>
-            <div class="dd-chip" data-value="Nature">Nature</div>
+          <div class="dd-interest-header">
+            <div class="dd-section-title">Popular categories</div>
+            <button class="dd-not-sure" id="dd-interest-not-sure">I'm not sure yet</button>
           </div>
-          <div class="dd-divider"></div>
-          <div class="dd-section-title">Browse by type</div>
           <div class="dd-categories">
-            <div class="dd-category" data-value="Yoga &amp; Movement">
+            <div class="dd-category" data-value="Yoga &amp; Meditation">
               <div class="dd-category__icon">🧘</div>
               <div>
-                <div class="dd-category__name">Yoga &amp; Movement</div>
-                <div class="dd-category__desc">Hatha, vinyasa, yin, sound healing</div>
+                <div class="dd-category__name">Yoga &amp; Meditation</div>
+                <div class="dd-category__desc">Meditation, silence, breathwork</div>
               </div>
             </div>
-            <div class="dd-category" data-value="Meditation &amp; Mindfulness">
-              <div class="dd-category__icon">🌿</div>
-              <div>
-                <div class="dd-category__name">Meditation &amp; Mindfulness</div>
-                <div class="dd-category__desc">Silent retreats, breathwork, mindfulness</div>
-              </div>
-            </div>
-            <div class="dd-category" data-value="Detox &amp; Cleanse">
-              <div class="dd-category__icon">✨</div>
-              <div>
-                <div class="dd-category__name">Detox &amp; Cleanse</div>
-                <div class="dd-category__desc">Juice fasts, gut health, digital detox</div>
-              </div>
-            </div>
-            <div class="dd-category" data-value="Fitness &amp; Active">
+            <div class="dd-category" data-value="Fitness &amp; Adventure">
               <div class="dd-category__icon">🏃</div>
               <div>
-                <div class="dd-category__name">Fitness &amp; Active</div>
-                <div class="dd-category__desc">Hiking, surfing, triathlon, bootcamp</div>
+                <div class="dd-category__name">Fitness &amp; Adventure</div>
+                <div class="dd-category__desc">Hiking, surfing, cycling, running</div>
               </div>
             </div>
-            <div class="dd-category" data-value="Mental Wellness">
-              <div class="dd-category__icon">🧠</div>
-              <div>
-                <div class="dd-category__name">Mental Wellness</div>
-                <div class="dd-category__desc">Burnout recovery, anxiety, stress</div>
-              </div>
-            </div>
-            <div class="dd-category" data-value="Spiritual &amp; Healing">
+            <div class="dd-category" data-value="Personal Growth &amp; Coaching">
               <div class="dd-category__icon">🌸</div>
               <div>
-                <div class="dd-category__name">Spiritual &amp; Healing</div>
-                <div class="dd-category__desc">Shamanic, energy work, plant medicine</div>
+                <div class="dd-category__name">Personal Growth &amp; Coaching</div>
+                <div class="dd-category__desc">Life coaching, leadership, mentoring</div>
               </div>
             </div>
-            <div class="dd-category" data-value="Creative &amp; Arts">
+            <div class="dd-category" data-value="Creative &amp; Cultural">
               <div class="dd-category__icon">🎨</div>
               <div>
-                <div class="dd-category__name">Creative &amp; Arts</div>
-                <div class="dd-category__desc">Painting, writing, photography, pottery</div>
+                <div class="dd-category__name">Creative &amp; Cultural</div>
+                <div class="dd-category__desc">Writing, art, music, photography, acting</div>
               </div>
             </div>
-            <div class="dd-category" data-value="Couples &amp; Relationships">
+            <div class="dd-category" data-value="Health &amp; Healing">
               <div class="dd-category__icon">💛</div>
               <div>
-                <div class="dd-category__name">Couples &amp; Relationships</div>
-                <div class="dd-category__desc">Reconnect, communication, tantra</div>
+                <div class="dd-category__name">Health &amp; Healing</div>
+                <div class="dd-category__desc">Detox, ayurveda, nutrition, hormone health</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Emotional &amp; Mental Support">
+              <div class="dd-category__icon">🧠</div>
+              <div>
+                <div class="dd-category__name">Emotional &amp; Mental Support</div>
+                <div class="dd-category__desc">Anxiety, depression, trauma, grief</div>
+              </div>
+            </div>
+            <div class="dd-category" data-value="Nature &amp; Outdoors">
+              <div class="dd-category__icon">🌿</div>
+              <div>
+                <div class="dd-category__name">Nature &amp; Outdoors</div>
+                <div class="dd-category__desc">Rewilding, forest bathing, safari, wildlife</div>
               </div>
             </div>
           </div>
@@ -1658,55 +1643,103 @@
 
     // State
     const state = { activeSection: null };
+    const morphBg = document.getElementById('dd-morph-bg');
+    let closeTimer = null;
 
-    function openSection(sectionId) {
-      // Close all first
-      closeAll();
+    function measureDd(dd) {
+      const prevDisplay    = dd.style.display;
+      const prevVisibility = dd.style.visibility;
+      dd.style.display    = 'block';
+      dd.style.visibility = 'hidden';
+      const w = dd.offsetWidth;
+      dd.style.display    = prevDisplay;
+      dd.style.visibility = prevVisibility;
+      return w;
+    }
 
-      const sec = document.getElementById('sec-' + sectionId);
-      const dd  = document.getElementById('dd-' + sectionId);
-
-      if (!sec || !dd) return;
-
-      sec.classList.add('is-active');
-      dd.classList.add('is-open');
-      searchBar.classList.add('has-active');
-      backdrop.classList.add('is-open');
-      hero.classList.add('search-active');
-      state.activeSection = sectionId;
-
-      // Centre dropdown under its section
+    function calcDdLeft(sec, ddWidth) {
       const searchContainer = document.querySelector('.hp-search');
       const containerRect   = searchContainer.getBoundingClientRect();
       const secRect         = sec.getBoundingClientRect();
       const secCentre       = secRect.left + secRect.width / 2 - containerRect.left;
-      const ddWidth         = dd.offsetWidth;
-      let   ddLeft          = secCentre - ddWidth / 2;
-      // Clamp so it doesn't bleed off the search container
-      ddLeft = Math.max(0, Math.min(ddLeft, containerRect.width - ddWidth));
-      dd.style.left      = ddLeft + 'px';
-      dd.style.transform = 'none';
+      let ddLeft = secCentre - ddWidth / 2;
+      return Math.max(0, Math.min(ddLeft, containerRect.width - ddWidth));
+    }
 
-      // Height is fixed via CSS (400px)
+    function openSection(sectionId) {
+      // Cancel any in-progress close
+      if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
 
-      // Render calendar if dates dropdown opens on range mode (the default)
+      const sec = document.getElementById('sec-' + sectionId);
+      const dd  = document.getElementById('dd-' + sectionId);
+      if (!sec || !dd) return;
+
+      const prevSection   = state.activeSection;
+      const isSwitching   = prevSection !== null && prevSection !== sectionId;
+      state.activeSection = sectionId;
+
+      // Update bar state
+      sections.forEach(s => s.classList.remove('is-active'));
+      sec.classList.add('is-active');
+      searchBar.classList.add('has-active');
+      backdrop.classList.add('is-open');
+      hero.classList.add('search-active');
+
+      // Measure & position target dropdown
+      const ddWidth = measureDd(dd);
+      const ddLeft  = calcDdLeft(sec, ddWidth);
+      dd.style.left = ddLeft + 'px';
+
+      if (isSwitching) {
+        // Fade out old content immediately
+        const oldDd = document.getElementById('dd-' + prevSection);
+        oldDd.classList.remove('is-content-visible');
+
+        // Morph bg slides to new position — CSS transition handles the spring
+        morphBg.style.left  = ddLeft + 'px';
+        morphBg.style.width = ddWidth + 'px';
+
+        // Swap content after old fades out
+        setTimeout(() => {
+          oldDd.classList.remove('is-open');
+          dd.classList.add('is-open');
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => dd.classList.add('is-content-visible'))
+          );
+        }, 140);
+      } else {
+        // Fresh open
+        morphBg.style.left  = ddLeft + 'px';
+        morphBg.style.width = ddWidth + 'px';
+        dd.classList.add('is-open');
+        morphBg.classList.add('is-visible');
+        setTimeout(() => dd.classList.add('is-content-visible'), 90);
+      }
+
+      // Calendar render
       if (sectionId === 'dates') {
         const activeMode = document.querySelector('.dd-date-mode.is-active');
         if (activeMode && activeMode.dataset.mode === 'range') renderCalendars();
       }
 
-      // Focus input if present
+      // Focus input
       const inp = sec.querySelector('input');
-      if (inp) inp.focus();
+      if (inp) setTimeout(() => inp.focus(), isSwitching ? 150 : 90);
     }
 
     function closeAll() {
-      sections.forEach(s => s.classList.remove('is-active'));
-      dropdowns.forEach(d => d.classList.remove('is-open'));
-      searchBar.classList.remove('has-active');
-      backdrop.classList.remove('is-open');
-      hero.classList.remove('search-active');
       state.activeSection = null;
+      dropdowns.forEach(d => d.classList.remove('is-content-visible'));
+      morphBg.classList.remove('is-visible');
+
+      closeTimer = setTimeout(() => {
+        sections.forEach(s => s.classList.remove('is-active'));
+        dropdowns.forEach(d => d.classList.remove('is-open'));
+        searchBar.classList.remove('has-active');
+        backdrop.classList.remove('is-open');
+        hero.classList.remove('search-active');
+        closeTimer = null;
+      }, 220);
     }
 
     // Section click handlers
@@ -1782,26 +1815,30 @@
       }
     });
 
-    /* ── Interest: chip & category selection ─────────────────────── */
-    document.querySelectorAll('.dd-chip').forEach(chip => {
-      chip.addEventListener('click', () => {
-        document.querySelectorAll('.dd-chip').forEach(c => c.classList.remove('is-selected'));
-        chip.classList.add('is-selected');
-        const inp = document.getElementById('input-interest');
-        inp.value = chip.dataset.value;
-        inp.dispatchEvent(new Event('input'));
-        setTimeout(closeAll, 200);
-      });
-    });
-
+    /* ── Interest: category selection ───────────────────────────── */
     document.querySelectorAll('.dd-category').forEach(cat => {
       cat.addEventListener('click', () => {
         document.querySelectorAll('.dd-category').forEach(c => c.classList.remove('is-selected'));
         cat.classList.add('is-selected');
+        document.getElementById('dd-interest-not-sure').classList.remove('is-selected');
         const inp = document.getElementById('input-interest');
         inp.value = cat.dataset.value;
         setTimeout(closeAll, 200);
       });
+    });
+
+    document.getElementById('dd-interest-not-sure').addEventListener('click', () => {
+      const btn = document.getElementById('dd-interest-not-sure');
+      const alreadySelected = btn.classList.contains('is-selected');
+      document.querySelectorAll('.dd-category').forEach(c => c.classList.remove('is-selected'));
+      document.getElementById('input-interest').value = '';
+      if (!alreadySelected) {
+        btn.classList.add('is-selected');
+        document.getElementById('input-interest').value = "I'm not sure yet";
+      } else {
+        btn.classList.remove('is-selected');
+      }
+      setTimeout(closeAll, 200);
     });
 
     // Interest typeahead: reopen dropdown on typing
