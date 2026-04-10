@@ -102,7 +102,7 @@
     /* ── SEARCH BAR ─────────────────────────────────────────────── */
     .hp-search {
       width: 100%;
-      max-width: 860px;
+      max-width: 980px;
       margin: 0 auto var(--s6);
       position: relative;
     }
@@ -132,6 +132,18 @@
       transition: background var(--dur-fast);
       position: relative;
       min-width: 0;
+      overflow: hidden;
+    }
+    #sec-want::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 40px;
+      background: linear-gradient(to right, transparent, rgba(255,255,255,0.95));
+      pointer-events: none;
+      border-radius: 0 var(--r-pill) var(--r-pill) 0;
     }
     .hp-search__section:hover {
       background: rgba(28,28,26,0.05);
@@ -318,6 +330,69 @@
       font-size: var(--t-xs);
       color: var(--stone);
       margin-top: 1px;
+    }
+
+    /* Want dropdown */
+    #dd-want {
+      width: 680px;
+    }
+    #dd-want.is-open { display: flex; flex-direction: column; }
+    .dd-want-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px 12px;
+      flex-shrink: 0;
+    }
+    .dd-want-title {
+      font-family: var(--ui);
+      font-size: var(--t-xs);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+    .dd-not-sure {
+      font-size: var(--t-xs);
+      color: var(--charcoal);
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-pill);
+      padding: 5px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--dur-fast);
+      flex-shrink: 0;
+    }
+    .dd-not-sure:hover, .dd-not-sure.is-selected {
+      border-color: var(--ink);
+      color: var(--ink);
+    }
+    .dd-want-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      padding: 4px 20px 20px;
+      overflow-y: auto;
+    }
+    .dd-want-pills::-webkit-scrollbar { width: 4px; }
+    .dd-want-pills::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 2px; }
+    .dd-want-pill {
+      font-size: var(--t-sm);
+      color: var(--charcoal);
+      background: transparent;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-pill);
+      padding: 5px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all var(--dur-fast);
+    }
+    .dd-want-pill:hover { border-color: rgba(0,0,0,0.35); color: var(--ink); }
+    .dd-want-pill.is-selected {
+      border-color: var(--ink);
+      color: var(--ink);
+      font-weight: 500;
     }
 
     /* Destination dropdown */
@@ -1219,7 +1294,15 @@
 
           <div class="hp-search__divider"></div>
 
-          <!-- Section 2: Destination -->
+          <!-- Section 2: I want to... -->
+          <div class="hp-search__section" id="sec-want" data-section="want">
+            <div class="hp-search__label">I want to...</div>
+            <div class="hp-search__value" id="val-want">Reset, recover, feel better...</div>
+          </div>
+
+          <div class="hp-search__divider"></div>
+
+          <!-- Section 3: Destination -->
           <div class="hp-search__section" id="sec-destination" data-section="destination">
             <div class="hp-search__label">Destination</div>
             <input
@@ -1323,6 +1406,64 @@
                 <div class="dd-category__desc">Reconnect, communication, tantra</div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <!-- ── DROPDOWN: I want to... ────────────────────────── -->
+        <div class="hp-search__dropdown" id="dd-want">
+          <div class="dd-want-header">
+            <div class="dd-want-title">What do you really want from a retreat?</div>
+            <button class="dd-not-sure" id="dd-want-not-sure">I'm not sure yet</button>
+          </div>
+          <div class="dd-want-pills">
+            <div class="dd-want-pill" data-value="Reset">Reset</div>
+            <div class="dd-want-pill" data-value="Recover">Recover</div>
+            <div class="dd-want-pill" data-value="Feel better">Feel better</div>
+            <div class="dd-want-pill" data-value="Restore energy">Restore energy</div>
+            <div class="dd-want-pill" data-value="Heal">Heal</div>
+            <div class="dd-want-pill" data-value="Cope">Cope</div>
+            <div class="dd-want-pill" data-value="Process">Process</div>
+            <div class="dd-want-pill" data-value="Let go">Let go</div>
+            <div class="dd-want-pill" data-value="Find meaning">Find meaning</div>
+            <div class="dd-want-pill" data-value="Connect">Connect</div>
+            <div class="dd-want-pill" data-value="Slow down">Slow down</div>
+            <div class="dd-want-pill" data-value="Be present">Be present</div>
+            <div class="dd-want-pill" data-value="Transform">Transform</div>
+            <div class="dd-want-pill" data-value="Push yourself">Push yourself</div>
+            <div class="dd-want-pill" data-value="Energise">Energise</div>
+            <div class="dd-want-pill" data-value="Feel alive">Feel alive</div>
+            <div class="dd-want-pill" data-value="Build confidence">Build confidence</div>
+            <div class="dd-want-pill" data-value="Change">Change</div>
+            <div class="dd-want-pill" data-value="Grow">Grow</div>
+            <div class="dd-want-pill" data-value="Move forward">Move forward</div>
+            <div class="dd-want-pill" data-value="Decide">Decide</div>
+            <div class="dd-want-pill" data-value="Improve life">Improve life</div>
+            <div class="dd-want-pill" data-value="Explore">Explore</div>
+            <div class="dd-want-pill" data-value="Express">Express</div>
+            <div class="dd-want-pill" data-value="Play">Play</div>
+            <div class="dd-want-pill" data-value="Discover">Discover</div>
+            <div class="dd-want-pill" data-value="Enjoy">Enjoy</div>
+            <div class="dd-want-pill" data-value="Escape">Escape</div>
+            <div class="dd-want-pill" data-value="Disconnect">Disconnect</div>
+            <div class="dd-want-pill" data-value="Breathe">Breathe</div>
+            <div class="dd-want-pill" data-value="Feel free">Feel free</div>
+            <div class="dd-want-pill" data-value="Indulge">Indulge</div>
+            <div class="dd-want-pill" data-value="Relax">Relax</div>
+            <div class="dd-want-pill" data-value="Treat yourself">Treat yourself</div>
+            <div class="dd-want-pill" data-value="Experience something special">Experience something special</div>
+            <div class="dd-want-pill" data-value="Belong">Belong</div>
+            <div class="dd-want-pill" data-value="Share">Share</div>
+            <div class="dd-want-pill" data-value="Feel safe">Feel safe</div>
+            <div class="dd-want-pill" data-value="Short break">Short break</div>
+            <div class="dd-want-pill" data-value="Deep dive">Deep dive</div>
+            <div class="dd-want-pill" data-value="Learn something">Learn something</div>
+            <div class="dd-want-pill" data-value="Commit">Commit</div>
+            <div class="dd-want-pill" data-value="Heal properly">Heal properly</div>
+            <div class="dd-want-pill" data-value="Get help">Get help</div>
+            <div class="dd-want-pill" data-value="Recover safely">Recover safely</div>
+            <div class="dd-want-pill" data-value="Balance">Balance</div>
+            <div class="dd-want-pill" data-value="Align">Align</div>
+            <div class="dd-want-pill" data-value="Cleanse">Cleanse</div>
           </div>
         </div>
 
@@ -1587,6 +1728,58 @@
     // Prevent dropdown clicks from closing
     dropdowns.forEach(dd => {
       dd.addEventListener('click', e => e.stopPropagation());
+    });
+
+    /* ── I want to...: pill multi-select ────────────────────────── */
+    const wantSelections = new Set();
+    const valWant = document.getElementById('val-want');
+
+    function updateWantDisplay() {
+      if (wantSelections.size === 0) {
+        valWant.textContent = 'Reset, recover, feel better...';
+        valWant.classList.remove('has-value');
+      } else {
+        const arr = [...wantSelections];
+        // Show up to 3 selections, then +N more
+        const preview = arr.slice(0, 3).join(', ');
+        const extra = arr.length > 3 ? ` +${arr.length - 3} more` : '';
+        valWant.textContent = preview + extra;
+        valWant.classList.add('has-value');
+      }
+    }
+
+    document.querySelectorAll('.dd-want-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const v = pill.dataset.value;
+        // Clear "I'm not sure yet" if active
+        document.getElementById('dd-want-not-sure').classList.remove('is-selected');
+        wantSelections.delete('__not_sure__');
+        if (wantSelections.has(v)) {
+          wantSelections.delete(v);
+          pill.classList.remove('is-selected');
+        } else {
+          wantSelections.add(v);
+          pill.classList.add('is-selected');
+        }
+        updateWantDisplay();
+      });
+    });
+
+    document.getElementById('dd-want-not-sure').addEventListener('click', () => {
+      const btn = document.getElementById('dd-want-not-sure');
+      const alreadySelected = btn.classList.contains('is-selected');
+      // Clear all pill selections
+      wantSelections.clear();
+      document.querySelectorAll('.dd-want-pill').forEach(p => p.classList.remove('is-selected'));
+      if (!alreadySelected) {
+        btn.classList.add('is-selected');
+        wantSelections.add('__not_sure__');
+        valWant.textContent = "I'm not sure yet";
+        valWant.classList.add('has-value');
+      } else {
+        btn.classList.remove('is-selected');
+        updateWantDisplay();
+      }
     });
 
     /* ── Interest: chip & category selection ─────────────────────── */
