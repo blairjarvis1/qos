@@ -280,13 +280,21 @@
     #dd-interest {
       width: 620px;
       left: 0;
+      overflow: hidden; /* prevent outer scroll — inner handles it */
     }
     #dd-interest.is-open { display: flex; flex-direction: column; }
+    .dd-interest-body {
+      flex: 1;
+      overflow-y: auto;
+      min-height: 0;
+    }
+    .dd-interest-body::-webkit-scrollbar { width: 4px; }
+    .dd-interest-body::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 2px; }
     .dd-interest-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 20px 14px;
+      padding: 28px 20px 14px;
       flex-shrink: 0;
     }
     .dd-section-title {
@@ -297,7 +305,8 @@
       text-transform: uppercase;
       color: var(--stone);
     }
-    #dd-destination .dd-section-title {
+    #dd-destination .dd-cols .dd-section-title,
+    #dd-destination .dd-dest-distance-inner .dd-section-title {
       padding: 12px 0 6px 24px;
     }
     .dd-categories {
@@ -339,6 +348,56 @@
       color: var(--stone);
       line-height: 1.4;
     }
+
+    /* Interest clear button */
+    .hp-search__clear {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--stone);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      line-height: 1;
+      z-index: 2;
+      padding: 0;
+      flex-shrink: 0;
+      transition: background var(--dur-fast);
+    }
+    .hp-search__clear.is-visible { display: flex; }
+    .hp-search__clear:hover { background: var(--ink); }
+
+    /* Interest search results */
+    .dd-interest-results { display: none; flex-direction: column; padding-bottom: 12px; }
+    .dd-interest-results.is-visible { display: flex; }
+    .dd-result {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background var(--dur-fast);
+    }
+    .dd-result:hover { background: var(--parchment); border-radius: 10px; }
+    .dd-result__icon {
+      width: 40px; height: 40px;
+      background: var(--cloud);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .dd-result__name { font-size: 14px; font-weight: 500; color: var(--ink); }
+    .dd-result__meta { font-size: 12px; color: var(--stone); margin-top: 2px; }
+    .dd-no-results { padding: 24px 20px; font-size: 13px; color: var(--stone); text-align: center; }
 
     /* Want dropdown */
     #dd-want {
@@ -405,7 +464,7 @@
 
     /* Destination dropdown */
     #dd-destination {
-      width: 560px;
+      width: 620px;
       flex-direction: column;
       overflow: hidden;
     }
@@ -413,28 +472,139 @@
       display: flex;
     }
     .dd-dest-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       padding: 16px var(--s5);
       border-bottom: 1px solid var(--border);
       flex-shrink: 0;
+      gap: var(--s2);
     }
-    .dd-dest-search {
+    .dd-dest-modes {
+      display: flex;
+      gap: var(--s2);
+      flex: 1;
+    }
+    .dd-dest-mode {
+      flex: 1;
+      text-align: center;
+      font-size: var(--t-sm);
+      font-weight: 500;
+      color: var(--stone);
+      padding: 6px var(--s3);
+      border-radius: var(--r-pill);
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: all var(--dur-fast);
+    }
+    .dd-dest-mode:hover { background: var(--cloud); color: var(--ink); }
+    .dd-dest-mode.is-active { background: var(--ink); color: var(--white); }
+    .dd-dest-divider {
+      width: 1px;
+      align-self: stretch;
+      background: var(--border);
+      flex-shrink: 0;
+      margin: 0 2px;
+    }
+    .dd-dest-top .dd-not-sure {
+      padding: 6px 14px;
+      align-self: stretch;
       display: flex;
       align-items: center;
-      gap: var(--s3);
-      background: var(--cloud);
-      border-radius: var(--r-pill);
-      padding: 0 var(--s5);
-      height: 32px;
     }
-    .dd-dest-search input {
-      border: none; outline: none;
-      background: transparent;
+    #dd-dest-default { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+    .dd-dest-panel { display: flex; flex-direction: column; flex: 1; min-height: 0; overflow-y: auto; }
+
+    /* Distance of travel panel */
+    .dd-dist-inner {
+      padding: 20px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .dd-dist-title { margin-bottom: 4px; }
+    .dd-dist-cards {
+      display: flex;
+      gap: 8px;
+    }
+    .dd-dist-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 8px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      cursor: pointer;
+      transition: all var(--dur-fast);
+      text-align: center;
+    }
+    .dd-dist-card:hover { border-color: rgba(0,0,0,0.3); background: var(--parchment); }
+    .dd-dist-card.is-selected { border-color: var(--ink); background: var(--ink); }
+    .dd-dist-card.is-selected .dd-dist-card__name,
+    .dd-dist-card.is-selected .dd-dist-card__sub { color: var(--white); }
+    .dd-dist-card__icon { font-size: 22px; line-height: 1; }
+    .dd-dist-card__name { font-size: var(--t-sm); font-weight: 500; color: var(--ink); }
+    .dd-dist-card__sub { font-size: 10px; color: var(--stone); }
+
+    /* Distance country lookup */
+    .dd-dist-country-wrap { position: relative; }
+    .dd-dist-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      background: var(--white);
+      transition: border-color var(--dur-fast);
+    }
+    .dd-dist-input-wrap:focus-within { border-color: var(--ink); }
+    .dd-dist-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: var(--sans);
       font-size: var(--t-sm);
       color: var(--ink);
-      width: 100%;
-      height: 100%;
+      background: transparent;
     }
-    .dd-dest-search input::placeholder { color: var(--stone); }
+    .dd-dist-input::placeholder { color: var(--stone); }
+    .dd-dist-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0; right: 0;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      max-height: 180px;
+      overflow-y: auto;
+      z-index: 210;
+      display: none;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+      scrollbar-width: thin;
+      scrollbar-color: var(--mist) transparent;
+    }
+    .dd-dist-dropdown.is-open { display: block; }
+    .dd-dist-dropdown::-webkit-scrollbar { width: 4px; }
+    .dd-dist-dropdown::-webkit-scrollbar-thumb { background: var(--mist); border-radius: 2px; }
+    .dd-dist-option {
+      padding: 10px 14px;
+      font-size: var(--t-sm);
+      color: var(--charcoal);
+      cursor: pointer;
+      transition: background var(--dur-fast);
+    }
+    .dd-dist-option:hover,
+    .dd-dist-option.is-highlighted { background: var(--parchment); color: var(--ink); }
+    .dd-dist-option.is-selected { background: var(--cloud); color: var(--ink); font-weight: 500; }
+    .dd-dist-empty {
+      padding: 12px 14px;
+      font-size: var(--t-sm);
+      color: var(--stone);
+      font-style: italic;
+    }
     .dd-cols {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -1387,6 +1557,7 @@
               placeholder="Yoga, meditation, detox…"
               autocomplete="off"
             >
+            <button class="hp-search__clear" id="interest-clear" tabindex="-1">&#x2715;</button>
           </div>
 
           <div class="hp-search__divider"></div>
@@ -1409,6 +1580,7 @@
               placeholder="Anywhere"
               autocomplete="off"
             >
+            <button class="hp-search__clear" id="destination-clear" tabindex="-1">&#x2715;</button>
           </div>
 
           <div class="hp-search__divider"></div>
@@ -1436,9 +1608,14 @@
         <!-- ── DROPDOWN: Interest ──────────────────────────────── -->
         <div class="hp-search__dropdown" id="dd-interest">
           <div class="dd-interest-header">
-            <div class="dd-section-title">Popular categories</div>
+            <div class="dd-section-title" id="dd-interest-title">Popular categories</div>
             <button class="dd-not-sure" id="dd-interest-not-sure">I'm not sure yet</button>
           </div>
+          <div class="dd-interest-body">
+          <!-- Typeahead results (shown when typing) -->
+          <div class="dd-interest-results" id="dd-interest-results"></div>
+          <!-- Default categories (hidden when typing) -->
+          <div id="dd-interest-categories">
           <div class="dd-categories">
             <div class="dd-category" data-value="Yoga &amp; Meditation">
               <div class="dd-category__icon">🧘</div>
@@ -1490,6 +1667,8 @@
               </div>
             </div>
           </div>
+          </div><!-- /#dd-interest-categories -->
+          </div><!-- /.dd-interest-body -->
         </div>
 
         <!-- ── DROPDOWN: I want to... ────────────────────────── -->
@@ -1552,106 +1731,163 @@
 
         <!-- ── DROPDOWN: Destination ──────────────────────────── -->
         <div class="hp-search__dropdown" id="dd-destination">
+          <!-- Typeahead header + results (shown when typing) -->
+          <div class="dd-interest-header" id="dd-dest-header" style="display:none">
+            <div class="dd-section-title" id="dd-dest-title">Suggested destinations</div>
+          </div>
+          <div class="dd-interest-body" id="dd-dest-typeahead" style="display:none">
+            <div class="dd-interest-results is-visible" id="dd-dest-results"></div>
+          </div>
+          <!-- Default tab panels (hidden when typing) -->
+          <div id="dd-dest-default">
           <div class="dd-dest-top">
-            <div class="dd-dest-search">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--stone); flex-shrink:0">
-                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-              </svg>
-              <input type="text" placeholder="Where do you want to go?" id="dest-search-input" autocomplete="off">
+            <div class="dd-dest-modes">
+              <div class="dd-dest-mode is-active" data-dest-mode="popular">Popular searches</div>
+              <div class="dd-dest-mode" data-dest-mode="distance">Distance of travel</div>
+            </div>
+            <div class="dd-dest-divider"></div>
+            <button class="dd-not-sure" id="dd-dest-not-sure">I'm not sure yet</button>
+          </div>
+          <!-- Popular searches panel -->
+          <div id="dd-dest-popular" class="dd-dest-panel">
+            <div class="dd-cols">
+              <div class="dd-cols-left">
+                <div class="dd-section-title">Top destinations</div>
+                <div class="dd-place" data-value="Bali, Indonesia">
+                  <div class="dd-place__icon"><img src="images/flags/Indonesia.png" alt="Indonesia"></div>
+                  <div>
+                    <div class="dd-place__name">Bali, Indonesia</div>
+                    <div class="dd-place__count">142 retreats</div>
+                  </div>
+                </div>
+                <div class="dd-place" data-value="Portugal">
+                  <div class="dd-place__icon"><img src="images/flags/portugal.png" alt="Portugal"></div>
+                  <div>
+                    <div class="dd-place__name">Portugal</div>
+                    <div class="dd-place__count">96 retreats</div>
+                  </div>
+                </div>
+                <div class="dd-place" data-value="Spain">
+                  <div class="dd-place__icon"><img src="images/flags/spain.png" alt="Spain"></div>
+                  <div>
+                    <div class="dd-place__name">Spain</div>
+                    <div class="dd-place__count">190 retreats</div>
+                  </div>
+                </div>
+                <div class="dd-place" data-value="Greece">
+                  <div class="dd-place__icon"><img src="images/flags/greece.png" alt="Greece"></div>
+                  <div>
+                    <div class="dd-place__name">Greece</div>
+                    <div class="dd-place__count">264 retreats</div>
+                  </div>
+                </div>
+                <div class="dd-place" data-value="France">
+                  <div class="dd-place__icon"><img src="images/flags/france.png" alt="France"></div>
+                  <div>
+                    <div class="dd-place__name">France</div>
+                    <div class="dd-place__count">173 retreats</div>
+                  </div>
+                </div>
+                <div class="dd-place" data-value="Vietnam">
+                  <div class="dd-place__icon"><img src="images/flags/vietnam.png" alt="Vietnam"></div>
+                  <div>
+                    <div class="dd-place__name">Vietnam</div>
+                    <div class="dd-place__count">39 retreats</div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div class="dd-section-title">Explore by region</div>
+                <div class="dd-place" data-value="Europe">
+                  <div class="dd-place__icon">🗺️</div>
+                  <div>
+                    <div class="dd-place__name">Europe</div>
+                    <div class="dd-place__count">All countries</div>
+                  </div>
+                </div>
+                <div class="dd-place" data-value="Southeast Asia">
+                  <div class="dd-place__icon">🌏</div>
+                  <div>
+                    <div class="dd-place__name">Southeast Asia</div>
+                    <div class="dd-place__count">Thailand, Bali & more</div>
+                  </div>
+                </div>
+                <div class="dd-place" data-value="Caribbean">
+                  <div class="dd-place__icon">🏖️</div>
+                  <div>
+                    <div class="dd-place__name">Caribbean</div>
+                    <div class="dd-place__count">61 retreats</div>
+                  </div>
+                </div>
+                <div class="dd-place" data-value="Central America">
+                  <div class="dd-place__icon">🦜</div>
+                  <div>
+                    <div class="dd-place__name">Central America</div>
+                    <div class="dd-place__count">Costa Rica, Mexico & more</div>
+                  </div>
+                </div>
+                <div class="dd-place" data-value="Middle East">
+                  <div class="dd-place__icon">🌅</div>
+                  <div>
+                    <div class="dd-place__name">Middle East</div>
+                    <div class="dd-place__count">UAE, Jordan & more</div>
+                  </div>
+                </div>
+                <div class="dd-place" data-value="Anywhere">
+                  <div class="dd-place__icon">✈️</div>
+                  <div>
+                    <div class="dd-place__name">Surprise me</div>
+                    <div class="dd-place__count">I'm open to anywhere</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="dd-cols">
-            <div class="dd-cols-left">
-              <div class="dd-section-title">Top destinations</div>
-              <div class="dd-place" data-value="Bali, Indonesia">
-                <div class="dd-place__icon"><img src="images/flags/Indonesia.png" alt="Indonesia"></div>
-                <div>
-                  <div class="dd-place__name">Bali, Indonesia</div>
-                  <div class="dd-place__count">142 retreats</div>
+
+          <!-- Distance of travel panel -->
+          <div id="dd-dest-distance" class="dd-dest-panel" style="display:none">
+            <div class="dd-dist-inner">
+              <div class="dd-section-title dd-dist-title">Your location</div>
+              <div class="dd-dist-country-wrap" id="dd-dist-country-wrap">
+                <div class="dd-dist-input-wrap">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--stone);flex-shrink:0">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                  </svg>
+                  <input class="dd-dist-input" id="dd-dist-country-input" type="text" placeholder="Start typing your country…" autocomplete="off">
                 </div>
+                <div class="dd-dist-dropdown" id="dd-dist-country-dropdown"></div>
               </div>
-              <div class="dd-place" data-value="Portugal">
-                <div class="dd-place__icon"><img src="images/flags/portugal.png" alt="Portugal"></div>
-                <div>
-                  <div class="dd-place__name">Portugal</div>
-                  <div class="dd-place__count">96 retreats</div>
+              <div class="dd-section-title dd-dist-title" style="margin-top:20px;">How far would you like to travel?</div>
+              <div class="dd-dist-cards">
+                <div class="dd-dist-card" data-value="Local">
+                  <div class="dd-dist-card__icon">🏡</div>
+                  <div class="dd-dist-card__name">Local</div>
+                  <div class="dd-dist-card__sub">Within 2 hrs</div>
                 </div>
-              </div>
-              <div class="dd-place" data-value="Spain">
-                <div class="dd-place__icon"><img src="images/flags/spain.png" alt="Spain"></div>
-                <div>
-                  <div class="dd-place__name">Spain</div>
-                  <div class="dd-place__count">190 retreats</div>
+                <div class="dd-dist-card" data-value="Short-haul">
+                  <div class="dd-dist-card__icon">🚂</div>
+                  <div class="dd-dist-card__name">Short-haul</div>
+                  <div class="dd-dist-card__sub">Up to 4 hrs</div>
                 </div>
-              </div>
-              <div class="dd-place" data-value="Greece">
-                <div class="dd-place__icon"><img src="images/flags/greece.png" alt="Greece"></div>
-                <div>
-                  <div class="dd-place__name">Greece</div>
-                  <div class="dd-place__count">264 retreats</div>
+                <div class="dd-dist-card" data-value="Medium-haul">
+                  <div class="dd-dist-card__icon">✈️</div>
+                  <div class="dd-dist-card__name">Medium-haul</div>
+                  <div class="dd-dist-card__sub">4–8 hrs</div>
                 </div>
-              </div>
-              <div class="dd-place" data-value="France">
-                <div class="dd-place__icon"><img src="images/flags/france.png" alt="France"></div>
-                <div>
-                  <div class="dd-place__name">France</div>
-                  <div class="dd-place__count">173 retreats</div>
+                <div class="dd-dist-card" data-value="Long-haul">
+                  <div class="dd-dist-card__icon">🌏</div>
+                  <div class="dd-dist-card__name">Long-haul</div>
+                  <div class="dd-dist-card__sub">8+ hrs</div>
                 </div>
-              </div>
-              <div class="dd-place" data-value="Vietnam">
-                <div class="dd-place__icon"><img src="images/flags/vietnam.png" alt="Vietnam"></div>
-                <div>
-                  <div class="dd-place__name">Vietnam</div>
-                  <div class="dd-place__count">39 retreats</div>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="dd-section-title">Explore by region</div>
-              <div class="dd-place" data-value="Europe">
-                <div class="dd-place__icon">🗺️</div>
-                <div>
-                  <div class="dd-place__name">Europe</div>
-                  <div class="dd-place__count">All countries</div>
-                </div>
-              </div>
-              <div class="dd-place" data-value="Southeast Asia">
-                <div class="dd-place__icon">🌏</div>
-                <div>
-                  <div class="dd-place__name">Southeast Asia</div>
-                  <div class="dd-place__count">Thailand, Bali & more</div>
-                </div>
-              </div>
-              <div class="dd-place" data-value="Caribbean">
-                <div class="dd-place__icon">🏖️</div>
-                <div>
-                  <div class="dd-place__name">Caribbean</div>
-                  <div class="dd-place__count">61 retreats</div>
-                </div>
-              </div>
-              <div class="dd-place" data-value="Central America">
-                <div class="dd-place__icon">🦜</div>
-                <div>
-                  <div class="dd-place__name">Central America</div>
-                  <div class="dd-place__count">Costa Rica, Mexico & more</div>
-                </div>
-              </div>
-              <div class="dd-place" data-value="Middle East">
-                <div class="dd-place__icon">🌅</div>
-                <div>
-                  <div class="dd-place__name">Middle East</div>
-                  <div class="dd-place__count">UAE, Jordan & more</div>
-                </div>
-              </div>
-              <div class="dd-place" data-value="Anywhere">
-                <div class="dd-place__icon">✈️</div>
-                <div>
-                  <div class="dd-place__name">Surprise me</div>
-                  <div class="dd-place__count">I'm open to anywhere</div>
+                <div class="dd-dist-card" data-value="Anywhere">
+                  <div class="dd-dist-card__icon">🌍</div>
+                  <div class="dd-dist-card__name">Anywhere</div>
+                  <div class="dd-dist-card__sub">Open to all</div>
                 </div>
               </div>
             </div>
           </div>
+          </div><!-- /dd-dest-default -->
         </div>
 
         <!-- ── DROPDOWN: Dates ──────────────────────────────────── -->
@@ -1968,36 +2204,324 @@
       setTimeout(closeAll, 200);
     });
 
-    // Interest typeahead: reopen dropdown on typing
-    document.getElementById('input-interest').addEventListener('input', (e) => {
-      if (e.target.value && state.activeSection !== 'interest') {
-        openSection('interest');
+    /* ── Interest typeahead ──────────────────────────────────────── */
+    const RETREAT_INDEX = [
+      { name: 'Yoga Retreat',            type: 'Movement & mindfulness',         emoji: '🧘', tags: 'yoga movement vinyasa hatha yin flow stretch' },
+      { name: 'Meditation Retreat',      type: 'Stillness & inner calm',         emoji: '🕊️', tags: 'meditation mindfulness silent stillness breath awareness' },
+      { name: 'Detox & Cleanse',         type: 'Gut health & reset',             emoji: '✨', tags: 'detox cleanse juice fast gut health reset nutrition' },
+      { name: 'Breathwork',              type: 'Pranayama & breathwork',         emoji: '💨', tags: 'breathwork pranayama breath holotropic wim hof' },
+      { name: 'Fitness & Bootcamp',      type: 'Training & transformation',      emoji: '🏃', tags: 'fitness bootcamp training strength cardio transformation' },
+      { name: 'Surf & Yoga',             type: 'Adventure meets wellness',       emoji: '🏄', tags: 'surf surfing yoga adventure ocean waves fitness' },
+      { name: 'Hiking & Trekking',       type: 'Nature & endurance',             emoji: '🥾', tags: 'hiking trekking walking nature outdoors mountains trails' },
+      { name: 'Ayurveda',                type: 'Ancient Indian healing',         emoji: '🌺', tags: 'ayurveda indian healing ancient panchakarma herbs nutrition' },
+      { name: 'Silent Retreat',          type: 'Deep stillness & reflection',    emoji: '🌑', tags: 'silent silence retreat vipassana stillness mindfulness meditation' },
+      { name: 'Digital Detox',           type: 'Unplug & recharge',              emoji: '📵', tags: 'digital detox unplug screen phone tech break recharge' },
+      { name: 'Sound Healing',           type: 'Vibration & sound therapy',      emoji: '🎵', tags: 'sound healing bowls gong vibration therapy music' },
+      { name: 'Spiritual Retreat',       type: 'Soul & inner work',              emoji: '🌀', tags: 'spiritual soul inner work shamanic plant medicine ceremony' },
+      { name: 'Weight Loss Retreat',     type: 'Health & body transformation',   emoji: '💪', tags: 'weight loss slimming health body transformation fitness diet' },
+      { name: 'Burnout Recovery',        type: 'Rest & nervous system reset',    emoji: '🧠', tags: 'burnout stress anxiety recovery rest mental health nervous system' },
+      { name: 'Creative Retreat',        type: 'Writing, art & expression',      emoji: '🎨', tags: 'creative writing art painting photography pottery expression' },
+      { name: 'Couples Retreat',         type: 'Reconnect & deepen bonds',       emoji: '💛', tags: 'couples partner relationship reconnect love intimacy communication' },
+      { name: 'Cold Water Therapy',      type: 'Ice baths & cold exposure',      emoji: '🧊', tags: 'cold water ice bath wim hof exposure therapy recovery' },
+      { name: 'Plant Medicine',          type: 'Ceremony & deep healing',        emoji: '🌿', tags: 'plant medicine ayahuasca psilocybin ceremony healing transformation' },
+      { name: 'Pilates Retreat',         type: 'Core strength & alignment',      emoji: '🩰', tags: 'pilates core strength alignment flexibility reformer' },
+      { name: 'Personal Growth',         type: 'Coaching & life transformation', emoji: '🌸', tags: 'personal growth coaching leadership mentoring life transformation' },
+      { name: 'Forest Bathing',          type: 'Nature immersion & calm',        emoji: '🍃', tags: 'forest bathing nature immersion shinrin yoku trees calm' },
+      { name: 'Hormone Health',          type: 'Womens health & balance',        emoji: '🌙', tags: 'hormone health womens menopause perimenopause balance fertility' },
+      { name: 'Trauma Healing',          type: 'Somatic & emotional release',    emoji: '🫀', tags: 'trauma somatic emotional release ptsd therapy healing body' },
+    ];
+
+    function searchRetreats(q) {
+      const query = q.toLowerCase();
+      return RETREAT_INDEX.filter(r =>
+        r.name.toLowerCase().includes(query) ||
+        r.type.toLowerCase().includes(query) ||
+        r.tags.includes(query)
+      ).slice(0, 6);
+    }
+
+    function renderInterestTypeahead(query) {
+      const title      = document.getElementById('dd-interest-title');
+      const results    = document.getElementById('dd-interest-results');
+      const categories = document.getElementById('dd-interest-categories');
+      const notSure    = document.getElementById('dd-interest-not-sure');
+      const clearBtn   = document.getElementById('interest-clear');
+
+      clearBtn.classList.toggle('is-visible', query.length > 0);
+
+      if (query.length === 0) {
+        title.textContent = 'Popular categories';
+        results.classList.remove('is-visible');
+        categories.style.display = '';
+        notSure.style.display = '';
+        return;
       }
+
+      title.textContent = 'Suggestions';
+      categories.style.display = 'none';
+      notSure.style.display = 'none';
+
+      const hits = searchRetreats(query);
+      if (hits.length === 0) {
+        results.innerHTML = `<div class="dd-no-results">No retreats found for "<strong>${query}</strong>"</div>`;
+      } else {
+        results.innerHTML = hits.map(r => `
+          <div class="dd-result" data-value="${r.name}">
+            <div class="dd-result__icon">${r.emoji}</div>
+            <div>
+              <div class="dd-result__name">${r.name}</div>
+              <div class="dd-result__meta">${r.type}</div>
+            </div>
+          </div>`).join('');
+        results.querySelectorAll('.dd-result').forEach(el => {
+          el.addEventListener('click', () => {
+            document.getElementById('input-interest').value = el.dataset.value;
+            renderInterestTypeahead('');
+            setTimeout(closeAll, 200);
+          });
+        });
+      }
+      results.classList.add('is-visible');
+    }
+
+    document.getElementById('input-interest').addEventListener('input', (e) => {
+      if (state.activeSection !== 'interest') openSection('interest');
+      renderInterestTypeahead(e.target.value);
     });
     document.getElementById('input-interest').addEventListener('focus', () => {
       openSection('interest');
     });
+    document.getElementById('interest-clear').addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('input-interest').value = '';
+      renderInterestTypeahead('');
+      document.getElementById('input-interest').focus();
+    });
+
+    /* ── Destination: data index ─────────────────────────────────── */
+    const DESTINATION_INDEX = [
+      { name: 'Bali, Indonesia',    type: 'Island · Southeast Asia',   emoji: '🌴', tags: 'bali indonesia ubud seminyak asia tropical island' },
+      { name: 'Portugal',           type: 'Country · Southern Europe', emoji: '🇵🇹', tags: 'portugal lisbon algarve europe atlantic' },
+      { name: 'Spain',              type: 'Country · Southern Europe', emoji: '🇪🇸', tags: 'spain ibiza barcelona andalusia europe' },
+      { name: 'Greece',             type: 'Country · Southern Europe', emoji: '🇬🇷', tags: 'greece mykonos santorini corfu europe mediterranean' },
+      { name: 'France',             type: 'Country · Western Europe',  emoji: '🇫🇷', tags: 'france paris provence alps europe' },
+      { name: 'Vietnam',            type: 'Country · Southeast Asia',  emoji: '🇻🇳', tags: 'vietnam hoi an hanoi ho chi minh asia' },
+      { name: 'Thailand',           type: 'Country · Southeast Asia',  emoji: '🇹🇭', tags: 'thailand koh samui chiang mai bangkok asia' },
+      { name: 'Morocco',            type: 'Country · North Africa',    emoji: '🇲🇦', tags: 'morocco marrakech atlas mountains africa desert' },
+      { name: 'Costa Rica',         type: 'Country · Central America', emoji: '🦜', tags: 'costa rica central america jungle rainforest surf' },
+      { name: 'India',              type: 'Country · South Asia',      emoji: '🇮🇳', tags: 'india rishikesh kerala goa mysore ayurveda yoga' },
+      { name: 'Sri Lanka',          type: 'Island · South Asia',       emoji: '🌿', tags: 'sri lanka colombo ayurveda wellness asia island' },
+      { name: 'Italy',              type: 'Country · Southern Europe', emoji: '🇮🇹', tags: 'italy tuscany sicily rome amalfi europe' },
+      { name: 'Mexico',             type: 'Country · Central America', emoji: '🇲🇽', tags: 'mexico tulum oaxaca pacific coast maya wellness' },
+      { name: 'Ibiza, Spain',       type: 'Island · Mediterranean',    emoji: '🏝️', tags: 'ibiza spain island mediterranean balearic wellness' },
+      { name: 'Maldives',           type: 'Island · Indian Ocean',     emoji: '🐠', tags: 'maldives island ocean overwater luxury wellness' },
+      { name: 'Tuscany, Italy',     type: 'Region · Southern Europe',  emoji: '🍷', tags: 'tuscany italy florence wine countryside wellness' },
+      { name: 'Algarve, Portugal',  type: 'Region · Southern Europe',  emoji: '🌊', tags: 'algarve portugal coast ocean cliff beach wellness' },
+      { name: 'Swiss Alps',         type: 'Region · Central Europe',   emoji: '⛰️', tags: 'swiss alps switzerland mountains nature skiing' },
+      { name: 'Canary Islands',     type: 'Islands · Atlantic',        emoji: '🌋', tags: 'canary islands tenerife gran canaria spain atlantic' },
+      { name: 'Ubud, Bali',         type: 'City · Southeast Asia',     emoji: '🌺', tags: 'ubud bali indonesia yoga jungle retreat spiritual' },
+      { name: 'Rishikesh, India',   type: 'City · South Asia',         emoji: '🕉️', tags: 'rishikesh india ganges yoga meditation spiritual' },
+      { name: 'Chiang Mai, Thailand', type: 'City · Southeast Asia',   emoji: '🏯', tags: 'chiang mai thailand temple meditation wellness' },
+      { name: 'Europe',             type: 'Region',                    emoji: '🗺️', tags: 'europe uk france spain italy greece portugal' },
+      { name: 'Southeast Asia',     type: 'Region',                    emoji: '🌏', tags: 'southeast asia bali thailand vietnam cambodia' },
+      { name: 'Caribbean',          type: 'Region',                    emoji: '🏖️', tags: 'caribbean barbados jamaica st lucia tropical island' },
+    ];
+
+    function searchDestinations(q) {
+      const query = q.toLowerCase();
+      return DESTINATION_INDEX.filter(r =>
+        r.name.toLowerCase().includes(query) ||
+        r.type.toLowerCase().includes(query) ||
+        r.tags.includes(query)
+      ).slice(0, 7);
+    }
+
+    function renderDestTypeahead(query) {
+      const header    = document.getElementById('dd-dest-header');
+      const typeahead = document.getElementById('dd-dest-typeahead');
+      const defaults  = document.getElementById('dd-dest-default');
+      const results   = document.getElementById('dd-dest-results');
+      const clearBtn  = document.getElementById('destination-clear');
+
+      clearBtn.classList.toggle('is-visible', query.length > 0);
+
+      if (query.length === 0) {
+        header.style.display    = 'none';
+        typeahead.style.display = 'none';
+        defaults.style.display  = '';
+        return;
+      }
+
+      header.style.display    = '';
+      typeahead.style.display = '';
+      defaults.style.display  = 'none';
+
+      const hits = searchDestinations(query);
+      if (hits.length === 0) {
+        results.innerHTML = `<div class="dd-no-results">No destinations found for "<strong>${query}</strong>"</div>`;
+      } else {
+        results.innerHTML = hits.map(r => `
+          <div class="dd-result" data-value="${r.name}">
+            <div class="dd-result__icon">${r.emoji}</div>
+            <div>
+              <div class="dd-result__name">${r.name}</div>
+              <div class="dd-result__meta">${r.type}</div>
+            </div>
+          </div>`).join('');
+        results.querySelectorAll('.dd-result').forEach(el => {
+          el.addEventListener('click', () => {
+            document.getElementById('input-destination').value = el.dataset.value;
+            clearDistSelection();
+            clearNotSure();
+            renderDestTypeahead('');
+            setTimeout(closeAll, 200);
+          });
+        });
+      }
+    }
 
     /* ── Destination: place selection ────────────────────────────── */
+    function clearNotSure() {
+      document.getElementById('dd-dest-not-sure').classList.remove('is-selected');
+    }
+
+    function clearDistSelection() {
+      distState.country  = '';
+      distState.distance = '';
+      document.querySelectorAll('.dd-dist-card').forEach(c => c.classList.remove('is-selected'));
+      const countryInput = document.getElementById('dd-dist-country-input');
+      if (countryInput) countryInput.value = '';
+    }
+
     document.querySelectorAll('.dd-place').forEach(place => {
       place.addEventListener('click', () => {
         const inp = document.getElementById('input-destination');
         inp.value = place.dataset.value;
+        clearDistSelection();
+        clearNotSure();
+        renderDestTypeahead('');
         setTimeout(closeAll, 200);
       });
-    });
-
-    // Destination search input syncs to bar input
-    document.getElementById('dest-search-input').addEventListener('input', (e) => {
-      document.getElementById('input-destination').value = e.target.value;
     });
 
     document.getElementById('input-destination').addEventListener('focus', () => {
       openSection('destination');
     });
     document.getElementById('input-destination').addEventListener('input', (e) => {
-      document.getElementById('dest-search-input').value = e.target.value;
+      if (state.activeSection !== 'destination') openSection('destination');
+      renderDestTypeahead(e.target.value);
     });
+
+    document.getElementById('destination-clear').addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.getElementById('input-destination').value = '';
+      renderDestTypeahead('');
+      document.getElementById('input-destination').focus();
+    });
+
+    /* ── Destination: mode tabs ──────────────────────────────────── */
+    document.querySelectorAll('.dd-dest-mode').forEach(mode => {
+      mode.addEventListener('click', () => {
+        document.querySelectorAll('.dd-dest-mode').forEach(m => m.classList.remove('is-active'));
+        mode.classList.add('is-active');
+        const panel = mode.dataset.destMode;
+        document.getElementById('dd-dest-popular').style.display  = panel === 'popular'  ? '' : 'none';
+        document.getElementById('dd-dest-distance').style.display = panel === 'distance' ? '' : 'none';
+      });
+    });
+
+    /* ── Destination: I'm not sure yet ──────────────────────────── */
+    document.getElementById('dd-dest-not-sure').addEventListener('click', () => {
+      const inp = document.getElementById('input-destination');
+      inp.value = "I'm not sure yet";
+      clearDistSelection();
+      document.getElementById('dd-dest-not-sure').classList.add('is-selected');
+      setTimeout(closeAll, 200);
+    });
+
+    /* ── Distance: shared state & commit ────────────────────────── */
+    const distState = { country: '', distance: '' };
+
+    function checkDistComplete() {
+      if (!distState.country || !distState.distance) return;
+      const inp = document.getElementById('input-destination');
+      inp.value = `${distState.country} · ${distState.distance}`;
+      renderDestTypeahead('');
+      setTimeout(closeAll, 200);
+    }
+
+    /* ── Distance cards ──────────────────────────────────────────── */
+    document.querySelectorAll('.dd-dist-card').forEach(card => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.dd-dist-card').forEach(c => c.classList.remove('is-selected'));
+        card.classList.add('is-selected');
+        distState.distance = card.dataset.value;
+        clearNotSure();
+        checkDistComplete();
+      });
+    });
+
+    /* ── Distance: country lookup ────────────────────────────────── */
+    (function() {
+      const input    = document.getElementById('dd-dist-country-input');
+      const dropdown = document.getElementById('dd-dist-country-dropdown');
+      let highlightIdx = -1;
+
+      function renderDistDropdown(query) {
+        const q = query.trim().toLowerCase();
+        if (q.length === 0) { dropdown.classList.remove('is-open'); return; }
+        const matches = ALL_COUNTRIES.filter(c => c.toLowerCase().startsWith(q))
+          .concat(ALL_COUNTRIES.filter(c => !c.toLowerCase().startsWith(q) && c.toLowerCase().includes(q)));
+        highlightIdx = -1;
+        dropdown.innerHTML = matches.length === 0
+          ? `<div class="dd-dist-empty">No countries found</div>`
+          : matches.map(c =>
+              `<div class="dd-dist-option" data-country="${c}">${c}</div>`
+            ).join('');
+        dropdown.classList.add('is-open');
+      }
+
+      function selectDistCountry(name) {
+        input.value = name;
+        distState.country = name;
+        dropdown.classList.remove('is-open');
+        checkDistComplete();
+      }
+
+      input.addEventListener('input', () => {
+        distState.country = '';
+        renderDistDropdown(input.value);
+      });
+
+      input.addEventListener('keydown', (e) => {
+        const items = dropdown.querySelectorAll('.dd-dist-option');
+        if (!items.length) return;
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          highlightIdx = Math.min(highlightIdx + 1, items.length - 1);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          highlightIdx = Math.max(highlightIdx - 1, 0);
+        } else if (e.key === 'Enter' && highlightIdx >= 0) {
+          e.stopPropagation();
+          selectDistCountry(items[highlightIdx].dataset.country);
+          return;
+        } else { return; }
+        items.forEach((el, i) => el.classList.toggle('is-highlighted', i === highlightIdx));
+        items[highlightIdx]?.scrollIntoView({ block: 'nearest' });
+      });
+
+      dropdown.addEventListener('mousedown', (e) => {
+        const opt = e.target.closest('.dd-dist-option');
+        if (opt) { e.preventDefault(); selectDistCountry(opt.dataset.country); }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!document.getElementById('dd-dist-country-wrap')?.contains(e.target)) {
+          dropdown.classList.remove('is-open');
+        }
+      });
+    })();
 
     /* ── Dates: mode tabs ────────────────────────────────────────── */
     document.querySelectorAll('.dd-date-mode').forEach(mode => {
