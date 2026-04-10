@@ -136,6 +136,14 @@
     }
     #sec-want::after,
     #sec-dates::after {
+      transition: opacity var(--dur-fast);
+    }
+    #sec-want:not(.is-active):hover::after,
+    #sec-dates:not(.is-active):hover::after {
+      opacity: 0;
+    }
+    #sec-want::after,
+    #sec-dates::after {
       content: '';
       position: absolute;
       right: 0;
