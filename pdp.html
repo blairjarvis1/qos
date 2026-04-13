@@ -157,9 +157,9 @@
     .rdp-sidebar { display: none !important; }
     .rdp-layout  { grid-template-columns: 1fr !important; }
 
-    /* ── Transparent → white header on scroll ────── */
+    /* ── Transparent → white header + hide on scroll  */
     .site-header {
-      transition: background var(--dur-fast), box-shadow var(--dur-fast);
+      transition: background var(--dur-fast), box-shadow var(--dur-fast), transform 0.3s ease;
     }
     .site-header.is-scrolled {
       background: var(--white) !important;
@@ -322,6 +322,7 @@
       z-index: 90;
       background: var(--white);
       border-bottom: 1px solid var(--border);
+      transition: top 0.3s ease;
     }
     .rdp-subnav__inner {
       max-width: var(--max-content);
@@ -948,7 +949,8 @@
       gap: var(--s5);
     }
     .pdp-bar__divider {
-      width: 1px; height: 40px;
+      width: 1px;
+      align-self: stretch;
       background: var(--border);
       flex-shrink: 0;
     }
@@ -2073,18 +2075,41 @@
   <script>
     'use strict';
 
-    /* ── Header scroll behaviour ─────────────────── */
+    /* ── Header hide/show + subnav pin on scroll ─── */
     (function() {
       const header = document.querySelector('.site-header');
+      const subnav = document.getElementById('rdp-subnav');
       if (!header) return;
-      const threshold = 80;
+
+      const HEADER_H = header.offsetHeight; // ~60px
+      let lastY      = window.scrollY;
+      let hidden     = false;
+
       function onScroll() {
-        if (window.scrollY > threshold) {
+        const y         = window.scrollY;
+        const scrollingDown = y > lastY;
+
+        // White header once past hero
+        if (y > 80) {
           header.classList.add('is-scrolled');
         } else {
           header.classList.remove('is-scrolled');
         }
+
+        // Hide header on scroll down, show on scroll up
+        if (scrollingDown && y > HEADER_H && !hidden) {
+          header.style.transform = `translateY(-100%)`;
+          if (subnav) subnav.style.top = '0';
+          hidden = true;
+        } else if (!scrollingDown && hidden) {
+          header.style.transform = '';
+          if (subnav) subnav.style.top = `${HEADER_H}px`;
+          hidden = false;
+        }
+
+        lastY = y;
       }
+
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
     })();
