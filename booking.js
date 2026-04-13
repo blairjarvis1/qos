@@ -14,6 +14,8 @@ const state = {
   guestCount: 1,
   guestType: 'solo',       // 'solo' | 'couple'
   paymentOption: 'deposit', // 'deposit' | 'full'
+  promoCode: null,          // applied promo code string
+  promoDiscount: 0,         // discount multiplier (0.2 = 20%)
 };
 
 const RETREAT_DATES = [
@@ -70,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   initConditionalFields();
   initCardFormatting();
+  initPromoCode();
 });
 
 /* --- Step Navigation ----------------------------------------- */
@@ -642,9 +645,37 @@ function updatePriceBreakdown() {
 
   const base = state.selectedRoom.price;
   const count = state.guestCount;
-  const total = base * count;
+  const subtotalBeforePromo = base * count;
+  const discountAmount = Math.round(subtotalBeforePromo * state.promoDiscount);
+  const total = subtotalBeforePromo - discountAmount;
   const deposit = Math.ceil(total * 0.25);
   const balance = total - deposit;
+
+  // Promo discount rows (step 3 price table + step 4 review snapshot)
+  const promoDiscountStr = `−£${discountAmount.toLocaleString()}`;
+  [
+    { row: 'promo-discount-row',  discount: 'price-promo-discount',  code: 'promo-code-applied' },
+    { row: 'review-promo-row',    discount: 'review-promo-discount',  code: 'review-promo-code'  },
+  ].forEach(({ row, discount, code }) => {
+    const rowEl  = document.getElementById(row);
+    const discEl = document.getElementById(discount);
+    const codeEl = document.getElementById(code);
+    if (!rowEl) return;
+    if (state.promoCode) {
+      rowEl.style.display = '';
+      if (discEl) discEl.textContent = promoDiscountStr;
+      if (codeEl) codeEl.textContent = state.promoCode;
+    } else {
+      rowEl.style.display = 'none';
+    }
+  });
+
+  // Room line shows pre-discount subtotal
+  const roomLineEl = document.getElementById('price-room-line');
+  if (roomLineEl) roomLineEl.textContent = `£${base.toLocaleString()} × ${count} guest${count > 1 ? 's' : ''}`;
+
+  const subtotalEl = document.getElementById('price-subtotal');
+  if (subtotalEl) subtotalEl.textContent = `£${total.toLocaleString()}`;
 
   // Update sidebar + nav total
   const totalEl = document.getElementById('sidebar-total');
@@ -655,13 +686,6 @@ function updatePriceBreakdown() {
   const perEl = document.getElementById('sidebar-per');
   if (perEl) perEl.textContent = `per person`;
 
-  // Update summary step price table
-  const roomLineEl = document.getElementById('price-room-line');
-  if (roomLineEl) roomLineEl.textContent = `£${base.toLocaleString()} × ${count} guest${count > 1 ? 's' : ''}`;
-
-  const subtotalEl = document.getElementById('price-subtotal');
-  if (subtotalEl) subtotalEl.textContent = `£${total.toLocaleString()}`;
-
   const totalSumEl = document.getElementById('price-total');
   if (totalSumEl) totalSumEl.textContent = `£${total.toLocaleString()}`;
 
@@ -670,6 +694,13 @@ function updatePriceBreakdown() {
 
   const balanceEl = document.getElementById('price-balance');
   if (balanceEl) balanceEl.textContent = `£${balance.toLocaleString()}`;
+
+  // Step 4 review snapshot
+  const reviewTotalEl = document.getElementById('review-total');
+  if (reviewTotalEl) reviewTotalEl.textContent = `£${total.toLocaleString()}`;
+
+  const reviewDepositEl = document.getElementById('review-deposit');
+  if (reviewDepositEl) reviewDepositEl.textContent = `£${deposit.toLocaleString()}`;
 
   // Payment step
   const payDepositEl = document.getElementById('pay-deposit-amount');
@@ -751,6 +782,38 @@ function initCardFormatting() {
       e.target.value = val;
     });
   }
+}
+
+/* --- Promo Code -------------------------------------------- */
+function initPromoCode() {
+  const input    = document.getElementById('promo-code-input');
+  const btn      = document.getElementById('promo-apply-btn');
+  const feedback = document.getElementById('promo-feedback');
+  if (!input || !btn || !feedback) return;
+
+  btn.addEventListener('click', () => {
+    const code = input.value.trim();
+    if (!code) {
+      showPromoFeedback(feedback, 'Please enter a promo code.', false);
+      return;
+    }
+
+    // Any non-empty code is valid for prototype purposes
+    state.promoCode     = code.toUpperCase();
+    state.promoDiscount = 0.20;
+    input.disabled      = true;
+    btn.disabled        = true;
+    btn.textContent     = 'Applied';
+
+    showPromoFeedback(feedback, `Promo code "${state.promoCode}" applied — 20% discount added.`, true);
+    updateSidebar();
+  });
+}
+
+function showPromoFeedback(el, msg, success) {
+  el.textContent = msg;
+  el.style.display = 'block';
+  el.style.color = success ? 'var(--sage)' : 'var(--error)';
 }
 
 /* --- Edit links --------------------------------------------- */

@@ -1062,6 +1062,24 @@
             </div>
           </div>
 
+          <!-- Promo code -->
+          <div class="booking-summary-card">
+            <div class="booking-summary-card__header">
+              <span class="booking-summary-card__title">Add a promo code</span>
+            </div>
+            <div class="booking-summary-card__body" style="padding-top: var(--s4); padding-bottom: var(--s4);">
+              <div style="display: flex; gap: var(--s4); align-items: stretch;">
+                <input id="promo-code-input" type="text" class="form-input" placeholder="e.g. 123456778"
+                  style="flex: 1; height: 45px;"
+                  autocomplete="off" spellcheck="false">
+                <button id="promo-apply-btn" class="btn btn--secondary" style="height: 45px; padding: 0 var(--s6); white-space: nowrap; flex-shrink: 0;">
+                  Update
+                </button>
+              </div>
+              <p id="promo-feedback" style="display:none; margin-top: var(--s3); font-size: var(--t-sm);"></p>
+            </div>
+          </div>
+
           <!-- Price breakdown -->
           <div class="booking-summary-card">
             <div class="booking-summary-card__header">
@@ -1076,6 +1094,10 @@
                 <tr>
                   <td style="color: var(--stone);">Meals, programme &amp; transfers</td>
                   <td style="text-align:right; color: var(--ink);">Included</td>
+                </tr>
+                <tr id="promo-discount-row" style="display:none;">
+                  <td style="color: var(--sage);">Promo code (<span id="promo-code-applied"></span>)</td>
+                  <td id="price-promo-discount" style="text-align:right; color: var(--sage); font-weight: 500;">—</td>
                 </tr>
                 <tr class="subtotal">
                   <td style="color: var(--ink); font-weight: 600;">Total</td>
@@ -1135,6 +1157,10 @@
               <div class="review-row">
                 <span class="review-row__key">Guests</span>
                 <span class="review-row__val" id="review-guests">1 guest</span>
+              </div>
+              <div id="review-promo-row" class="review-row" style="display:none;">
+                <span class="review-row__key" style="color: var(--sage);">Promo code (<span id="review-promo-code"></span>)</span>
+                <span class="review-row__val" id="review-promo-discount" style="color: var(--sage);">—</span>
               </div>
               <div class="review-row">
                 <span class="review-row__key">Total</span>
@@ -1915,10 +1941,12 @@
         const rGuests = document.getElementById('review-guests');
         if (rGuests) rGuests.textContent = s.guestCount === 1 ? '1 guest' : `${s.guestCount} guests`;
 
-        // Price in review
+        // Price in review (promo-aware)
         if (s.selectedRoom) {
-          const total   = s.selectedRoom.price * s.guestCount;
-          const deposit = Math.ceil(total * 0.25);
+          const subtotal     = s.selectedRoom.price * s.guestCount;
+          const discountAmt  = Math.round(subtotal * (s.promoDiscount || 0));
+          const total        = subtotal - discountAmt;
+          const deposit      = Math.ceil(total * 0.25);
           const rTotal  = document.getElementById('review-total');
           if (rTotal) rTotal.textContent = `£${total.toLocaleString()}`;
           const rDep = document.getElementById('review-deposit');
