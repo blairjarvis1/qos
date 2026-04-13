@@ -2198,10 +2198,13 @@
       if (roomSel && widgetState.roomSelected && widgetState.price) {
         roomSel.value = String(widgetState.price);
       }
-      // Price
-      const priceEl = document.getElementById('pdp-bar-price');
+      // Price — show total when room selected
+      const priceEl  = document.getElementById('pdp-bar-price');
+      const fromEl   = document.getElementById('pdp-bar-from');
       if (priceEl && widgetState.roomSelected && widgetState.price) {
-        priceEl.textContent = `£${widgetState.price.toLocaleString()}`;
+        const total = widgetState.price * widgetState.guests;
+        priceEl.textContent = `£${total.toLocaleString()}`;
+        if (fromEl) fromEl.textContent = widgetState.guests > 1 ? `${widgetState.guests} guests · total` : 'per person';
       }
       // Guests
       const countEl = document.getElementById('pdp-bar-count');
@@ -2377,10 +2380,9 @@
 
       <!-- Price -->
       <div class="pdp-bar__price-block">
-        <div class="pdp-bar__from">From</div>
+        <div class="pdp-bar__from" id="pdp-bar-from">From</div>
         <div>
           <span class="pdp-bar__amount" id="pdp-bar-price">£2,195</span>
-          <span class="pdp-bar__per">per person</span>
         </div>
       </div>
 
