@@ -151,31 +151,772 @@
     .breadcrumb__sep { color: var(--mist); }
     .breadcrumb__current { color: var(--ink); font-weight: 500; }
 
-    /* Top-align price and description together */
-    .booking-bar__price { align-self: flex-start; }
+    body { padding-top: 0; }
 
-    /* Booking bar description text (replaces dates + guests) */
-    .booking-bar__description {
-      flex: 0 0 32%;
-      max-width: 32%;
-      display: flex;
-      align-items: flex-start;
-      align-self: flex-start;
-      padding-top: 18px;
+    /* ── Transparent → white header on scroll ────── */
+    .site-header {
+      transition: background var(--dur-fast), box-shadow var(--dur-fast);
     }
-    .booking-bar__desc-text {
+    .site-header.is-scrolled {
+      background: var(--white) !important;
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .site-header.is-scrolled .site-header__logo { color: var(--ink); }
+    .site-header.is-scrolled .site-header__nav a { color: var(--stone); }
+    .site-header.is-scrolled .site-header__nav a:hover { color: var(--ink); }
+    .site-header.is-scrolled .site-header__actions .btn--ghost { color: var(--charcoal); }
+
+    /* ── Breadcrumb ──────────────────────────────────── */
+    .rdp-breadcrumb {
+      max-width: var(--max-content);
+      margin: 0 auto;
+      padding: var(--s4) var(--s7);
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      font-size: var(--t-sm);
+      color: var(--stone);
+    }
+    .rdp-breadcrumb a { color: var(--stone); }
+    .rdp-breadcrumb a:hover { color: var(--ink); }
+    .rdp-breadcrumb__sep { color: var(--mist); }
+    .rdp-breadcrumb__current { color: var(--ink); font-weight: 500; }
+
+    /* ── Title Block ─────────────────────────────────── */
+    .rdp-title-block {
+      max-width: var(--max-content);
+      margin: 0 auto;
+      padding: var(--s5) var(--s7) var(--s6);
+    }
+    .rdp-eyebrow {
+      font-size: var(--t-xs);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--stone);
+      font-weight: 600;
+      margin-bottom: var(--s3);
+    }
+    .rdp-h1 {
       font-family: var(--serif);
-      font-size: calc(var(--t-xl) * 0.66);
-      font-style: italic;
-      font-weight: 300;
-      color: rgba(255,255,255,0.8);
-      line-height: 1.45;
-      margin: 0;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
+      font-size: 44px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.15;
+      margin-bottom: var(--s3);
+    }
+    .rdp-tagline {
+      font-size: var(--t-md);
+      color: var(--stone);
+      line-height: 1.5;
+      margin-bottom: var(--s5);
+      max-width: 620px;
+    }
+    .rdp-title-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--s5);
+      flex-wrap: wrap;
+      margin-bottom: var(--s4);
+    }
+    .rdp-rating {
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      font-size: var(--t-sm);
+      color: var(--charcoal);
+      font-weight: 500;
+    }
+    .rdp-rating__stars { color: #c9a84c; }
+    .rdp-rating__count { color: var(--stone); font-weight: 400; }
+    .rdp-vetted {
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      font-size: var(--t-sm);
+      font-weight: 600;
+      color: var(--sage);
+      background: var(--sage-pale);
+      padding: var(--s2) var(--s4);
+      border-radius: var(--r-pill);
+    }
+    .rdp-tags {
+      display: flex;
+      gap: var(--s2);
+      flex-wrap: wrap;
+    }
+    .rdp-tag {
+      background: var(--parchment);
+      color: var(--charcoal);
+      padding: var(--s2) var(--s4);
+      border-radius: var(--r-pill);
+      font-size: var(--t-sm);
+      border: 1px solid var(--border);
+    }
+
+    /* ── Gallery ─────────────────────────────────────── */
+    .rdp-gallery {
+      max-width: var(--max-content);
+      margin: 0 auto;
+      padding: 0 var(--s7) var(--s7);
+    }
+    .rdp-gallery__grid {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      grid-template-rows: repeat(3, 1fr);
+      gap: 4px;
+      height: 520px;
+      border-radius: var(--r-xl);
       overflow: hidden;
     }
+    .rdp-gallery__main {
+      grid-row: 1 / 4;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .rdp-gallery__main img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--dur-slow) var(--ease-out);
+    }
+    .rdp-gallery__main:hover img { transform: scale(1.02); }
+    .rdp-gallery__thumb {
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+    }
+    .rdp-gallery__thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform var(--dur-slow) var(--ease-out);
+    }
+    .rdp-gallery__thumb:hover img { transform: scale(1.04); }
+    .rdp-gallery__view-all {
+      position: absolute;
+      bottom: var(--s4);
+      right: var(--s4);
+      background: var(--white);
+      border: none;
+      border-radius: var(--r-md);
+      padding: var(--s3) var(--s5);
+      font-size: var(--t-sm);
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+    }
+    .rdp-gallery__view-all:hover { background: var(--parchment); }
+
+    /* ── Section subnav ──────────────────────────────── */
+    .rdp-subnav {
+      position: sticky;
+      top: 60px;
+      z-index: 90;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .rdp-subnav__inner {
+      max-width: var(--max-content);
+      margin: 0 auto;
+      padding: 0 var(--s7);
+      display: flex;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .rdp-subnav__inner::-webkit-scrollbar { display: none; }
+    .rdp-subnav__link {
+      display: inline-flex;
+      align-items: center;
+      padding: var(--s4) var(--s5);
+      font-size: var(--t-sm);
+      color: var(--stone);
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      text-decoration: none;
+      transition: color var(--dur-fast), border-color var(--dur-fast);
+    }
+    .rdp-subnav__link:hover { color: var(--ink); }
+    .rdp-subnav__link.is-active { color: var(--ink); border-bottom-color: var(--ink); font-weight: 500; }
+
+    /* ── Page layout ─────────────────────────────────── */
+    .rdp-layout {
+      max-width: var(--max-content);
+      margin: 0 auto;
+      padding: 0 var(--s7) var(--s12);
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: var(--s9);
+      align-items: start;
+    }
+    .rdp-main { min-width: 0; }
+    .rdp-sidebar { position: sticky; top: 124px; }
+
+    @media (max-width: 960px) {
+      .rdp-layout {
+        grid-template-columns: 1fr;
+      }
+      .rdp-sidebar {
+        position: static;
+        order: -1;
+      }
+      .rdp-gallery__grid {
+        grid-template-columns: 1fr 1fr;
+        height: 320px;
+      }
+      .rdp-gallery__main { grid-row: 1 / 3; }
+      .rdp-glance { grid-template-columns: repeat(2, 1fr); }
+      .rdp-editorial__cols { grid-template-columns: 1fr; gap: var(--s5); }
+      .rdp-host-cards { grid-template-columns: 1fr; }
+      .rdp-food-grid { grid-template-columns: 1fr; }
+      .rdp-reviews-grid { grid-template-columns: 1fr; }
+      .rdp-trust-grid { grid-template-columns: 1fr; }
+      .rdp-related-grid { grid-template-columns: 1fr 1fr; }
+      .rdp-neighbourhood-grid { grid-template-columns: 1fr 1fr; }
+      .rdp-room-card { grid-template-columns: 1fr; }
+      .rdp-room-card__img { height: 200px; width: 100%; }
+      .rdp-facilities { grid-template-columns: 1fr; }
+    }
+
+    /* ── Sections ────────────────────────────────────── */
+    .rdp-section {
+      padding: var(--s9) 0;
+      border-bottom: 1px solid var(--border);
+      scroll-margin-top: 124px;
+    }
+    .rdp-section:last-child { border-bottom: none; }
+    .rdp-section__eyebrow {
+      font-size: var(--t-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--sage);
+      font-weight: 700;
+      margin-bottom: var(--s3);
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+    }
+    .rdp-section__title {
+      font-family: var(--serif);
+      font-size: var(--t-2xl);
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: var(--s2);
+      line-height: 1.2;
+    }
+    .rdp-section__sub {
+      font-size: var(--t-base);
+      color: var(--stone);
+      margin-bottom: var(--s6);
+      line-height: 1.6;
+    }
+
+    /* ── Timeline ───────────────────────────────────── */
+    .rdp-timeline { display: flex; flex-direction: column; }
+    .rdp-timeline__item {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: var(--s5);
+    }
+    .rdp-timeline__spine {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 3px;
+    }
+    .rdp-timeline__node {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 2.5px solid var(--sage);
+      flex-shrink: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .rdp-timeline__line {
+      width: 2px;
+      flex: 1;
+      background: var(--sage-light);
+      margin-top: var(--s2);
+      margin-bottom: 0;
+      min-height: var(--s7);
+    }
+    .rdp-timeline__content {
+      padding-bottom: var(--s7);
+    }
+    .rdp-timeline__item--last .rdp-timeline__content {
+      padding-bottom: 0;
+    }
+    .rdp-timeline__time {
+      font-size: var(--t-xs);
+      font-weight: 700;
+      color: var(--sage);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--s2);
+      line-height: 1;
+    }
+    .rdp-timeline__title {
+      font-size: var(--t-base);
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: var(--s2);
+    }
+    .rdp-timeline__desc {
+      font-size: var(--t-sm);
+      color: var(--stone);
+      line-height: 1.7;
+    }
+
+    /* ── At a glance ─────────────────────────────────── */
+    .rdp-glance {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s4);
+      margin: var(--s6) 0;
+    }
+    .rdp-glance__item {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s4);
+      padding: var(--s5);
+      background: var(--parchment);
+      border-radius: var(--r-lg);
+      border: 1px solid var(--border);
+    }
+    .rdp-glance__icon {
+      color: var(--sage);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .rdp-glance__label {
+      font-size: var(--t-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--stone);
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .rdp-glance__val {
+      font-size: var(--t-base);
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* ── QoR Editorial ───────────────────────────────── */
+    .rdp-editorial {
+      background: var(--parchment);
+      border-radius: var(--r-xl);
+      padding: var(--s8);
+      border: 1px solid var(--border);
+    }
+    .rdp-editorial__lead {
+      font-family: var(--serif);
+      font-size: var(--t-xl);
+      color: var(--ink);
+      line-height: 1.6;
+      font-weight: 400;
+      font-style: italic;
+      margin-bottom: var(--s6);
+    }
+    .rdp-editorial__body {
+      color: var(--charcoal);
+      line-height: 1.9;
+      margin-bottom: var(--s7);
+      font-size: var(--t-base);
+    }
+    .rdp-editorial__cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--s7);
+      margin-bottom: var(--s7);
+    }
+    .rdp-editorial__col-title {
+      font-size: var(--t-sm);
+      font-weight: 700;
+      color: var(--ink);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: var(--s4);
+    }
+    .rdp-editorial__point {
+      display: flex;
+      gap: var(--s3);
+      font-size: var(--t-sm);
+      color: var(--charcoal);
+      line-height: 1.6;
+      margin-bottom: var(--s3);
+    }
+    .rdp-editorial__point--pro::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; }
+    .rdp-editorial__point--con::before { content: '→'; color: var(--stone); flex-shrink: 0; }
+    .rdp-editorial__author {
+      display: flex;
+      align-items: center;
+      gap: var(--s5);
+      padding-top: var(--s6);
+      border-top: 1px solid var(--border-mid);
+    }
+    .rdp-editorial__avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--sand-mid);
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+    .rdp-editorial__author-name { font-size: var(--t-sm); font-weight: 600; color: var(--ink); }
+    .rdp-editorial__author-role { font-size: var(--t-xs); color: var(--stone); margin-top: 2px; }
+
+    /* ── Dates ───────────────────────────────────────── */
+    .rdp-date-cards { display: flex; flex-direction: column; gap: var(--s3); }
+    .rdp-date-card {
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: var(--s5) var(--s6);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: var(--s6);
+      cursor: pointer;
+      transition: border-color var(--dur-fast), background var(--dur-fast);
+    }
+    .rdp-date-card:hover:not(.rdp-date-card--soldout) { border-color: var(--charcoal); }
+    .rdp-date-card.is-selected { border-color: var(--sage); background: var(--sage-pale); }
+    .rdp-date-card--soldout { opacity: 0.5; cursor: not-allowed; }
+    .rdp-date-card__label { font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+    .rdp-date-card__meta { font-size: var(--t-sm); color: var(--stone); display: flex; gap: var(--s4); align-items: center; }
+    .rdp-date-card__status {
+      font-size: var(--t-xs);
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: var(--r-pill);
+      white-space: nowrap;
+    }
+    .rdp-date-card__status--available { background: var(--success-bg); color: var(--success); }
+    .rdp-date-card__status--limited { background: var(--warning-bg); color: var(--warning); }
+    .rdp-date-card__status--soldout { background: var(--cloud); color: var(--stone); }
+    .rdp-date-card__badge {
+      font-size: var(--t-xs);
+      font-weight: 600;
+      background: var(--sage);
+      color: white;
+      padding: 2px 8px;
+      border-radius: var(--r-pill);
+      margin-left: var(--s2);
+    }
+    .rdp-date-card__price-wrap { text-align: right; }
+    .rdp-date-card__price { font-family: var(--serif); font-size: var(--t-xl); color: var(--ink); }
+    .rdp-date-card__per { font-size: var(--t-xs); color: var(--stone); }
+
+    /* ── Room cards ──────────────────────────────────── */
+    .rdp-room-cards { display: flex; flex-direction: column; gap: var(--s5); }
+    .rdp-room-card {
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      transition: border-color var(--dur-fast);
+    }
+    .rdp-room-card { cursor: pointer; }
+    .rdp-room-card:hover { border-color: var(--charcoal); }
+    .rdp-room-card.is-selected { border-color: var(--sage) !important; background: #f3f7f4; }
+    .rdp-room-card--popular { border-color: var(--border); }
+    .rdp-room-select-btn {
+      display: inline-flex; align-items: center; gap: var(--s2);
+      font-size: var(--t-sm); font-weight: 600; font-family: var(--sans);
+      padding: var(--s2) var(--s4); border-radius: var(--r-md);
+      border: 1.5px solid var(--charcoal); background: transparent; color: var(--ink);
+      cursor: pointer; transition: background var(--dur-fast), color var(--dur-fast), border-color var(--dur-fast);
+      white-space: nowrap;
+    }
+    .rdp-room-select-btn:hover { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    .rdp-room-select-btn.is-primary { background: var(--ink); color: var(--white); border-color: var(--ink); }
+    .rdp-room-select-btn.is-primary:hover { background: var(--charcoal); border-color: var(--charcoal); }
+    .rdp-room-card.is-selected .rdp-room-select-btn,
+    .rdp-room-card.is-selected .rdp-room-select-btn.is-primary {
+      background: var(--sage); color: var(--white); border-color: var(--sage);
+    }
+    .rdp-room-card__img { width: 100%; height: 100%; object-fit: cover; min-height: 200px; display: block; }
+    .rdp-room-card__body { padding: var(--s6); display: flex; flex-direction: column; }
+    .rdp-room-card__badge {
+      display: inline-block;
+      font-size: var(--t-xs);
+      font-weight: 600;
+      color: var(--sage);
+      background: var(--sage-pale);
+      padding: 2px 10px;
+      border-radius: var(--r-pill);
+      margin-bottom: var(--s3);
+      align-self: flex-start;
+    }
+    .rdp-room-card__name { font-family: var(--serif); font-size: var(--t-xl); color: var(--ink); margin-bottom: var(--s1); font-weight: 400; }
+    .rdp-room-card__type { font-size: var(--t-sm); color: var(--stone); margin-bottom: var(--s4); }
+    .rdp-room-card__includes { display: flex; flex-direction: column; gap: var(--s2); margin-bottom: var(--s5); }
+    .rdp-room-card__include { font-size: var(--t-sm); color: var(--charcoal); display: flex; gap: var(--s2); }
+    .rdp-room-card__include::before { content: '✓'; color: var(--sage); font-weight: 700; flex-shrink: 0; }
+    .rdp-room-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      padding-top: var(--s5);
+      border-top: 1px solid var(--border);
+    }
+    .rdp-room-card__price { font-family: var(--serif); font-size: var(--t-xl); color: var(--ink); }
+    .rdp-room-card__price-label { font-size: var(--t-xs); color: var(--stone); }
+
+    /* ── Facilities ──────────────────────────────────── */
+    .rdp-facilities {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--s5);
+    }
+    .rdp-facility { display: flex; gap: var(--s4); align-items: flex-start; }
+    .rdp-facility__icon {
+      width: 40px; height: 40px;
+      background: var(--sage-light);
+      border-radius: var(--r-md);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--sage); flex-shrink: 0;
+    }
+    .rdp-facility__name { font-size: var(--t-base); font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+    .rdp-facility__desc { font-size: var(--t-sm); color: var(--stone); line-height: 1.5; }
+
+    /* ── Hosts ───────────────────────────────────────── */
+    .rdp-host-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s5); }
+    .rdp-host-card { border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--s6); }
+    .rdp-host-card__avatar {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--sand-mid);
+      object-fit: cover;
+      margin-bottom: var(--s4);
+      display: block;
+    }
+    .rdp-host-card__name { font-weight: 600; color: var(--ink); margin-bottom: 3px; font-size: var(--t-base); }
+    .rdp-host-card__role { font-size: var(--t-sm); color: var(--sage); font-weight: 500; margin-bottom: var(--s3); }
+    .rdp-host-card__bio { font-size: var(--t-sm); color: var(--stone); line-height: 1.7; margin-bottom: var(--s4); }
+    .rdp-host-card__cred { font-size: var(--t-xs); color: var(--stone); display: flex; gap: var(--s2); margin-bottom: var(--s2); }
+    .rdp-host-card__cred::before { content: '·'; color: var(--mist); }
+
+    /* ── Food ────────────────────────────────────────── */
+    .rdp-food-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s7); }
+    .rdp-dietary-tags { display: flex; gap: var(--s2); flex-wrap: wrap; margin-top: var(--s4); }
+    .rdp-dietary-tag {
+      background: var(--sage-pale);
+      color: var(--sage);
+      padding: var(--s2) var(--s4);
+      border-radius: var(--r-pill);
+      font-size: var(--t-sm);
+      font-weight: 500;
+    }
+    .rdp-menu { border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
+    .rdp-menu__row { padding: var(--s4) var(--s5); border-bottom: 1px solid var(--border); }
+    .rdp-menu__row:last-child { border-bottom: none; }
+    .rdp-menu__label { font-size: var(--t-xs); color: var(--stone); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 4px; font-weight: 600; }
+    .rdp-menu__item { font-size: var(--t-sm); color: var(--charcoal); }
+
+    /* ── Reviews ─────────────────────────────────────── */
+    .rdp-review-summary {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: var(--s7);
+      align-items: center;
+      background: var(--parchment);
+      border-radius: var(--r-lg);
+      padding: var(--s6) var(--s7);
+      margin-bottom: var(--s6);
+    }
+    .rdp-review-score { font-family: var(--serif); font-size: 56px; font-weight: 300; color: var(--ink); line-height: 1; }
+    .rdp-review-stars { color: #c9a84c; font-size: 18px; letter-spacing: 2px; }
+    .rdp-review-ai {
+      font-size: var(--t-sm);
+      color: var(--charcoal);
+      line-height: 1.8;
+      margin-top: var(--s3);
+      padding-top: var(--s3);
+      border-top: 1px solid var(--border-mid);
+    }
+    .rdp-review-ai__label {
+      font-size: var(--t-xs);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--stone);
+      font-weight: 600;
+      margin-bottom: var(--s2);
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+    }
+    .rdp-review-themes {
+      display: flex;
+      gap: var(--s2);
+      flex-wrap: wrap;
+      margin-bottom: var(--s6);
+    }
+    .rdp-review-theme {
+      padding: var(--s2) var(--s4);
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      font-size: var(--t-sm);
+      color: var(--stone);
+      cursor: pointer;
+      transition: all var(--dur-fast);
+    }
+    .rdp-review-theme:hover,
+    .rdp-review-theme.is-active { border-color: var(--ink); color: var(--ink); background: var(--parchment); }
+    .rdp-reviews-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
+    .rdp-review { border: 1px solid var(--border); border-radius: var(--r-lg); padding: var(--s5); }
+    .rdp-review__theme-tag {
+      display: inline-block;
+      font-size: var(--t-xs);
+      color: var(--sage);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: var(--s3);
+    }
+    .rdp-review__stars { color: #c9a84c; font-size: 13px; letter-spacing: 1px; margin-bottom: var(--s3); }
+    .rdp-review__quote { font-size: var(--t-sm); color: var(--charcoal); line-height: 1.7; margin-bottom: var(--s4); }
+    .rdp-review__author { font-size: var(--t-xs); color: var(--stone); font-weight: 600; }
+
+    /* ── Location ────────────────────────────────────── */
+    .rdp-travel-info { display: flex; gap: var(--s7); margin-top: var(--s5); flex-wrap: wrap; }
+    .rdp-travel-item__label { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.07em; color: var(--stone); font-weight: 600; margin-bottom: var(--s2); }
+    .rdp-travel-item__val { font-size: var(--t-sm); color: var(--charcoal); }
+    .rdp-neighbourhood-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s4); margin-top: var(--s6); }
+    .rdp-nb-card { border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; }
+    .rdp-nb-card__img { width: 100%; height: 140px; object-fit: cover; background: var(--sand-mid); }
+    .rdp-nb-card__body { padding: var(--s4) var(--s5); }
+    .rdp-nb-card__tag { font-size: var(--t-xs); color: var(--sage); font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: var(--s2); }
+    .rdp-nb-card__name { font-weight: 600; color: var(--ink); margin-bottom: var(--s1); font-size: var(--t-base); }
+    .rdp-nb-card__desc { font-size: var(--t-sm); color: var(--stone); line-height: 1.5; }
+    .rdp-skyscanner {
+      background: #003399;
+      color: white;
+      border-radius: var(--r-lg);
+      padding: var(--s7);
+      margin-top: var(--s8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--s6);
+    }
+    .rdp-skyscanner__logo { font-family: var(--serif); font-size: 20px; font-weight: 500; }
+    .rdp-skyscanner__sub { font-size: var(--t-sm); opacity: 0.75; margin-top: 4px; }
+    .rdp-skyscanner__details { font-size: var(--t-sm); opacity: 0.85; }
+    .rdp-skyscanner__btn {
+      background: white;
+      color: #003399;
+      padding: var(--s4) var(--s7);
+      border-radius: var(--r-md);
+      font-weight: 700;
+      font-size: var(--t-sm);
+      white-space: nowrap;
+      flex-shrink: 0;
+      border: none;
+      cursor: pointer;
+    }
+
+    /* ── Trust ───────────────────────────────────────── */
+    .rdp-trust-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s5); }
+    .rdp-trust-item {
+      text-align: center;
+      padding: var(--s6) var(--s5);
+      background: var(--parchment);
+      border-radius: var(--r-lg);
+      border: 1px solid var(--border);
+    }
+    .rdp-trust-item__icon { color: var(--sage); margin-bottom: var(--s4); }
+    .rdp-trust-item__title { font-weight: 600; color: var(--ink); margin-bottom: var(--s2); }
+    .rdp-trust-item__desc { font-size: var(--t-sm); color: var(--stone); line-height: 1.6; }
+
+    /* ── Related ─────────────────────────────────────── */
+    .rdp-related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s5); }
+    .rdp-related-card { border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--border); transition: box-shadow var(--dur-fast); }
+    .rdp-related-card:hover { box-shadow: var(--shadow-md); }
+    .rdp-related-card__img { width: 100%; height: 180px; object-fit: cover; display: block; }
+    .rdp-related-card__body { padding: var(--s5); }
+    .rdp-related-card__loc { font-size: var(--t-xs); color: var(--stone); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: var(--s2); }
+    .rdp-related-card__name { font-family: var(--serif); font-size: var(--t-lg); color: var(--ink); margin-bottom: var(--s2); font-weight: 400; }
+    .rdp-related-card__meta { font-size: var(--t-sm); color: var(--stone); }
+    .rdp-related-card__price { font-weight: 600; color: var(--ink); margin-top: var(--s3); font-size: var(--t-sm); }
+
+    /* ── Booking widget ──────────────────────────────── */
+    .rdp-widget {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .rdp-widget__header {
+      padding: var(--s6);
+      border-bottom: 1px solid var(--border);
+      background: var(--parchment);
+    }
+    .rdp-widget__from { font-size: var(--t-xs); color: var(--stone); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: var(--s1); }
+    .rdp-widget__price { font-family: var(--serif); font-size: 38px; color: var(--ink); line-height: 1.05; }
+    .rdp-widget__per { font-size: var(--t-sm); color: var(--stone); margin-left: 4px; }
+    .rdp-widget__rating { display: flex; align-items: center; gap: var(--s2); margin-top: var(--s3); font-size: var(--t-sm); color: var(--stone); }
+    .rdp-widget__body { padding: var(--s5) var(--s6); }
+    .rdp-widget__field-label { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--stone); font-weight: 600; margin-bottom: var(--s2); margin-top: var(--s5); }
+    .rdp-widget__field-label:first-child { margin-top: 0; }
+    .rdp-widget__placeholder {
+      display: flex; align-items: center; gap: var(--s2);
+      padding: var(--s3) var(--s4);
+      border: 1.5px dashed var(--border);
+      border-radius: var(--r-md);
+      font-size: var(--t-sm); color: var(--stone);
+    }
+    .rdp-widget__placeholder svg { color: var(--stone); flex-shrink: 0; opacity: 0.5; }
+    .rdp-widget__avail { font-size: var(--t-xs); color: var(--warning); font-weight: 500; margin-top: var(--s2); }
+    .rdp-widget__date-selected {
+      display: flex; align-items: center; gap: var(--s2);
+      margin-top: var(--s3);
+      padding: var(--s3) var(--s4);
+      background: #f3f7f4;
+      border-radius: var(--r-md);
+      border: 1px solid var(--sage-light, #b4cebc);
+      font-size: var(--t-sm); color: var(--ink); font-weight: 500;
+    }
+    .rdp-widget__date-selected svg { color: var(--sage); flex-shrink: 0; }
+    .rdp-widget__date-nights { color: var(--stone); font-weight: 400; }
+    .rdp-widget__guests-row { display: flex; align-items: center; justify-content: space-between; }
+    .rdp-widget__price-calc {
+      background: var(--parchment);
+      border-radius: var(--r-md);
+      padding: var(--s4) var(--s5);
+      margin-top: var(--s5);
+    }
+    .rdp-widget__calc-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--t-sm);
+      color: var(--stone);
+      margin-bottom: var(--s2);
+    }
+    .rdp-widget__calc-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: var(--t-base);
+      font-weight: 600;
+      color: var(--ink);
+      border-top: 1px solid var(--border-mid);
+      padding-top: var(--s3);
+      margin-top: var(--s3);
+    }
+    .rdp-widget__ctas { margin-top: var(--s5); display: flex; flex-direction: column; gap: var(--s3); }
+    .rdp-widget__note { text-align: center; font-size: var(--t-xs); color: var(--stone); margin-top: var(--s3); }
+    .rdp-widget__trust { display: flex; flex-direction: column; gap: var(--s3); padding-top: var(--s5); border-top: 1px solid var(--border); margin-top: var(--s5); }
+    .rdp-widget__trust-item { display: flex; align-items: center; gap: var(--s3); font-size: var(--t-sm); color: var(--stone); }
+    .rdp-widget__trust-item svg { color: var(--sage); flex-shrink: 0; }
+
   </style>
 </head>
 <body>
@@ -236,11 +977,33 @@
 
       <div class="booking-bar__divider"></div>
 
-      <div class="booking-bar__description">
-        <p class="booking-bar__desc-text">7-night set-date group retreats. Up to 6 guests. Private, bespoke retreats for groups, corporates and families of 6 to 10 guests.</p>
+      <div class="booking-bar__dates">
+        <p class="booking-bar__label">Select dates - (These can be changed later)</p>
+        <div class="widget-dates-scroll">
+          <div class="widget-date-pill is-limited">7–14 Jun ·&thinsp;3 left</div>
+          <div class="widget-date-pill">21–28 Jun</div>
+          <div class="widget-date-pill is-soldout">5–12 Jul</div>
+          <div class="widget-date-pill">19–26 Jul</div>
+          <div class="widget-date-pill is-limited">2–9 Aug ·&thinsp;2 left</div>
+          <div class="widget-date-pill">16–23 Aug</div>
+        </div>
+        <p class="booking-bar__availability">Only 3 spaces left on the dates shown</p>
       </div>
 
-      <div class="booking-bar__secondary-cta" style="margin-left: auto;">
+      <div class="booking-bar__divider"></div>
+
+      <div class="booking-bar__guests">
+        <p class="booking-bar__label">Guests</p>
+        <div class="stepper">
+          <button class="stepper__btn" disabled>−</button>
+          <span class="stepper__val">1</span>
+          <button class="stepper__btn">+</button>
+        </div>
+      </div>
+
+      <div class="booking-bar__divider"></div>
+
+      <div class="booking-bar__secondary-cta">
         <a href="enquiry.html" class="btn btn--outline-light btn--lg">Enquire</a>
       </div>
 
@@ -278,320 +1041,925 @@
     </div>
   </div>
 
-  <!-- ===== Breadcrumb ===== -->
-  <div class="breadcrumb">
-    <div class="breadcrumb__inner">
-      <a href="#">Home</a>
-      <span class="breadcrumb__sep">/</span>
-      <a href="#">Destinations</a>
-      <span class="breadcrumb__sep">/</span>
-      <a href="#">Bali</a>
-      <span class="breadcrumb__sep">/</span>
-      <a href="#">Gianyar</a>
-      <span class="breadcrumb__sep">/</span>
-      <span class="breadcrumb__current">Elevatin Barn</span>
+  <!-- ═══════════════════════════════════════════════
+       SECTION SUBNAV
+  ═══════════════════════════════════════════════ -->
+  <nav class="rdp-subnav" id="rdp-subnav">
+    <div class="rdp-subnav__inner">
+      <a href="#overview"    class="rdp-subnav__link is-active">Overview</a>
+      <a href="#editorial"   class="rdp-subnav__link">Why QoR chose this</a>
+      <a href="#dates"       class="rdp-subnav__link">Dates &amp; Prices</a>
+      <a href="#rooms"       class="rdp-subnav__link">Rooms</a>
+      <a href="#facilities"  class="rdp-subnav__link">Facilities</a>
+      <a href="#host"        class="rdp-subnav__link">Our Hosts</a>
+      <a href="#food"        class="rdp-subnav__link">Food</a>
+      <a href="#reviews"     class="rdp-subnav__link">Reviews</a>
+      <a href="#location"    class="rdp-subnav__link">Location</a>
+      <a href="#faqs"        class="rdp-subnav__link">FAQs</a>
     </div>
-  </div>
+  </nav>
 
+  <!-- ═══════════════════════════════════════════════
+       PAGE LAYOUT — 2 column
+  ═══════════════════════════════════════════════ -->
+  <div class="rdp-layout">
 
-  <!-- ===== Main Content ===== -->
-  <div class="page-body">
+    <!-- ─────────────────────────────────────────────
+         MAIN CONTENT
+    ───────────────────────────────────────────── -->
+    <main class="rdp-main">
 
-    <!-- Left: Tabbed content -->
-    <div class="tabs-scope">
-      <div class="tabs">
-        <div class="tabs__list">
-          <button class="tabs__tab is-active" data-tab="overview">Overview</button>
-          <button class="tabs__tab" data-tab="included">What's Included</button>
-          <button class="tabs__tab" data-tab="accommodation">Accommodation</button>
-          <button class="tabs__tab" data-tab="programme">Programme</button>
-          <button class="tabs__tab" data-tab="reviews">Reviews</button>
-          <button class="tabs__tab" data-tab="location">Location</button>
-        </div>
-      </div>
+      <!-- ── 1. Overview ──────────────────────────── -->
+      <section class="rdp-section" id="overview">
+        <p class="rdp-section__title">What is this experience?</p>
+        <p style="font-family: var(--serif); font-size: var(--t-xl); line-height: 1.6; color: var(--ink); margin-bottom: var(--s6); font-weight: 400;">
+          Set among emerald rice paddies and jungle in Gianyar, Bali, the Elevation Barn is a place to <em>arrive fully</em> — and leave changed.
+        </p>
+        <p style="color: var(--stone); line-height: 1.9; margin-bottom: var(--s4);">
+          Seven days of restorative yoga, guided meditation, and embodied movement — held alongside extraordinary farm-to-table meals, communal evenings, and the unhurried rhythm of Balinese life. This is not a programme about optimising yourself. It's about returning to yourself.
+        </p>
+        <p style="color: var(--stone); line-height: 1.9;">
+          Led by internationally-trained facilitators with backgrounds in trauma-informed yoga, somatic movement, and nature therapy. Suitable for all experience levels. The maximum group size of 12 guests ensures a genuinely intimate experience where connection forms naturally.
+        </p>
 
-      <!-- Tab: Overview -->
-      <div class="tab-panel is-active" data-panel="overview">
-        <div class="section">
-          <p style="font-family: var(--serif); font-size: var(--t-xl); line-height: 1.5; color: var(--ink); margin-bottom: var(--s6); font-weight: 300;">
-            Set in a restored 18th-century farmhouse in the golden hills of Alentejo, Quinta da Levada is a place to <em>slow down, go inward, and return to yourself.</em>
-          </p>
-          <p style="color: var(--stone); line-height: 1.8; margin-bottom: var(--s4);">
-            Seven days of restorative yoga, guided forest bathing, and somatic movement — held alongside long farm-to-table lunches, evenings under the stars, and the deep, unhurried quiet of the Portuguese countryside. This is not a programme about doing more. It's about arriving, fully, at rest.
-          </p>
-          <p style="color: var(--stone); line-height: 1.8;">
-            Led by internationally-trained facilitators with backgrounds in trauma-informed yoga, nature therapy, and integrative coaching. Suitable for all experience levels. Maximum 12 guests ensures a genuinely intimate experience.
-          </p>
-
-          <div class="highlight-stats">
-            <div class="highlight-stat">
-              <div class="highlight-stat__value">7</div>
-              <div class="highlight-stat__label">Nights</div>
+        <!-- At a glance -->
+        <div class="rdp-glance">
+          <div class="rdp-glance__item">
+            <div class="rdp-glance__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             </div>
-            <div class="highlight-stat">
-              <div class="highlight-stat__value">12</div>
-              <div class="highlight-stat__label">Max guests</div>
-            </div>
-            <div class="highlight-stat">
-              <div class="highlight-stat__value">4.9</div>
-              <div class="highlight-stat__label">Guest rating</div>
-            </div>
-            <div class="highlight-stat">
-              <div class="highlight-stat__value">6</div>
-              <div class="highlight-stat__label">Dates in 2026</div>
-            </div>
-          </div>
-
-          <p class="label-caps" style="margin-bottom: var(--s4);">Led by</p>
-          <div style="display:flex; gap: var(--s5); align-items: flex-start;">
-            <div style="width:60px; height:60px; border-radius:50%; background:var(--sand-mid); flex-shrink:0;"></div>
             <div>
-              <div style="font-weight: 600; color: var(--ink); margin-bottom: var(--s1);">Sofia Nunes &amp; Jamie Carvalho</div>
-              <div style="font-size: var(--t-sm); color: var(--stone); line-height: 1.6;">Trauma-informed yoga teacher &amp; nature therapy guide. Combined 22 years of retreat facilitation across Europe and Southeast Asia.</div>
+              <div class="rdp-glance__label">Duration</div>
+              <div class="rdp-glance__val">7 nights / 8 days</div>
+            </div>
+          </div>
+          <div class="rdp-glance__item">
+            <div class="rdp-glance__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+              <div class="rdp-glance__label">Group size</div>
+              <div class="rdp-glance__val">Max 12 guests</div>
+            </div>
+          </div>
+          <div class="rdp-glance__item">
+            <div class="rdp-glance__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div>
+              <div class="rdp-glance__label">Skill level</div>
+              <div class="rdp-glance__val">All levels welcome</div>
+            </div>
+          </div>
+          <div class="rdp-glance__item">
+            <div class="rdp-glance__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div>
+              <div class="rdp-glance__label">Style</div>
+              <div class="rdp-glance__val">Structured &amp; flexible</div>
+            </div>
+          </div>
+          <div class="rdp-glance__item">
+            <div class="rdp-glance__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+            </div>
+            <div>
+              <div class="rdp-glance__label">Meals</div>
+              <div class="rdp-glance__val">All included</div>
+            </div>
+          </div>
+          <div class="rdp-glance__item">
+            <div class="rdp-glance__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            </div>
+            <div>
+              <div class="rdp-glance__label">Transfers</div>
+              <div class="rdp-glance__val">Denpasar included</div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Tab: What's Included -->
-      <div class="tab-panel" data-panel="included">
-        <div class="section">
-          <div class="section-head">
-            <h2>Everything you need, included</h2>
-            <p>All the essentials — and the extras that make the difference.</p>
+        <!-- Typical schedule — vertical timeline -->
+        <p class="label-caps" style="margin-bottom: var(--s6); margin-top: var(--s7);">Typical daily rhythm</p>
+
+        <div class="rdp-timeline">
+
+          <div class="rdp-timeline__item">
+            <div class="rdp-timeline__spine">
+              <div class="rdp-timeline__node"></div>
+              <div class="rdp-timeline__line"></div>
+            </div>
+            <div class="rdp-timeline__content">
+              <div class="rdp-timeline__time">6:30am</div>
+              <div class="rdp-timeline__title">Morning movement</div>
+              <div class="rdp-timeline__desc">Vinyasa or restorative yoga in the open-air shala, overlooking the rice paddies.</div>
+            </div>
           </div>
-          <div class="includes-grid">
-            <div class="include-item">Return transfers from Lisbon Airport</div>
-            <div class="include-item">7 nights accommodation</div>
-            <div class="include-item">All meals — breakfast, lunch &amp; dinner</div>
-            <div class="include-item">Filtered water &amp; herbal teas throughout</div>
-            <div class="include-item">2× daily yoga &amp; movement sessions</div>
-            <div class="include-item">Daily meditation practice</div>
-            <div class="include-item">2× guided forest bathing walks</div>
-            <div class="include-item">Closing ceremony &amp; farewell dinner</div>
-            <div class="include-item">Welcome gift &amp; retreat journal</div>
-            <div class="include-item">Wi-Fi (deliberately limited)</div>
-            <div class="include-item">Yoga props &amp; all equipment</div>
-            <div class="include-item">Pre-arrival 1:1 call with a facilitator</div>
+
+          <div class="rdp-timeline__item">
+            <div class="rdp-timeline__spine">
+              <div class="rdp-timeline__node"></div>
+              <div class="rdp-timeline__line"></div>
+            </div>
+            <div class="rdp-timeline__content">
+              <div class="rdp-timeline__time">8:30am</div>
+              <div class="rdp-timeline__title">Breakfast</div>
+              <div class="rdp-timeline__desc">Communal breakfast — Balinese-inspired, plant-forward, seasonally led.</div>
+            </div>
           </div>
-          <div class="divider"></div>
-          <p class="label-caps" style="margin-bottom: var(--s4);">Not included</p>
-          <div style="display:flex; flex-direction: column; gap: var(--s2); color: var(--stone); font-size: var(--t-sm);">
-            <div>— Flights to/from Lisbon</div>
-            <div>— Alcohol (available to purchase on-site)</div>
-            <div>— Optional 1:1 private coaching sessions (£85/session)</div>
-            <div>— Travel insurance (strongly recommended)</div>
+
+          <div class="rdp-timeline__item">
+            <div class="rdp-timeline__spine">
+              <div class="rdp-timeline__node"></div>
+              <div class="rdp-timeline__line"></div>
+            </div>
+            <div class="rdp-timeline__content">
+              <div class="rdp-timeline__time">10:00am</div>
+              <div class="rdp-timeline__title">Workshop or free time</div>
+              <div class="rdp-timeline__desc">Guided workshops on breathwork, somatic awareness, or nature therapy. Afternoons are yours — pool, trails, reading, 1:1 sessions.</div>
+            </div>
+          </div>
+
+          <div class="rdp-timeline__item">
+            <div class="rdp-timeline__spine">
+              <div class="rdp-timeline__node"></div>
+              <div class="rdp-timeline__line"></div>
+            </div>
+            <div class="rdp-timeline__content">
+              <div class="rdp-timeline__time">4:00pm</div>
+              <div class="rdp-timeline__title">Afternoon session</div>
+              <div class="rdp-timeline__desc">Guided meditation, yin yoga, or forest bathing depending on the day.</div>
+            </div>
+          </div>
+
+          <div class="rdp-timeline__item rdp-timeline__item--last">
+            <div class="rdp-timeline__spine">
+              <div class="rdp-timeline__node"></div>
+            </div>
+            <div class="rdp-timeline__content">
+              <div class="rdp-timeline__time">7:00pm</div>
+              <div class="rdp-timeline__title">Dinner &amp; evening</div>
+              <div class="rdp-timeline__desc">Long communal dinners, sharing circles, cacao ceremonies, or simply stargazing in the gardens.</div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── 2. QoR Editorial ─────────────────────── -->
+      <section class="rdp-section" id="editorial">
+        <p class="rdp-section__eyebrow">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          The QoR Edit
+        </p>
+        <p class="rdp-section__title">Why we chose this retreat</p>
+
+        <div class="rdp-editorial">
+          <p class="rdp-editorial__lead">
+            "The Elevation Barn is one of those rare finds — a retreat that delivers on every promise, and then some."
+          </p>
+          <p class="rdp-editorial__body">
+            Our editor Emma visited in September 2025 and described it as the most considered retreat environment she'd encountered in a decade of retreat reviewing. What makes it exceptional isn't any single element — it's the totality. The setting (a beautifully restored Balinese property surrounded by rice paddies) is genuinely stunning; the hosts hold the space with rare warmth and expertise; and the programme is intelligently sequenced to move you from arrival anxiety to deep rest within 48 hours.
+            <br><br>
+            We only recommend retreats we've experienced first-hand. This one earned our full endorsement.
+          </p>
+
+          <div class="rdp-editorial__cols">
+            <div>
+              <p class="rdp-editorial__col-title">What makes it special</p>
+              <div class="rdp-editorial__point rdp-editorial__point--pro">Genuinely intimate — 12 guests means real connection forms naturally</div>
+              <div class="rdp-editorial__point rdp-editorial__point--pro">Hosts with deep credentials, not wellness influencers</div>
+              <div class="rdp-editorial__point rdp-editorial__point--pro">Programme intelligently structured — you can arrive exhausted</div>
+              <div class="rdp-editorial__point rdp-editorial__point--pro">Food is exceptional — every meal feels like a considered act</div>
+              <div class="rdp-editorial__point rdp-editorial__point--pro">The setting genuinely aids transformation</div>
+            </div>
+            <div>
+              <p class="rdp-editorial__col-title">Honest considerations</p>
+              <div class="rdp-editorial__point rdp-editorial__point--con">Not the right choice if you want a packed social schedule</div>
+              <div class="rdp-editorial__point rdp-editorial__point--con">July/August heat is significant — pack accordingly</div>
+              <div class="rdp-editorial__point rdp-editorial__point--con">Remote location — embrace the digital detox rather than resist it</div>
+              <div class="rdp-editorial__point rdp-editorial__point--con">Limited local nightlife — this retreat is the destination</div>
+            </div>
+          </div>
+
+          <div class="rdp-editorial__author">
+            <div class="rdp-editorial__avatar" style="background: var(--sand-mid); display:flex; align-items:center; justify-content:center; font-family: var(--serif); font-size:18px; color: var(--stone);">E</div>
+            <div>
+              <div class="rdp-editorial__author-name">Emma Hartley</div>
+              <div class="rdp-editorial__author-role">Senior Retreat Editor, Queen of Retreats · Visited September 2025</div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Tab: Accommodation -->
-      <div class="tab-panel" data-panel="accommodation">
-        <div class="section">
-          <div class="section-head">
-            <h2>Your accommodation</h2>
-            <p>Three room types, each designed for rest and retreat.</p>
-          </div>
-          <div class="room-preview-grid">
-            <div class="room-preview-card">
-              <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg"
-                   alt="Shared Garden Room" class="room-preview-card__img">
-              <div class="room-preview-card__body">
-                <div class="room-preview-card__name">Shared Garden Room</div>
-                <div class="room-preview-card__detail">Twin share · Garden view · En-suite</div>
-                <div class="room-preview-card__price">From £2,195 <span style="font-weight:400; color: var(--stone)">per person</span></div>
+      <!-- ── 3. Dates & Packages ──────────────────── -->
+      <section class="rdp-section" id="dates">
+        <p class="rdp-section__title">Retreat dates &amp; pricing</p>
+        <p class="rdp-section__sub">All programmes run Saturday to Saturday. Prices are per person and include accommodation, all meals, transfers, and the full programme.</p>
+
+        <div class="rdp-date-cards">
+
+          <div class="rdp-date-card rdp-date-card--soldout">
+            <div>
+              <div class="rdp-date-card__label">5–12 July 2026</div>
+              <div class="rdp-date-card__meta">
+                <span class="rdp-date-card__status rdp-date-card__status--soldout">Sold out</span>
+                <span>7 nights · 12 guests</span>
               </div>
             </div>
-            <div class="room-preview-card">
-              <img src="images/header_casa-ana_20230628180415.jpg"
-                   alt="Private Valley Room" class="room-preview-card__img">
-              <div class="room-preview-card__body">
-                <div class="room-preview-card__name">Private Valley Room</div>
-                <div class="room-preview-card__detail">Double or twin · Valley view · En-suite</div>
-                <div class="room-preview-card__price">From £2,895 <span style="font-weight:400; color: var(--stone)">per person</span></div>
+            <div class="rdp-date-card__price-wrap">
+              <div class="rdp-date-card__price">£2,195</div>
+              <div class="rdp-date-card__per">per person</div>
+            </div>
+          </div>
+
+          <div class="rdp-date-card" data-date="d1" data-price="2195" data-label="7–14 Jun 2026" data-pill="7–14 Jun">
+            <div>
+              <div class="rdp-date-card__label">
+                7–14 June 2026
+                <span class="rdp-date-card__badge">Most popular</span>
+              </div>
+              <div class="rdp-date-card__meta">
+                <span class="rdp-date-card__status rdp-date-card__status--limited">3 spaces left</span>
+                <span>7 nights · 12 guests max</span>
               </div>
             </div>
-            <div class="room-preview-card">
-              <img src="images/header_les-marguerites.jpg"
-                   alt="Quinta Suite" class="room-preview-card__img">
-              <div class="room-preview-card__body">
-                <div class="room-preview-card__name">Quinta Suite</div>
-                <div class="room-preview-card__detail">Junior suite · Private terrace · Deep soak bath</div>
-                <div class="room-preview-card__price">From £3,750 <span style="font-weight:400; color: var(--stone)">per person</span></div>
+            <div class="rdp-date-card__price-wrap">
+              <div class="rdp-date-card__price">£2,195</div>
+              <div class="rdp-date-card__per">per person</div>
+            </div>
+          </div>
+
+          <div class="rdp-date-card" data-date="d2" data-price="2195" data-label="21–28 Jun 2026" data-pill="21–28 Jun">
+            <div>
+              <div class="rdp-date-card__label">21–28 June 2026</div>
+              <div class="rdp-date-card__meta">
+                <span class="rdp-date-card__status rdp-date-card__status--available">8 spaces</span>
+                <span>7 nights · 12 guests max</span>
+              </div>
+            </div>
+            <div class="rdp-date-card__price-wrap">
+              <div class="rdp-date-card__price">£2,195</div>
+              <div class="rdp-date-card__per">per person</div>
+            </div>
+          </div>
+
+          <div class="rdp-date-card" data-date="d3" data-price="2895" data-label="2–9 Aug 2026" data-pill="2–9 Aug">
+            <div>
+              <div class="rdp-date-card__label">
+                2–9 August 2026
+                <span class="rdp-date-card__badge">Best value</span>
+              </div>
+              <div class="rdp-date-card__meta">
+                <span class="rdp-date-card__status rdp-date-card__status--limited">2 spaces left</span>
+                <span>7 nights · 12 guests max</span>
+              </div>
+            </div>
+            <div class="rdp-date-card__price-wrap">
+              <div class="rdp-date-card__price">£2,895</div>
+              <div class="rdp-date-card__per">per person</div>
+            </div>
+          </div>
+
+          <div class="rdp-date-card" data-date="d4" data-price="2195" data-label="16–23 Aug 2026" data-pill="16–23 Aug">
+            <div>
+              <div class="rdp-date-card__label">16–23 August 2026</div>
+              <div class="rdp-date-card__meta">
+                <span class="rdp-date-card__status rdp-date-card__status--available">10 spaces</span>
+                <span>7 nights · 12 guests max</span>
+              </div>
+            </div>
+            <div class="rdp-date-card__price-wrap">
+              <div class="rdp-date-card__price">£2,195</div>
+              <div class="rdp-date-card__per">per person</div>
+            </div>
+          </div>
+
+          <div class="rdp-date-card" data-date="d5" data-price="2195" data-label="6–13 Sep 2026" data-pill="6–13 Sep">
+            <div>
+              <div class="rdp-date-card__label">6–13 September 2026</div>
+              <div class="rdp-date-card__meta">
+                <span class="rdp-date-card__status rdp-date-card__status--available">8 spaces</span>
+                <span>7 nights · 12 guests max</span>
+              </div>
+            </div>
+            <div class="rdp-date-card__price-wrap">
+              <div class="rdp-date-card__price">£2,195</div>
+              <div class="rdp-date-card__per">per person</div>
+            </div>
+          </div>
+
+        </div>
+
+        <p style="font-size: var(--t-sm); color: var(--stone); margin-top: var(--s5);">More dates available into 2027. <a href="#" style="color: var(--ink); font-weight: 500;">View full calendar →</a></p>
+      </section>
+
+      <!-- ── 4. Accommodation ─────────────────────── -->
+      <section class="rdp-section" id="rooms">
+        <p class="rdp-section__title">Your accommodation</p>
+        <p class="rdp-section__sub">Three room types, each designed for rest and renewal. All include en-suite bathrooms and garden access.</p>
+
+        <div class="rdp-room-cards">
+
+          <div class="rdp-room-card" data-price="2195" data-room="2195">
+            <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg"
+                 alt="Shared Garden Room" class="rdp-room-card__img">
+            <div class="rdp-room-card__body">
+              <div class="rdp-room-card__name">Shared Garden Room</div>
+              <div class="rdp-room-card__type">Twin share · Garden view · En-suite</div>
+              <div class="rdp-room-card__includes">
+                <div class="rdp-room-card__include">Garden-view terrace with hammock</div>
+                <div class="rdp-room-card__include">En-suite with rain shower</div>
+                <div class="rdp-room-card__include">Air conditioning &amp; ceiling fan</div>
+              </div>
+              <div class="rdp-room-card__footer">
+                <div>
+                  <div class="rdp-room-card__price">£2,195</div>
+                  <div class="rdp-room-card__price-label">per person</div>
+                </div>
+                <button class="rdp-room-select-btn" type="button">Select room</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="rdp-room-card rdp-room-card--popular" data-price="2895" data-room="2895">
+            <img src="images/header_casa-ana_20230628180415.jpg"
+                 alt="Private Valley Room" class="rdp-room-card__img">
+            <div class="rdp-room-card__body">
+              <div class="rdp-room-card__badge">Most popular</div>
+              <div class="rdp-room-card__name">Private Valley Room</div>
+              <div class="rdp-room-card__type">Double or twin · Rice paddy view · En-suite</div>
+              <div class="rdp-room-card__includes">
+                <div class="rdp-room-card__include">Private balcony with rice paddy view</div>
+                <div class="rdp-room-card__include">En-suite with outdoor shower</div>
+                <div class="rdp-room-card__include">Air conditioning, ceiling fan &amp; daybed</div>
+              </div>
+              <div class="rdp-room-card__footer">
+                <div>
+                  <div class="rdp-room-card__price">£2,895</div>
+                  <div class="rdp-room-card__price-label">per person</div>
+                </div>
+                <button class="rdp-room-select-btn" type="button">Select room</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="rdp-room-card" data-price="3750" data-room="3750">
+            <img src="images/header_les-marguerites.jpg"
+                 alt="Quinta Suite" class="rdp-room-card__img">
+            <div class="rdp-room-card__body">
+              <div class="rdp-room-card__badge" style="background: var(--warning-bg); color: var(--warning);">Premium</div>
+              <div class="rdp-room-card__name">Quinta Suite</div>
+              <div class="rdp-room-card__type">Junior suite · Private terrace · Deep-soak bath</div>
+              <div class="rdp-room-card__includes">
+                <div class="rdp-room-card__include">Private terrace &amp; plunge pool</div>
+                <div class="rdp-room-card__include">Freestanding bath &amp; outdoor shower</div>
+                <div class="rdp-room-card__include">Nightly turndown &amp; welcome hamper</div>
+              </div>
+              <div class="rdp-room-card__footer">
+                <div>
+                  <div class="rdp-room-card__price">£3,750</div>
+                  <div class="rdp-room-card__price-label">per person</div>
+                </div>
+                <button class="rdp-room-select-btn" type="button">Select room</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── 5. Facilities ────────────────────────── -->
+      <section class="rdp-section" id="facilities">
+        <p class="rdp-section__title">Facilities &amp; space</p>
+        <p class="rdp-section__sub">Every element of the Elevation Barn is designed to deepen your retreat — not distract from it.</p>
+
+        <div class="rdp-facilities">
+          <div class="rdp-facility">
+            <div class="rdp-facility__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <div>
+              <div class="rdp-facility__name">Open-air yoga shala</div>
+              <div class="rdp-facility__desc">Purpose-built, rice paddy-facing yoga shala with teak floors and all equipment provided.</div>
+            </div>
+          </div>
+          <div class="rdp-facility">
+            <div class="rdp-facility__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+            </div>
+            <div>
+              <div class="rdp-facility__name">Infinity pool</div>
+              <div class="rdp-facility__desc">Overlooking the valley, the pool is the social and contemplative heart of the property.</div>
+            </div>
+          </div>
+          <div class="rdp-facility">
+            <div class="rdp-facility__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            </div>
+            <div>
+              <div class="rdp-facility__name">Spa treatment rooms</div>
+              <div class="rdp-facility__desc">Two private treatment rooms offering Balinese massage and bodywork (bookable separately).</div>
+            </div>
+          </div>
+          <div class="rdp-facility">
+            <div class="rdp-facility__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            </div>
+            <div>
+              <div class="rdp-facility__name">Meditation garden</div>
+              <div class="rdp-facility__desc">A secluded garden with seating alcoves and a koi pond — designed for stillness.</div>
+            </div>
+          </div>
+          <div class="rdp-facility">
+            <div class="rdp-facility__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            </div>
+            <div>
+              <div class="rdp-facility__name">Cacao ceremony space</div>
+              <div class="rdp-facility__desc">Dedicated indoor-outdoor ceremonial space for evening gatherings and shared rituals.</div>
+            </div>
+          </div>
+          <div class="rdp-facility">
+            <div class="rdp-facility__icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div>
+              <div class="rdp-facility__name">Jungle trails</div>
+              <div class="rdp-facility__desc">3km of guided walking trails through rice terraces and jungle — led by the retreat team.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 6. Host & Credibility ────────────────── -->
+      <section class="rdp-section" id="host">
+        <p class="rdp-section__title">Your hosts</p>
+        <p class="rdp-section__sub">Led by credentialed practitioners with a combined 22 years of retreat facilitation across Europe and Southeast Asia.</p>
+
+        <div class="rdp-host-cards">
+          <div class="rdp-host-card">
+            <div class="rdp-host-card__avatar" style="display:flex; align-items:center; justify-content:center; font-family: var(--serif); font-size: 22px; color: var(--stone);">S</div>
+            <div class="rdp-host-card__name">Sofia Nunes</div>
+            <div class="rdp-host-card__role">Lead facilitator · Trauma-informed yoga</div>
+            <p class="rdp-host-card__bio">Sofia has been teaching and facilitating since 2014, working across Portugal, Bali, and the UK. Her work draws on trauma-informed yoga, somatic experiencing, and Jungian depth psychology.</p>
+            <div class="rdp-host-card__cred">500hr YTT — Kaivalyadhama, India</div>
+            <div class="rdp-host-card__cred">Somatic Experiencing Practitioner (SEP)</div>
+            <div class="rdp-host-card__cred">Trauma-Sensitive Yoga certified (TCTSY)</div>
+          </div>
+          <div class="rdp-host-card">
+            <div class="rdp-host-card__avatar" style="display:flex; align-items:center; justify-content:center; font-family: var(--serif); font-size: 22px; color: var(--stone);">J</div>
+            <div class="rdp-host-card__name">Jamie Carvalho</div>
+            <div class="rdp-host-card__role">Nature therapy guide · Somatic movement</div>
+            <p class="rdp-host-card__bio">Jamie is a certified nature and forest therapy guide who has worked across Bali, the Azores, and Scotland. He brings a quiet, grounded presence that guests consistently describe as transformative.</p>
+            <div class="rdp-host-card__cred">Certified Nature &amp; Forest Therapy Guide (ANFT)</div>
+            <div class="rdp-host-card__cred">Integrative coaching (ICF-accredited)</div>
+            <div class="rdp-host-card__cred">10 years retreat facilitation</div>
+          </div>
+        </div>
+
+        <div style="background: var(--parchment); border-radius: var(--r-lg); padding: var(--s6) var(--s7); margin-top: var(--s6); border-left: 3px solid var(--sage);">
+          <p style="font-family: var(--serif); font-size: var(--t-lg); color: var(--ink); line-height: 1.7; font-style: italic; font-weight: 400;">"We don't try to fix anyone. We create the conditions in which people can remember who they already are."</p>
+          <p style="font-size: var(--t-sm); color: var(--stone); margin-top: var(--s3);">— Sofia &amp; Jamie</p>
+        </div>
+      </section>
+
+      <!-- ── 7. Food & Lifestyle ──────────────────── -->
+      <section class="rdp-section" id="food">
+        <p class="rdp-section__title">Food &amp; nourishment</p>
+        <p class="rdp-section__sub">Three meals a day, plus snacks, herbal teas, and cold-pressed juices throughout. Every meal is a considered act.</p>
+
+        <div class="rdp-food-grid">
+          <div>
+            <p style="color: var(--charcoal); line-height: 1.9; margin-bottom: var(--s5);">
+              The kitchen at Elevation Barn is plant-forward, locally sourced, and prepared with extraordinary care. Inspired by Balinese tradition and guided by seasonal availability, meals are designed to nourish the body and delight the senses — never to restrict.
+            </p>
+            <p style="color: var(--charcoal); line-height: 1.9; margin-bottom: var(--s6);">
+              Some fish and ethically sourced chicken are available. All dietary requirements are accommodated with advance notice.
+            </p>
+            <p class="label-caps" style="margin-bottom: var(--s3);">Dietary needs we accommodate</p>
+            <div class="rdp-dietary-tags">
+              <span class="rdp-dietary-tag">Vegan</span>
+              <span class="rdp-dietary-tag">Vegetarian</span>
+              <span class="rdp-dietary-tag">Gluten-free</span>
+              <span class="rdp-dietary-tag">Dairy-free</span>
+              <span class="rdp-dietary-tag">Nut allergy</span>
+              <span class="rdp-dietary-tag">Low-FODMAP</span>
+            </div>
+          </div>
+          <div>
+            <p class="label-caps" style="margin-bottom: var(--s4);">Sample menu</p>
+            <div class="rdp-menu">
+              <div class="rdp-menu__row">
+                <div class="rdp-menu__label">Breakfast</div>
+                <div class="rdp-menu__item">Banana leaf congee, tropical fruit platter, coconut yoghurt, cold-pressed green juice</div>
+              </div>
+              <div class="rdp-menu__row">
+                <div class="rdp-menu__label">Lunch</div>
+                <div class="rdp-menu__item">Tempeh satay with peanut sauce, gado-gado, sambal matah, jasmine rice</div>
+              </div>
+              <div class="rdp-menu__row">
+                <div class="rdp-menu__label">Dinner</div>
+                <div class="rdp-menu__item">Slow-roasted fish with tamarind &amp; lemongrass, jackfruit curry, coconut rice, grilled greens</div>
+              </div>
+              <div class="rdp-menu__row">
+                <div class="rdp-menu__label">Throughout</div>
+                <div class="rdp-menu__item">Herbal teas, filtered water, fresh fruit, afternoon energy balls</div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Tab: Programme -->
-      <div class="tab-panel" data-panel="programme">
-        <div class="section">
-          <div class="section-head">
-            <h2>Your week at Quinta da Levada</h2>
-            <p>A gentle rhythm, held by nature and each other.</p>
+      <!-- ── 8. Reviews ───────────────────────────── -->
+      <section class="rdp-section" id="reviews">
+        <p class="rdp-section__title">What guests say</p>
+
+        <!-- Aggregate + AI summary -->
+        <div class="rdp-review-summary">
+          <div>
+            <div class="rdp-review-score">4.9</div>
+            <div class="rdp-review-stars" style="margin-top: var(--s2);">★★★★★</div>
+            <p style="font-size: var(--t-xs); color: var(--stone); margin-top: var(--s2);">47 verified reviews</p>
           </div>
-          <div class="programme-day">
-            <div class="programme-day__label">Day 1</div>
-            <div class="programme-day__content">
-              <div class="programme-day__title">Arrival &amp; Settling</div>
-              <div class="programme-day__desc">Transfer from Lisbon, welcome lunch, orientation walk and opening circle. Early evening yin yoga to decompress from travel. Communal dinner.</div>
+          <div>
+            <div class="rdp-review-ai__label">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              AI review summary
             </div>
+            <p class="rdp-review-ai">Guests consistently describe Elevation Barn as transformative without being prescriptive. The hosting team receives exceptional praise across all reviews — particularly for their ability to hold space for guests arriving at different emotional starting points. Food is regularly cited as "unexpectedly exceptional." The setting — rice paddies, open-air yoga shala — appears in nearly every review as a decisive factor. Solo travellers note how naturally community forms.</p>
           </div>
-          <div class="programme-day">
-            <div class="programme-day__label">Days 2–3</div>
-            <div class="programme-day__content">
-              <div class="programme-day__title">Deepening</div>
-              <div class="programme-day__desc">Morning movement (vinyasa or restorative), guided meditation, afternoon forest bathing, workshops on breath and somatic awareness. Free time for rest or journalling.</div>
+        </div>
+
+        <!-- Theme filters -->
+        <div class="rdp-review-themes">
+          <button class="rdp-review-theme is-active">All reviews</button>
+          <button class="rdp-review-theme">Food &amp; nourishment</button>
+          <button class="rdp-review-theme">Host &amp; teaching</button>
+          <button class="rdp-review-theme">Transformation</button>
+          <button class="rdp-review-theme">Setting &amp; atmosphere</button>
+        </div>
+
+        <div class="rdp-reviews-grid">
+          <div class="rdp-review">
+            <div class="rdp-review__theme-tag">Transformation</div>
+            <div class="rdp-review__stars">★★★★★</div>
+            <p class="rdp-review__quote">"The most present I've felt in years. I arrived exhausted and depleted. I left feeling like myself again — and I hadn't realised how far I'd drifted."</p>
+            <div class="rdp-review__author">Sarah M. — London · June 2025</div>
+          </div>
+          <div class="rdp-review">
+            <div class="rdp-review__theme-tag">Food &amp; nourishment</div>
+            <div class="rdp-review__stars">★★★★★</div>
+            <p class="rdp-review__quote">"Sofia and Jamie hold the space with such warmth. The food alone is worth the trip — and I say that as someone who came for the yoga."</p>
+            <div class="rdp-review__author">David K. — Dublin · September 2025</div>
+          </div>
+          <div class="rdp-review">
+            <div class="rdp-review__theme-tag">Host &amp; teaching</div>
+            <div class="rdp-review__stars">★★★★★</div>
+            <p class="rdp-review__quote">"I've done a lot of retreats. This one is different. It doesn't try to fix you. It just gives you the space to remember who you already are."</p>
+            <div class="rdp-review__author">Priya S. — Manchester · August 2025</div>
+          </div>
+          <div class="rdp-review">
+            <div class="rdp-review__theme-tag">Setting &amp; atmosphere</div>
+            <div class="rdp-review__stars">★★★★★</div>
+            <p class="rdp-review__quote">"Genuinely transformative. The quality of everything — the facilitation, the food, the setting — exceeded every expectation. Already looking at dates for next year."</p>
+            <div class="rdp-review__author">Alix R. — Paris · July 2025</div>
+          </div>
+        </div>
+
+        <p style="margin-top: var(--s6); font-size: var(--t-sm); color: var(--stone);">
+          <a href="#" style="color: var(--ink); font-weight: 500;">Read all 47 reviews →</a>
+        </p>
+      </section>
+
+      <!-- ── 9. Location & Travel ─────────────────── -->
+      <section class="rdp-section" id="location">
+        <p class="rdp-section__title">Location &amp; getting here</p>
+        <p class="rdp-section__sub">Gianyar, Bali — set in the cultural heartland of the island, 40 minutes from Ubud.</p>
+
+        <div class="map-placeholder">[ Map — Gianyar, Bali, Indonesia ]</div>
+
+        <div class="rdp-travel-info">
+          <div class="rdp-travel-item">
+            <div class="rdp-travel-item__label">Nearest airport</div>
+            <div class="rdp-travel-item__val">Ngurah Rai (DPS) — 1h 15m by road</div>
+          </div>
+          <div class="rdp-travel-item">
+            <div class="rdp-travel-item__label">Nearest town</div>
+            <div class="rdp-travel-item__val">Ubud — 40 minutes</div>
+          </div>
+          <div class="rdp-travel-item">
+            <div class="rdp-travel-item__label">Airport transfers</div>
+            <div class="rdp-travel-item__val">Included in all packages</div>
+          </div>
+          <div class="rdp-travel-item">
+            <div class="rdp-travel-item__label">Best time to visit</div>
+            <div class="rdp-travel-item__val">May–October (dry season)</div>
+          </div>
+        </div>
+
+        <!-- Neighbourhood -->
+        <div style="margin-top: var(--s9);">
+          <p class="rdp-section__title" style="font-size: var(--t-xl);">Explore the area</p>
+          <p style="color: var(--stone); margin-bottom: var(--s5); font-size: var(--t-base);">Beyond the retreat, Gianyar and the surrounding area offer some of the most culturally rich experiences in Bali. Our team's personal picks:</p>
+
+          <div class="rdp-neighbourhood-grid">
+            <div class="rdp-nb-card">
+              <div class="rdp-nb-card__img" style="background: var(--sage-light); display:flex; align-items:center; justify-content:center; color: var(--sage);">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+              </div>
+              <div class="rdp-nb-card__body">
+                <div class="rdp-nb-card__tag">Café</div>
+                <div class="rdp-nb-card__name">Zest Kitchen, Ubud</div>
+                <div class="rdp-nb-card__desc">Plant-based pioneer. Their morning bowls are the perfect pre-retreat fuel. Book ahead for dinner.</div>
+              </div>
             </div>
-          </div>
-          <div class="programme-day">
-            <div class="programme-day__label">Days 4–5</div>
-            <div class="programme-day__content">
-              <div class="programme-day__title">Stillness &amp; Integration</div>
-              <div class="programme-day__desc">Morning silence practice, embodied movement, afternoon free time for pool, walking trails or 1:1 sessions. Evening sharing circles.</div>
+            <div class="rdp-nb-card">
+              <div class="rdp-nb-card__img" style="background: var(--sage-pale); display:flex; align-items:center; justify-content:center; color: var(--sage);">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+              </div>
+              <div class="rdp-nb-card__body">
+                <div class="rdp-nb-card__tag">Nature</div>
+                <div class="rdp-nb-card__name">Campuhan Ridge Walk</div>
+                <div class="rdp-nb-card__desc">45 minutes through jungle and rice terraces. Ask reception for the early morning route — magical at dawn.</div>
+              </div>
             </div>
-          </div>
-          <div class="programme-day">
-            <div class="programme-day__label">Days 6–7</div>
-            <div class="programme-day__content">
-              <div class="programme-day__title">Closing &amp; Return</div>
-              <div class="programme-day__desc">Integration practices, letter-writing workshop, closing ceremony and farewell dinner. Morning 7: departure after a final breakfast, return transfer to Lisbon.</div>
+            <div class="rdp-nb-card">
+              <div class="rdp-nb-card__img" style="background: var(--warning-bg); display:flex; align-items:center; justify-content:center; color: var(--warning);">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+              </div>
+              <div class="rdp-nb-card__body">
+                <div class="rdp-nb-card__tag">Culture</div>
+                <div class="rdp-nb-card__name">Tirta Empul Temple</div>
+                <div class="rdp-nb-card__desc">Ancient water temple with deep spiritual significance. Arrange a guided visit through the retreat team.</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Tab: Reviews -->
-      <div class="tab-panel" data-panel="reviews">
-        <div class="section">
-          <div class="aggregate-rating">
-            <div class="agg-score">4.9</div>
-            <div class="agg-details">
-              <div class="agg-stars">★★★★★</div>
-              <p style="font-size: var(--t-sm); color: var(--stone); margin-top: var(--s2);">Based on 47 guest reviews</p>
+        <!-- Skyscanner -->
+        <div class="rdp-skyscanner">
+          <div>
+            <div class="rdp-skyscanner__logo">Skyscanner</div>
+            <div class="rdp-skyscanner__sub">Plan your journey to Bali</div>
+          </div>
+          <div class="rdp-skyscanner__details">
+            Flights to Ngurah Rai International (DPS) · Pre-filled with retreat dates once selected
+          </div>
+          <button class="rdp-skyscanner__btn">Search flights →</button>
+        </div>
+      </section>
+
+      <!-- ── 10. FAQs ─────────────────────────────── -->
+      <section class="rdp-section" id="faqs">
+        <p class="rdp-section__title">Frequently asked questions</p>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            What is the cancellation policy?
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+            <p style="color: var(--stone); line-height: 1.8; font-size: var(--t-sm);">Full refund up to 90 days before arrival. 50% refund between 60–90 days. Credit note only within 60 days. No refund or credit within 30 days. We strongly recommend comprehensive travel insurance. Cancellations must be submitted in writing.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            When is the deposit and balance due?
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+            <p style="color: var(--stone); line-height: 1.8; font-size: var(--t-sm);">A 25% deposit is required to secure your place — no payment is taken today when you enquire. The balance is due 60 days before your arrival date. We accept all major cards via our secure payment processor.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            What should I bring?
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+            <p style="color: var(--stone); line-height: 1.8; font-size: var(--t-sm);">Light, breathable clothing for warm tropical days and cooler evenings. A journal (we provide one, but you may have your own practice). Insect repellent and sun protection. Yoga mats and all equipment are provided, but you're welcome to bring your own. And above all — an open mind.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            Are dietary requirements accommodated?
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+            <p style="color: var(--stone); line-height: 1.8; font-size: var(--t-sm);">Yes, fully. The kitchen accommodates vegan, vegetarian, gluten-free, dairy-free, nut-free, and most other dietary needs with advance notice. Please note your requirements when booking. Severe allergies are taken seriously — the team will contact you directly to discuss.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            Can I attend solo?
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+            <p style="color: var(--stone); line-height: 1.8; font-size: var(--t-sm);">Absolutely. Around 60% of guests attend solo. The intimacy of the group (max 12 guests) means community forms naturally and quickly. Solo travellers consistently cite the connections made as one of the most unexpected highlights of the experience.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <button class="accordion-trigger">
+            What is the Wi-Fi situation?
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="accordion-body">
+            <p style="color: var(--stone); line-height: 1.8; font-size: var(--t-sm);">Wi-Fi is available in communal areas and rooms but is intentionally kept at reduced speeds during the programme hours. The team encourages a gentle digital detox — but it is never compulsory. Most guests find they naturally disconnect within the first 24 hours.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 11. Trust & Impact ───────────────────── -->
+      <section class="rdp-section" id="trust">
+        <p class="rdp-section__title">Our promise to you</p>
+        <p class="rdp-section__sub">Every retreat listed on Queen of Retreats meets our rigorous standard of quality, care, and integrity.</p>
+
+        <div class="rdp-trust-grid">
+          <div class="rdp-trust-item">
+            <div class="rdp-trust-item__icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="rdp-trust-item__title">QoR Reviewed</div>
+            <p class="rdp-trust-item__desc">Every retreat is visited and assessed in person by our editorial team — we only list what we genuinely believe in.</p>
+          </div>
+          <div class="rdp-trust-item">
+            <div class="rdp-trust-item__icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="rdp-trust-item__title">Secure booking</div>
+            <p class="rdp-trust-item__desc">All payments are encrypted via Stripe. Your 25% deposit is held securely and your booking is fully protected.</p>
+          </div>
+          <div class="rdp-trust-item">
+            <div class="rdp-trust-item__icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 6s.9-1.75 5-1.75S11 6 11 6V20s-3.13-1.25-5-1.25S1 20 1 20V6z"/><path d="M11 6s.9-1.75 5-1.75S21 6 21 6V20s-3.13-1.25-5-1.25-5 1.25-5 1.25V6z"/></svg>
+            </div>
+            <div class="rdp-trust-item__title">Responsible travel</div>
+            <p class="rdp-trust-item__desc">We prioritise retreats that invest in local communities, sustainable practices, and ethical hospitality.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── 12. Related retreats ──────────────────── -->
+      <section class="rdp-section" id="related">
+        <p class="rdp-section__title">You might also love</p>
+        <p class="rdp-section__sub">Similar retreats, carefully selected by our editorial team.</p>
+
+        <div class="rdp-related-grid">
+          <div class="rdp-related-card">
+            <img src="images/header_vale-de-moses.jpg" alt="Vale de Moses" class="rdp-related-card__img">
+            <div class="rdp-related-card__body">
+              <div class="rdp-related-card__loc">Alentejo · Portugal</div>
+              <div class="rdp-related-card__name">Vale de Moses</div>
+              <div class="rdp-related-card__meta">Yoga &amp; mindfulness · 7 nights · All levels</div>
+              <div class="rdp-related-card__price">From £1,850 per person</div>
             </div>
           </div>
-
-          <div class="reviews-grid">
-            <div class="review-card">
-              <p class="review-card__quote">"The most present I've felt in years. I arrived exhausted and depleted. I left feeling like myself again."</p>
-              <p class="review-card__author"><strong>Sarah M.</strong> — London · June 2025</p>
+          <div class="rdp-related-card">
+            <img src="images/header_les-marguerites.jpg" alt="Les Marguerites" class="rdp-related-card__img">
+            <div class="rdp-related-card__body">
+              <div class="rdp-related-card__loc">Provence · France</div>
+              <div class="rdp-related-card__name">Les Marguerites</div>
+              <div class="rdp-related-card__meta">Holistic wellness · 5 nights · Small group</div>
+              <div class="rdp-related-card__price">From £2,450 per person</div>
             </div>
-            <div class="review-card">
-              <p class="review-card__quote">"Sofia and Jamie hold the space with such warmth. The food alone is worth the trip — and I say that as someone who came for the yoga."</p>
-              <p class="review-card__author"><strong>David K.</strong> — Dublin · September 2025</p>
-            </div>
-            <div class="review-card">
-              <p class="review-card__quote">"I've done a lot of retreats. This one is different. It doesn't try to fix you. It just gives you the space to remember who you already are."</p>
-              <p class="review-card__author"><strong>Priya S.</strong> — Manchester · August 2025</p>
-            </div>
-            <div class="review-card">
-              <p class="review-card__quote">"Genuinely transformative. The quality of everything — the facilitation, the food, the setting — exceeded every expectation."</p>
-              <p class="review-card__author"><strong>Alix R.</strong> — Paris · July 2025</p>
+          </div>
+          <div class="rdp-related-card">
+            <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Mellulah Yoga" class="rdp-related-card__img">
+            <div class="rdp-related-card__body">
+              <div class="rdp-related-card__loc">Ibiza · Spain</div>
+              <div class="rdp-related-card__name">Mellulah Yoga Retreats</div>
+              <div class="rdp-related-card__meta">Yoga &amp; movement · 7 nights · All levels</div>
+              <div class="rdp-related-card__price">From £2,100 per person</div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Tab: Location -->
-      <div class="tab-panel" data-panel="location">
-        <div class="section">
-          <div class="section-head">
-            <h2>Alentejo, Portugal</h2>
-            <p>A land of cork forests, ancient olive groves, and extraordinary quiet.</p>
+    </main><!-- end rdp-main -->
+
+
+    <!-- ─────────────────────────────────────────────
+         STICKY BOOKING SIDEBAR
+    ───────────────────────────────────────────── -->
+    <aside class="rdp-sidebar" id="rdp-sidebar">
+      <div class="rdp-widget">
+
+        <div class="rdp-widget__header">
+          <div class="rdp-widget__from">From</div>
+          <div>
+            <span class="rdp-widget__price" id="widget-price">£2,195</span>
+            <span class="rdp-widget__per">per person</span>
           </div>
-          <p style="color: var(--stone); line-height: 1.8; margin-bottom: var(--s5);">
-            Quinta da Levada sits in the Val do Guadiana, approximately 2.5 hours from Lisbon by car. Return transfers from Lisbon Humberto Delgado Airport are included in all packages.
-          </p>
-          <div class="map-placeholder">
-            [ Interactive map — Alentejo, Portugal ]
-          </div>
-          <div style="display: flex; gap: var(--s7); margin-top: var(--s6);">
-            <div>
-              <p class="label-caps" style="margin-bottom: var(--s2);">Nearest Airport</p>
-              <p style="font-size: var(--t-sm); color: var(--stone);">Lisbon (LIS) — 2h 30m by road</p>
-            </div>
-            <div>
-              <p class="label-caps" style="margin-bottom: var(--s2);">Nearest Town</p>
-              <p style="font-size: var(--t-sm); color: var(--stone);">Mértola — 20 minutes</p>
-            </div>
-            <div>
-              <p class="label-caps" style="margin-bottom: var(--s2);">Best time to visit</p>
-              <p style="font-size: var(--t-sm); color: var(--stone);">April–October</p>
-            </div>
+          <div class="rdp-widget__rating">
+            <span style="color:#c9a84c;">★★★★★</span>
+            <span>4.9 · 47 reviews</span>
           </div>
         </div>
+
+        <div class="rdp-widget__body">
+
+          <!-- Dates -->
+          <div class="rdp-widget__field-label">Dates</div>
+          <div class="rdp-widget__placeholder" id="widget-date-placeholder">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            No date selected yet
+          </div>
+          <div class="rdp-widget__avail" id="widget-avail" style="display:none;"></div>
+          <div class="rdp-widget__date-selected" id="widget-date-selected" style="display:none;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="widget-date-label">—</span>
+            <span class="rdp-widget__date-nights">· 7 nights</span>
+          </div>
+
+          <!-- Guests -->
+          <div class="rdp-widget__field-label">Guests</div>
+          <div class="rdp-widget__guests-row">
+            <span style="font-size: var(--t-sm); color: var(--stone);">Adults</span>
+            <div class="stepper">
+              <button class="stepper__btn" id="widget-minus" disabled>−</button>
+              <span class="stepper__val" id="widget-count">1</span>
+              <button class="stepper__btn" id="widget-plus">+</button>
+            </div>
+          </div>
+
+          <!-- Room -->
+          <div class="rdp-widget__field-label">Room type</div>
+          <div class="select-wrap">
+            <select class="form-select" id="widget-room">
+              <option value="" disabled selected>Select room</option>
+              <option value="2195">Shared Garden Room — £2,195 pp</option>
+              <option value="2895">Private Valley Room — £2,895 pp</option>
+              <option value="3750">Quinta Suite — £3,750 pp</option>
+            </select>
+          </div>
+
+          <!-- Price calc -->
+          <div class="rdp-widget__price-calc" id="widget-calc" style="display:none;">
+            <div class="rdp-widget__calc-row">
+              <span style="color: var(--stone);">Dates</span>
+              <span id="calc-date-label" style="font-weight: 500;">—</span>
+            </div>
+            <div class="rdp-widget__calc-row">
+              <span id="calc-room-label">Room rate</span>
+              <span id="calc-room-price">—</span>
+            </div>
+            <div class="rdp-widget__calc-row">
+              <span>Meals, programme &amp; transfers</span>
+              <span>Included</span>
+            </div>
+            <div class="rdp-widget__calc-total">
+              <span>Total</span>
+              <span id="calc-total">—</span>
+            </div>
+          </div>
+
+          <!-- CTAs -->
+          <div class="rdp-widget__ctas">
+            <a href="booking.html" class="btn btn--primary btn--lg btn--full">Book This Retreat</a>
+            <a href="enquiry.html" class="btn btn--outline btn--lg btn--full">Enquire Instead</a>
+          </div>
+          <p class="rdp-widget__note">No payment today · 25% deposit to secure your place</p>
+
+          <!-- Trust signals -->
+          <div class="rdp-widget__trust">
+            <div class="rdp-widget__trust-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              Free cancellation up to 90 days
+            </div>
+            <div class="rdp-widget__trust-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              QoR reviewed &amp; vetted
+            </div>
+            <div class="rdp-widget__trust-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              Secure payment via Stripe
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div><!-- end tabs-scope -->
+    </aside>
 
-  </div><!-- end page-body -->
+  </div><!-- end rdp-layout -->
 
-  <script>
-    // Tabs (inline for index page)
-    document.querySelectorAll('.tabs__tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        const tabList = tab.closest('.tabs');
-        const target  = tab.dataset.tab;
-        const scope   = tab.closest('.tabs-scope') || document;
-        tabList.querySelectorAll('.tabs__tab').forEach(t => t.classList.remove('is-active'));
-        tab.classList.add('is-active');
-        scope.querySelectorAll('.tab-panel').forEach(panel => {
-          panel.classList.toggle('is-active', panel.dataset.panel === target);
-        });
-      });
-    });
 
-    // Widget date pill selection
-    document.querySelectorAll('.widget-date-pill:not(.is-soldout)').forEach(pill => {
-      pill.addEventListener('click', () => {
-        document.querySelectorAll('.widget-date-pill').forEach(p => p.classList.remove('is-active'));
-        pill.classList.add('is-active');
-      });
-    });
-
-    // Widget stepper
-    const steps = document.querySelector('.booking-bar .stepper');
-    if (steps) {
-      const minus = steps.querySelector('.stepper__btn:first-child');
-      const plus  = steps.querySelector('.stepper__btn:last-child');
-      const val   = steps.querySelector('.stepper__val');
-      let count   = 1;
-      minus.addEventListener('click', () => {
-        if (count > 1) { count--; val.textContent = count; minus.disabled = count <= 1; }
-      });
-      plus.addEventListener('click', () => {
-        if (count < 12) { count++; val.textContent = count; minus.disabled = false; }
-      });
-    }
-  </script>
-
-  <script>
-    // Transparent header → white on scroll past hero
-    const header = document.querySelector('.site-header');
-    const hero = document.querySelector('.hero');
-    function updateHeader() {
-      const threshold = hero ? hero.offsetHeight - header.offsetHeight : 100;
-      header.classList.toggle('is-scrolled', window.scrollY > threshold);
-    }
-    window.addEventListener('scroll', updateHeader, { passive: true });
-    updateHeader();
-  </script>
-
-  <!-- ── FOOTER ──────────────────────────────────────────────────── -->
+  <!-- ═══════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════ -->
   <footer style="background: var(--ink); color: var(--white); padding: 64px 48px 40px;">
     <div style="max-width: 1320px; margin: 0 auto;">
-
-      <!-- Top row -->
       <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.12);">
-
-        <!-- Brand -->
         <div>
           <a href="index.html" style="font-family: var(--serif); font-size: 22px; color: var(--white); margin-bottom: 16px; text-decoration: none; display: block;">Queen of Retreats</a>
           <p style="font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.55); max-width: 280px;">Expertly vetted, personally selected retreats from around the world. We only list what we truly believe in.</p>
         </div>
-
-        <!-- Retreats -->
         <div>
           <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.40); margin-bottom: 16px;">Retreats</div>
           <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
@@ -599,48 +1967,240 @@
             <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Health &amp; Healing</a></li>
             <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Fitness &amp; Adventure</a></li>
             <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Personal Growth</a></li>
-            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Creative &amp; Cultural</a></li>
           </ul>
         </div>
-
-        <!-- Destinations -->
-        <div>
-          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.40); margin-bottom: 16px;">Destinations</div>
-          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
-            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Portugal</a></li>
-            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Spain</a></li>
-            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Greece</a></li>
-            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Indonesia</a></li>
-            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">France</a></li>
-          </ul>
-        </div>
-
-        <!-- Company -->
         <div>
           <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.40); margin-bottom: 16px;">Company</div>
           <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
-            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">About Us</a></li>
-            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">How It Works</a></li>
-            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">List Your Retreat</a></li>
-            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Inspiration</a></li>
-            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Contact</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">About QoR</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Our Curation Process</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Editorial Team</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Press</a></li>
           </ul>
         </div>
-
-      </div>
-
-      <!-- Bottom row -->
-      <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 28px;">
-        <p style="font-size: 12px; color: rgba(255,255,255,0.35); margin: 0;">© 2026 Queen of Retreats. All rights reserved.</p>
-        <div style="display: flex; gap: 24px;">
-          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none;">Privacy Policy</a>
-          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none;">Terms of Use</a>
-          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none;">Cookie Settings</a>
+        <div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.40); margin-bottom: 16px;">Support</div>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Help centre</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Booking FAQs</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Contact us</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Privacy policy</a></li>
+          </ul>
         </div>
       </div>
-
+      <div style="display:flex; align-items:center; justify-content:space-between; padding-top: 32px;">
+        <p style="font-size: 12px; color: rgba(255,255,255,0.35);">© 2026 Queen of Retreats Ltd. All rights reserved.</p>
+        <p style="font-size: 12px; color: rgba(255,255,255,0.35);">Designed by Studio Thirty One</p>
+      </div>
     </div>
   </footer>
+
+
+  <!-- ═══════════════════════════════════════════════
+       SCRIPTS
+  ═══════════════════════════════════════════════ -->
+  <script>
+    'use strict';
+
+    /* ── Header scroll behaviour ─────────────────── */
+    (function() {
+      const header = document.querySelector('.site-header');
+      if (!header) return;
+      const threshold = 80;
+      function onScroll() {
+        if (window.scrollY > threshold) {
+          header.classList.add('is-scrolled');
+        } else {
+          header.classList.remove('is-scrolled');
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+
+    /* ── Accordion ───────────────────────────────── */
+    document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const body = trigger.nextElementSibling;
+        const isOpen = body?.classList.contains('is-open');
+        trigger.classList.toggle('is-open', !isOpen);
+        body?.classList.toggle('is-open', !isOpen);
+      });
+    });
+
+    /* ── Review theme filter ─────────────────────── */
+    document.querySelectorAll('.rdp-review-theme').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.rdp-review-theme').forEach(b => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+      });
+    });
+
+    /* ── Date card selection (main content → widget sync) ── */
+    document.querySelectorAll('.rdp-date-card:not(.rdp-date-card--soldout)').forEach(card => {
+      card.addEventListener('click', () => {
+        // Mark selected in main content
+        document.querySelectorAll('.rdp-date-card').forEach(c => c.classList.remove('is-selected'));
+        card.classList.add('is-selected');
+
+        const label    = card.dataset.label || '';
+        const pillText = card.dataset.pill  || '';
+
+        // Sync widget state
+        widgetState.dateSelected = true;
+        widgetState.dateLabel    = label;
+
+        // Hide placeholder, show date confirmation banner
+        const placeholderEl  = document.getElementById('widget-date-placeholder');
+        const dateSelectedEl = document.getElementById('widget-date-selected');
+        const dateLabelEl    = document.getElementById('widget-date-label');
+        if (placeholderEl)  placeholderEl.style.display = 'none';
+        if (dateSelectedEl && dateLabelEl) {
+          dateLabelEl.textContent = label;
+          dateSelectedEl.style.display = 'flex';
+        }
+
+        // Handle availability notice
+        const avail = document.getElementById('widget-avail');
+        if (card.querySelector('.rdp-date-card__status--limited')) {
+          avail.style.display = 'block';
+          avail.textContent = 'Only a few spaces left on this date.';
+        } else {
+          avail.style.display = 'none';
+        }
+
+        // Recalculate price in widget
+        updateWidgetPrice();
+
+        // Smooth scroll to sidebar on desktop so user sees the update
+        if (window.innerWidth > 960) {
+          document.getElementById('rdp-sidebar').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      });
+    });
+
+    /* ── Booking widget ──────────────────────────── */
+    const widgetState = {
+      price: 0,
+      guests: 1,
+      dateSelected: false,
+      dateLabel: '',
+      roomSelected: false,
+    };
+
+    // Room select (dropdown)
+    document.getElementById('widget-room').addEventListener('change', function() {
+      if (this.value) {
+        widgetState.price = parseInt(this.value);
+        widgetState.roomSelected = true;
+        updateWidgetPrice();
+      }
+    });
+
+    // Guest stepper
+    document.getElementById('widget-minus').addEventListener('click', () => {
+      if (widgetState.guests > 1) {
+        widgetState.guests--;
+        document.getElementById('widget-count').textContent = widgetState.guests;
+        document.getElementById('widget-minus').disabled = widgetState.guests <= 1;
+        updateWidgetPrice();
+      }
+    });
+    document.getElementById('widget-plus').addEventListener('click', () => {
+      if (widgetState.guests < 12) {
+        widgetState.guests++;
+        document.getElementById('widget-count').textContent = widgetState.guests;
+        document.getElementById('widget-minus').disabled = false;
+        updateWidgetPrice();
+      }
+    });
+
+    function updateWidgetPrice() {
+      const priceEl = document.getElementById('widget-price');
+      const calcEl  = document.getElementById('widget-calc');
+
+      // Update header price only when a room is selected
+      if (widgetState.roomSelected) {
+        priceEl.textContent = `£${widgetState.price.toLocaleString()}`;
+      }
+
+      // Show full calc breakdown only when both date and room are selected
+      if (widgetState.dateSelected && widgetState.roomSelected) {
+        const total = widgetState.price * widgetState.guests;
+        calcEl.style.display = 'block';
+        document.getElementById('calc-date-label').textContent = widgetState.dateLabel || '—';
+        document.getElementById('calc-room-label').textContent =
+          `£${widgetState.price.toLocaleString()} × ${widgetState.guests} guest${widgetState.guests > 1 ? 's' : ''}`;
+        document.getElementById('calc-room-price').textContent = `£${total.toLocaleString()}`;
+        document.getElementById('calc-total').textContent = `£${total.toLocaleString()}`;
+      }
+    }
+
+    /* ── Room card selection ─────────────────────────── */
+    document.querySelectorAll('.rdp-room-card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        const price = parseInt(this.dataset.price);
+        const roomValue = this.dataset.room;
+
+        // Deselect all cards and reset buttons
+        document.querySelectorAll('.rdp-room-card').forEach(c => {
+          c.classList.remove('is-selected');
+          const btn = c.querySelector('.rdp-room-select-btn');
+          if (btn) btn.textContent = 'Select room';
+        });
+
+        // Select this card
+        this.classList.add('is-selected');
+        const btn = this.querySelector('.rdp-room-select-btn');
+        if (btn) btn.textContent = '✓ Selected';
+
+        // Sync the widget room dropdown
+        const roomSelect = document.getElementById('widget-room');
+        if (roomSelect) {
+          roomSelect.value = roomValue;
+        }
+
+        // Update widget state and price
+        widgetState.price = price;
+        widgetState.roomSelected = true;
+        updateWidgetPrice();
+
+        // Scroll to widget if on mobile (single-column layout)
+        if (window.innerWidth <= 960) {
+          const widget = document.getElementById('rdp-sidebar');
+          if (widget) widget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    /* ── Subnav scroll spy ───────────────────────── */
+    const sections = document.querySelectorAll('.rdp-section[id]');
+    const navLinks  = document.querySelectorAll('.rdp-subnav__link');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => {
+            link.classList.toggle('is-active', link.getAttribute('href') === `#${entry.target.id}`);
+          });
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(section => observer.observe(section));
+
+    // Smooth scroll for subnav links
+    navLinks.forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    /* Header is always dark on this page — no scroll handler needed */
+
+  </script>
 
 </body>
 </html>
