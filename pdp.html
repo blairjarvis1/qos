@@ -151,7 +151,11 @@
     .breadcrumb__sep { color: var(--mist); }
     .breadcrumb__current { color: var(--ink); font-weight: 500; }
 
-    body { padding-top: 0; }
+    body { padding-top: 0; padding-bottom: 88px; }
+
+    /* ── Hide vertical sidebar; full-width layout ── */
+    .rdp-sidebar { display: none !important; }
+    .rdp-layout  { grid-template-columns: 1fr !important; }
 
     /* ── Transparent → white header on scroll ────── */
     .site-header {
@@ -916,6 +920,73 @@
     .rdp-widget__trust { display: flex; flex-direction: column; gap: var(--s3); padding-top: var(--s5); border-top: 1px solid var(--border); margin-top: var(--s5); }
     .rdp-widget__trust-item { display: flex; align-items: center; gap: var(--s3); font-size: var(--t-sm); color: var(--stone); }
     .rdp-widget__trust-item svg { color: var(--sage); flex-shrink: 0; }
+
+    /* ── PDP Fixed Bottom Booking Bar ───────────────────────────── */
+    #pdp-bottom-bar {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(calc(100% + 16px));
+      width: min(var(--max-content), calc(100vw - 32px));
+      z-index: 300;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.14);
+      transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #pdp-bottom-bar.is-visible {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .pdp-bar__inner {
+      max-width: var(--max-content);
+      margin: 0 auto;
+      padding: var(--s4) var(--s7);
+      display: flex;
+      align-items: center;
+      gap: var(--s5);
+    }
+    .pdp-bar__divider {
+      width: 1px; height: 40px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+    .pdp-bar__price-block { flex-shrink: 0; }
+    .pdp-bar__from { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--stone); margin-bottom: 2px; }
+    .pdp-bar__amount { font-family: var(--serif); font-size: 28px; color: var(--ink); line-height: 1; }
+    .pdp-bar__per { font-size: var(--t-xs); color: var(--stone); margin-left: 3px; }
+
+    .pdp-bar__field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .pdp-bar__label { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--stone); font-weight: 600; white-space: nowrap; }
+    .pdp-bar__value { font-size: var(--t-sm); color: var(--ink); font-weight: 500; white-space: nowrap; }
+    .pdp-bar__value--placeholder { color: var(--stone); font-weight: 400; }
+
+    .pdp-bar__select {
+      font-size: var(--t-sm);
+      height: 36px;
+      padding: 0 var(--s6) 0 var(--s3);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-md);
+      background: var(--white);
+      color: var(--ink);
+      min-width: 190px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+    .pdp-bar__select:focus { outline: none; border-color: var(--sage); }
+
+    .pdp-bar__guests-row { display: flex; align-items: center; gap: var(--s3); }
+    .pdp-bar__guests-row .stepper__btn { width: 32px; height: 36px; }
+    .pdp-bar__guests-row .stepper { height: 36px; }
+
+    .pdp-bar__ctas { display: flex; gap: var(--s3); margin-left: auto; flex-shrink: 0; align-items: flex-end; align-self: flex-end; }
+    .pdp-bar__cta-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .pdp-bar__note { display: none; }
 
   </style>
 </head>
@@ -2018,6 +2089,79 @@
       onScroll();
     })();
 
+    /* ── PDP Bottom Bar ──────────────────────────── */
+    window.addEventListener('DOMContentLoaded', function() {
+      const bar     = document.getElementById('pdp-bottom-bar');
+      const heroBar = document.querySelector('.booking-bar');
+      if (!bar) return;
+
+      // Show bar once user scrolls past the hero
+      function updateBarVisibility() {
+        const hero = document.querySelector('.hero');
+        const threshold = hero ? hero.offsetHeight * 0.75 : 300;
+        bar.classList.toggle('is-visible', window.scrollY > threshold);
+      }
+      window.addEventListener('scroll', updateBarVisibility, { passive: true });
+      updateBarVisibility();
+
+      // Guest stepper
+      let barGuests = 1;
+      document.getElementById('pdp-bar-minus').addEventListener('click', () => {
+        if (barGuests > 1) {
+          barGuests--;
+          widgetState.guests = barGuests;
+          document.getElementById('pdp-bar-count').textContent = barGuests;
+          document.getElementById('pdp-bar-minus').disabled = barGuests <= 1;
+          // Sync main widget stepper
+          const wc = document.getElementById('widget-count');
+          if (wc) wc.textContent = barGuests;
+          const wm = document.getElementById('widget-minus');
+          if (wm) wm.disabled = barGuests <= 1;
+          updateWidgetPrice();
+          syncBottomBar();
+        }
+      });
+      document.getElementById('pdp-bar-plus').addEventListener('click', () => {
+        if (barGuests < 12) {
+          barGuests++;
+          widgetState.guests = barGuests;
+          document.getElementById('pdp-bar-count').textContent = barGuests;
+          document.getElementById('pdp-bar-minus').disabled = false;
+          // Sync main widget stepper
+          const wc = document.getElementById('widget-count');
+          if (wc) wc.textContent = barGuests;
+          const wm = document.getElementById('widget-minus');
+          if (wm) wm.disabled = false;
+          updateWidgetPrice();
+          syncBottomBar();
+        }
+      });
+
+      // Room dropdown → sync widgetState
+      document.getElementById('pdp-bar-room').addEventListener('change', function() {
+        if (!this.value) return;
+        widgetState.price = parseInt(this.value);
+        widgetState.roomSelected = true;
+        const wr = document.getElementById('widget-room');
+        if (wr) wr.value = this.value;
+        // Sync room card selection in main content
+        document.querySelectorAll('.rdp-room-card').forEach(c => {
+          c.classList.remove('is-selected');
+          const btn = c.querySelector('.rdp-room-select-btn');
+          if (btn) btn.textContent = 'Select room';
+        });
+        document.querySelectorAll('.rdp-room-card').forEach(c => {
+          if (c.dataset.price === this.value) {
+            c.classList.add('is-selected');
+            const btn = c.querySelector('.rdp-room-select-btn');
+            if (btn) btn.textContent = '✓ Selected';
+          }
+        });
+        updateWidgetPrice();
+        syncBottomBar();
+      });
+    }); // end DOMContentLoaded
+
     /* ── Accordion ───────────────────────────────── */
     document.querySelectorAll('.accordion-trigger').forEach(trigger => {
       trigger.addEventListener('click', () => {
@@ -2036,15 +2180,44 @@
       });
     });
 
-    /* ── Date card selection (main content → widget sync) ── */
+    /* ── Bottom bar sync helper ──────────────────── */
+    function syncBottomBar() {
+      // Date
+      const dateEl = document.getElementById('pdp-bar-date');
+      if (dateEl) {
+        if (widgetState.dateLabel) {
+          dateEl.textContent = widgetState.dateLabel;
+          dateEl.classList.remove('pdp-bar__value--placeholder');
+        } else {
+          dateEl.textContent = 'No date selected yet';
+          dateEl.classList.add('pdp-bar__value--placeholder');
+        }
+      }
+      // Room dropdown
+      const roomSel = document.getElementById('pdp-bar-room');
+      if (roomSel && widgetState.roomSelected && widgetState.price) {
+        roomSel.value = String(widgetState.price);
+      }
+      // Price
+      const priceEl = document.getElementById('pdp-bar-price');
+      if (priceEl && widgetState.roomSelected && widgetState.price) {
+        priceEl.textContent = `£${widgetState.price.toLocaleString()}`;
+      }
+      // Guests
+      const countEl = document.getElementById('pdp-bar-count');
+      if (countEl) countEl.textContent = widgetState.guests;
+      const minusBtn = document.getElementById('pdp-bar-minus');
+      if (minusBtn) minusBtn.disabled = widgetState.guests <= 1;
+    }
+
+    /* ── Date card selection (main content → widget + bar sync) ── */
     document.querySelectorAll('.rdp-date-card:not(.rdp-date-card--soldout)').forEach(card => {
       card.addEventListener('click', () => {
         // Mark selected in main content
         document.querySelectorAll('.rdp-date-card').forEach(c => c.classList.remove('is-selected'));
         card.classList.add('is-selected');
 
-        const label    = card.dataset.label || '';
-        const pillText = card.dataset.pill  || '';
+        const label = card.dataset.label || '';
 
         // Sync widget state
         widgetState.dateSelected = true;
@@ -2062,20 +2235,18 @@
 
         // Handle availability notice
         const avail = document.getElementById('widget-avail');
-        if (card.querySelector('.rdp-date-card__status--limited')) {
-          avail.style.display = 'block';
-          avail.textContent = 'Only a few spaces left on this date.';
-        } else {
-          avail.style.display = 'none';
+        if (avail) {
+          if (card.querySelector('.rdp-date-card__status--limited')) {
+            avail.style.display = 'block';
+            avail.textContent = 'Only a few spaces left on this date.';
+          } else {
+            avail.style.display = 'none';
+          }
         }
 
-        // Recalculate price in widget
+        // Recalculate price & sync bottom bar
         updateWidgetPrice();
-
-        // Smooth scroll to sidebar on desktop so user sees the update
-        if (window.innerWidth > 960) {
-          document.getElementById('rdp-sidebar').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }
+        syncBottomBar();
       });
     });
 
@@ -2094,6 +2265,7 @@
         widgetState.price = parseInt(this.value);
         widgetState.roomSelected = true;
         updateWidgetPrice();
+        syncBottomBar();
       }
     });
 
@@ -2164,12 +2336,7 @@
         widgetState.price = price;
         widgetState.roomSelected = true;
         updateWidgetPrice();
-
-        // Scroll to widget if on mobile (single-column layout)
-        if (window.innerWidth <= 960) {
-          const widget = document.getElementById('rdp-sidebar');
-          if (widget) widget.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        syncBottomBar();
       });
     });
 
@@ -2201,6 +2368,70 @@
     /* Header is always dark on this page — no scroll handler needed */
 
   </script>
+
+  <!-- ═══════════════════════════════════════════════
+       PDP FIXED BOTTOM BOOKING BAR
+  ═══════════════════════════════════════════════ -->
+  <div id="pdp-bottom-bar" role="complementary" aria-label="Booking">
+    <div class="pdp-bar__inner">
+
+      <!-- Price -->
+      <div class="pdp-bar__price-block">
+        <div class="pdp-bar__from">From</div>
+        <div>
+          <span class="pdp-bar__amount" id="pdp-bar-price">£2,195</span>
+          <span class="pdp-bar__per">per person</span>
+        </div>
+      </div>
+
+      <div class="pdp-bar__divider"></div>
+
+      <!-- Dates -->
+      <div class="pdp-bar__field">
+        <div class="pdp-bar__label">Dates</div>
+        <div class="pdp-bar__value pdp-bar__value--placeholder" id="pdp-bar-date">No date selected yet</div>
+      </div>
+
+      <div class="pdp-bar__divider"></div>
+
+      <!-- Room -->
+      <div class="pdp-bar__field">
+        <div class="pdp-bar__label">Room</div>
+        <select class="pdp-bar__select" id="pdp-bar-room">
+          <option value="" disabled selected>Select room</option>
+          <option value="2195">Shared Garden Room — £2,195 pp</option>
+          <option value="2895">Private Valley Room — £2,895 pp</option>
+          <option value="3750">Quinta Suite — £3,750 pp</option>
+        </select>
+      </div>
+
+      <div class="pdp-bar__divider"></div>
+
+      <!-- Guests -->
+      <div class="pdp-bar__field">
+        <div class="pdp-bar__label">Guests</div>
+        <div class="pdp-bar__guests-row">
+          <div class="stepper">
+            <button class="stepper__btn" id="pdp-bar-minus" disabled>−</button>
+            <span class="stepper__val" id="pdp-bar-count">1</span>
+            <button class="stepper__btn" id="pdp-bar-plus">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pdp-bar__divider"></div>
+
+      <!-- CTAs -->
+      <div class="pdp-bar__ctas">
+        <a href="enquiry.html" class="btn btn--lg" style="height: 36px; padding-top: 0; padding-bottom: 0; display: inline-flex; align-items: center; border: 1.5px solid var(--border); color: var(--ink); background: transparent;">Enquire</a>
+        <div class="pdp-bar__cta-wrap">
+          <a href="booking.html" class="btn btn--primary btn--lg" style="height: 36px; padding-top: 0; padding-bottom: 0; display: inline-flex; align-items: center; font-size: 90%;">Book This Retreat</a>
+          <div class="pdp-bar__note">No payment today · 25% deposit to secure your place</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
 </body>
 </html>
