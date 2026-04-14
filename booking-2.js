@@ -12,7 +12,7 @@ let calResize   = null; // set by initCalCarousel; call calResize() to recalcula
 /* --- State --------------------------------------------------- */
 const state = {
   currentStep: 1,
-  totalSteps: 7,
+  totalSteps: 8,
   selectedDate: null,
   selectedRoom: null,
   guestCount: 1,
@@ -154,37 +154,33 @@ function renderStep(n, animate = true) {
     requestAnimationFrame(calResize);
   }
 
-  // Basket panel: hide on step 8 (confirmation), restore body margin too
-  const basket = document.getElementById('booking-basket');
-  const onConfirmation = n === 8;
-  if (basket) basket.classList.toggle('is-hidden', onConfirmation);
-  // Remove/restore the right-margin offset on the body and progress bar
-  document.querySelector('.booking-body').style.marginRight  = onConfirmation ? '0' : '';
-  const pbInner = document.querySelector('.progress-bar__inner');
-  if (pbInner) pbInner.style.marginRight = onConfirmation ? '0' : '';
+  // Booking nav summary: hide on step 8 (confirmation), show on all others
+  const bookingNav = document.querySelector('.booking-nav');
+  if (bookingNav) {
+    bookingNav.classList.toggle('booking-nav--no-summary', n === 8);
+  }
+
+  // Sidebar visibility: hidden on step 1 and step 8
+  const sidebar = document.getElementById('booking-sidebar');
+  if (sidebar) {
+    sidebar.classList.toggle('hidden', n === 1 || n === 8);
+  }
+
+  // Layout swap: step 1 and 8 are full-width
+  const layout = document.getElementById('booking-layout');
+  if (layout) {
+    if (n === 1 || n === 8) {
+      layout.classList.remove('booking-layout');
+      layout.classList.add('booking-layout--full');
+    } else {
+      layout.classList.add('booking-layout');
+      layout.classList.remove('booking-layout--full');
+    }
+  }
 
   // Don't scroll to top or alter hash (preserves scroll position on step change)
   history.replaceState(null, '', `#step-${n}`);
 }
-
-/* --- Step icons (booking-1 icon stepper) -------------------- */
-const STEP_ICONS = [
-  /* 1 Dates */
-  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
-  /* 2 Room */
-  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9h18"/><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"/><path d="M3 9v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M3 14h18"/><path d="M8 14v6"/><path d="M16 14v6"/></svg>`,
-  /* 3 Summary */
-  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>`,
-  /* 4 Your Details */
-  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
-  /* 5 About You */
-  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
-  /* 6 Payment */
-  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
-  /* 7 Confirmed */
-  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
-];
-const DONE_ICON = `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
 
 function updateProgressBar(current) {
   const steps = document.querySelectorAll('.progress-step[data-step]');
@@ -196,7 +192,7 @@ function updateProgressBar(current) {
 
     const dot = step.querySelector('.progress-step__dot');
     if (dot) {
-      dot.innerHTML = n < current ? DONE_ICON : (STEP_ICONS[n - 1] || n);
+      dot.textContent = n < current ? '✓' : n;
     }
   });
 }
@@ -265,7 +261,7 @@ function validateStep(n) {
         return false;
       }
       return true;
-    case 3: {
+    case 4: {
       const cb1 = document.getElementById('agree-policies');
       const cb2 = document.getElementById('agree-tcs');
       if (!cb1?.checked || !cb2?.checked) {
@@ -274,8 +270,8 @@ function validateStep(n) {
       }
       return true;
     }
-    case 4: {
-      const req = document.querySelectorAll('#step-4 [required]');
+    case 5: {
+      const req = document.querySelectorAll('#step-5 [required]');
       let valid = true;
       req.forEach(field => {
         if (!field.value.trim()) {

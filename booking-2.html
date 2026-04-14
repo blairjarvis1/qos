@@ -355,105 +355,6 @@
       background: var(--sage-pale);
       border-top: 1px solid var(--sage-light);
     }
-    /* Room image carousel */
-    .room-carousel {
-      position: relative;
-      overflow: hidden;
-      aspect-ratio: 4/3;
-      background: var(--sand-mid);
-    }
-    .room-carousel__track {
-      display: flex;
-      height: 100%;
-      transition: transform 0.4s ease;
-    }
-    .room-carousel__slide {
-      min-width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .room-carousel__btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255,255,255,0.60);
-      border: none;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 2;
-      color: var(--ink);
-      transition: background 0.2s;
-    }
-    .room-carousel__btn:hover { background: var(--white); }
-    .room-carousel__btn--prev { left: 8px; }
-    .room-carousel__btn--next { right: 8px; }
-    .room-carousel__dots {
-      position: absolute;
-      bottom: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 5px;
-      z-index: 2;
-    }
-    .room-carousel__dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.5);
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .room-carousel__dot.is-active { background: var(--white); }
-
-    /* Room details expandable */
-    .room-details-toggle { margin-top: var(--s4); }
-    .room-details-btn {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 5px;
-      width: 100%;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: var(--t-xs);
-      font-weight: 500;
-      color: var(--stone);
-      padding: 0;
-      letter-spacing: 0.03em;
-    }
-    .room-details-btn:hover { color: var(--ink); }
-    .room-details-arrow {
-      transition: transform 0.25s ease;
-      flex-shrink: 0;
-    }
-    .room-details-btn[aria-expanded="true"] .room-details-arrow {
-      transform: rotate(180deg);
-    }
-    .room-includes-list--collapsible {
-      margin-top: var(--s3);
-      overflow: hidden;
-      max-height: 0;
-      opacity: 0;
-      transition: max-height 0.3s ease, opacity 0.25s ease;
-    }
-    .room-includes-list--collapsible.is-open {
-      max-height: 400px;
-      opacity: 1;
-    }
-
-    /* Icon stepper — no border, no filled circle; icon colour */
-    .progress-step__dot                              { border: none; background: transparent; }
-    .progress-step.is-done .progress-step__dot       { border: none; background: transparent; color: var(--ink); }
-    .progress-step.is-active .progress-step__dot     { border: none; background: transparent; color: var(--ink); }
-    .progress-step.is-done:hover .progress-step__dot { border: none; background: transparent; color: var(--ink); }
   </style>
 </head>
 <body>
@@ -461,17 +362,17 @@
   <!-- ===== Booking Header ===== -->
   <header class="booking-header">
     <div class="booking-header__inner">
-      <div style="display:flex; justify-content:flex-start; margin-left: -24px;">
-        <a href="pdp.html" class="btn btn--ghost" style="font-size: var(--t-sm);">
-          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-          BACK TO RETREAT
-        </a>
+      <div class="booking-header__context">
+        <span>Booking</span>
+        <span class="booking-header__sep">/</span>
+        <span class="booking-header__retreat">Elevation Barn - Bali</span>
       </div>
       <a href="index.html" class="booking-header__logo">Queen of Retreats</a>
-      <div class="booking-header__context" style="justify-content:flex-end;">
-        <span>Need help? (Mon–Fri, 9am–5pm)</span>
-        <span class="booking-header__sep">/</span>
-        <span class="booking-header__retreat">Contact us</span>
+      <div style="display:flex; justify-content:flex-end;">
+        <a href="pdp.html" class="btn btn--ghost" style="font-size: var(--t-sm);">
+          Exit
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </a>
       </div>
     </div>
   </header>
@@ -500,7 +401,7 @@
         <div class="progress-step" data-step="3">
           <div class="progress-step__dot-wrap">
             <div class="progress-step__dot">3</div>
-            <span class="progress-step__label">Review</span>
+            <span class="progress-step__label">Summary</span>
           </div>
         </div>
         <div class="progress-step__line"></div>
@@ -508,7 +409,7 @@
         <div class="progress-step" data-step="4">
           <div class="progress-step__dot-wrap">
             <div class="progress-step__dot">4</div>
-            <span class="progress-step__label">Your Details</span>
+            <span class="progress-step__label">Review</span>
           </div>
         </div>
         <div class="progress-step__line"></div>
@@ -516,7 +417,7 @@
         <div class="progress-step" data-step="5">
           <div class="progress-step__dot-wrap">
             <div class="progress-step__dot">5</div>
-            <span class="progress-step__label">About You</span>
+            <span class="progress-step__label">Your Details</span>
           </div>
         </div>
         <div class="progress-step__line"></div>
@@ -524,7 +425,7 @@
         <div class="progress-step" data-step="6">
           <div class="progress-step__dot-wrap">
             <div class="progress-step__dot">6</div>
-            <span class="progress-step__label">Payment</span>
+            <span class="progress-step__label">About You</span>
           </div>
         </div>
         <div class="progress-step__line"></div>
@@ -532,6 +433,14 @@
         <div class="progress-step" data-step="7">
           <div class="progress-step__dot-wrap">
             <div class="progress-step__dot">7</div>
+            <span class="progress-step__label">Payment</span>
+          </div>
+        </div>
+        <div class="progress-step__line"></div>
+
+        <div class="progress-step" data-step="8">
+          <div class="progress-step__dot-wrap">
+            <div class="progress-step__dot">8</div>
             <span class="progress-step__label">Confirmed</span>
           </div>
         </div>
@@ -557,7 +466,7 @@
         <section id="step-1" class="step-panel is-active">
           <div>
             <div class="step-panel__header">
-              <p class="label-caps step-panel__eyebrow">Step 1 of 7</p>
+              <p class="label-caps step-panel__eyebrow">Step 1 of 8</p>
               <h1 class="step-panel__title">When would you like to attend?</h1>
               <p class="step-panel__desc">All programmes run Saturday to Saturday, 7 nights. Choose the week that works for you.</p>
             </div>
@@ -964,7 +873,7 @@
         ───────────────────────────────────────────────── -->
         <section id="step-2" class="step-panel">
           <div class="step-panel__header">
-            <p class="label-caps step-panel__eyebrow">Step 2 of 7</p>
+            <p class="label-caps step-panel__eyebrow">Step 2 of 8</p>
             <h1 class="step-panel__title">Choose your room</h1>
             <p class="step-panel__desc">All rooms are en-suite and include the full retreat programme. Select the option that suits you best.</p>
           </div>
@@ -973,40 +882,22 @@
 
             <!-- Room 1 -->
             <div class="room-card" data-room-id="r1">
-              <div class="room-carousel" data-carousel>
-                <div class="room-carousel__track">
-                  <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Shared Garden Room" class="room-carousel__slide">
-                  <img src="images/header_vale-de-moses.jpg" alt="Shared Garden Room" class="room-carousel__slide">
-                  <img src="images/header_casa-ana_20230628180415.jpg" alt="Shared Garden Room" class="room-carousel__slide">
-                </div>
-                <button class="room-carousel__btn room-carousel__btn--prev" aria-label="Previous"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
-                <button class="room-carousel__btn room-carousel__btn--next" aria-label="Next"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
-                <div class="room-carousel__dots">
-                  <span class="room-carousel__dot is-active"></span>
-                  <span class="room-carousel__dot"></span>
-                  <span class="room-carousel__dot"></span>
-                </div>
-              </div>
+              <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg"
+                   alt="Shared Garden Room" class="room-card__image">
               <div class="room-card__badge">
                 <!-- no badge -->
               </div>
               <div class="room-card__body">
                 <h3 class="room-card__name">Shared Garden Room</h3>
                 <p class="room-card__type">Twin share · Garden view · En-suite</p>
-                <div class="room-details-toggle">
-                  <button class="room-details-btn" aria-expanded="false">
-                    See room details
-                    <svg class="room-details-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                  </button>
-                  <ul class="room-includes-list room-includes-list--collapsible">
-                    <li>Twin beds, Egyptian cotton linen</li>
-                    <li>Garden terrace access</li>
-                    <li>Shared with one other guest</li>
-                    <li>En-suite bathroom with rain shower</li>
-                    <li>All meals &amp; programme included</li>
-                    <li>Lisbon transfers included</li>
-                  </ul>
-                </div>
+                <ul class="room-includes-list">
+                  <li>Twin beds, Egyptian cotton linen</li>
+                  <li>Garden terrace access</li>
+                  <li>Shared with one other guest</li>
+                  <li>En-suite bathroom with rain shower</li>
+                  <li>All meals &amp; programme included</li>
+                  <li>Lisbon transfers included</li>
+                </ul>
               </div>
               <div class="room-card__footer">
                 <div>
@@ -1019,40 +910,22 @@
 
             <!-- Room 2 -->
             <div class="room-card" data-room-id="r2">
-              <div class="room-carousel" data-carousel>
-                <div class="room-carousel__track">
-                  <img src="images/header_casa-ana_20230628180415.jpg" alt="Private Valley Room" class="room-carousel__slide">
-                  <img src="images/header_vale-de-moses.jpg" alt="Private Valley Room" class="room-carousel__slide">
-                  <img src="images/header_les-marguerites.jpg" alt="Private Valley Room" class="room-carousel__slide">
-                </div>
-                <button class="room-carousel__btn room-carousel__btn--prev" aria-label="Previous"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
-                <button class="room-carousel__btn room-carousel__btn--next" aria-label="Next"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
-                <div class="room-carousel__dots">
-                  <span class="room-carousel__dot is-active"></span>
-                  <span class="room-carousel__dot"></span>
-                  <span class="room-carousel__dot"></span>
-                </div>
-              </div>
+              <img src="images/header_casa-ana_20230628180415.jpg"
+                   alt="Private Valley Room" class="room-card__image">
               <div class="room-card__badge">
                 <span class="badge badge--sage">Most popular</span>
               </div>
               <div class="room-card__body">
                 <h3 class="room-card__name">Private Valley Room</h3>
                 <p class="room-card__type">Double or twin · Valley view · En-suite</p>
-                <div class="room-details-toggle">
-                  <button class="room-details-btn" aria-expanded="false">
-                    See room details
-                    <svg class="room-details-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                  </button>
-                  <ul class="room-includes-list room-includes-list--collapsible">
-                    <li>King or twin beds — your choice</li>
-                    <li>Private room for solo or couple</li>
-                    <li>Valley view with morning light</li>
-                    <li>En-suite with walk-in shower</li>
-                    <li>All meals &amp; programme included</li>
-                    <li>Denpasar International Airport transfers included</li>
-                  </ul>
-                </div>
+                <ul class="room-includes-list">
+                  <li>King or twin beds — your choice</li>
+                  <li>Private room for solo or couple</li>
+                  <li>Valley view with morning light</li>
+                  <li>En-suite with walk-in shower</li>
+                  <li>All meals &amp; programme included</li>
+                  <li>Denpasar International Airport transfers included</li>
+                </ul>
               </div>
               <div class="room-card__footer">
                 <div>
@@ -1065,41 +938,23 @@
 
             <!-- Room 3 -->
             <div class="room-card" data-room-id="r3">
-              <div class="room-carousel" data-carousel>
-                <div class="room-carousel__track">
-                  <img src="images/header_les-marguerites.jpg" alt="Quinta Suite" class="room-carousel__slide">
-                  <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Quinta Suite" class="room-carousel__slide">
-                  <img src="images/header_vale-de-moses.jpg" alt="Quinta Suite" class="room-carousel__slide">
-                </div>
-                <button class="room-carousel__btn room-carousel__btn--prev" aria-label="Previous"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
-                <button class="room-carousel__btn room-carousel__btn--next" aria-label="Next"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
-                <div class="room-carousel__dots">
-                  <span class="room-carousel__dot is-active"></span>
-                  <span class="room-carousel__dot"></span>
-                  <span class="room-carousel__dot"></span>
-                </div>
-              </div>
+              <img src="images/header_les-marguerites.jpg"
+                   alt="Quinta Suite" class="room-card__image">
               <div class="room-card__badge">
                 <span class="badge badge--stone">Premium</span>
               </div>
               <div class="room-card__body">
                 <h3 class="room-card__name">Quinta Suite</h3>
                 <p class="room-card__type">Junior suite · Private terrace · Deep-soak bath</p>
-                <div class="room-details-toggle">
-                  <button class="room-details-btn" aria-expanded="false">
-                    See room details
-                    <svg class="room-details-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                  </button>
-                  <ul class="room-includes-list room-includes-list--collapsible">
-                    <li>Spacious suite with lounge area</li>
-                    <li>Private terrace with valley views</li>
-                    <li>Deep-soak bath + rain shower</li>
-                    <li>All meals &amp; programme included</li>
-                    <li>Lisbon transfers included</li>
-                    <li class="extra">2× private coaching sessions</li>
-                    <li class="extra">In-room aromatherapy welcome kit</li>
-                  </ul>
-                </div>
+                <ul class="room-includes-list">
+                  <li>Spacious suite with lounge area</li>
+                  <li>Private terrace with valley views</li>
+                  <li>Deep-soak bath + rain shower</li>
+                  <li>All meals &amp; programme included</li>
+                  <li>Lisbon transfers included</li>
+                  <li class="extra">2× private coaching sessions</li>
+                  <li class="extra">In-room aromatherapy welcome kit</li>
+                </ul>
               </div>
               <div class="room-card__footer">
                 <div>
@@ -1114,7 +969,7 @@
 
           <!-- Guest count -->
           <div style="margin-top: var(--s7);">
-            <h4 style="font-family: var(--serif); font-size: var(--t-xl); font-weight: 500; color: var(--ink); margin-bottom: 24px; padding-top: 24px;">Are you travelling alone, with someone or in a group?</h4>
+            <h4 style="font-family: var(--sans); font-size: var(--t-base); font-weight: 600; margin-bottom: var(--s4);">Are you travelling alone, with someone or in a group?</h4>
             <div class="guest-type-grid" style="grid-template-columns: 1fr 1fr 1fr;">
               <div class="guest-type-card is-active" data-type="solo">
                 <div class="guest-type-card__title">Solo traveller</div>
@@ -1155,9 +1010,9 @@
         ───────────────────────────────────────────────── -->
         <section id="step-3" class="step-panel">
           <div class="step-panel__header">
-            <p class="label-caps step-panel__eyebrow">Step 3 of 7</p>
-            <h1 class="step-panel__title">Review your booking</h1>
-            <p class="step-panel__desc" style="white-space: nowrap;">Review your booking and confirm the retreat policies before continuing. You can make changes at any point.</p>
+            <p class="label-caps step-panel__eyebrow">Step 3 of 8</p>
+            <h1 class="step-panel__title">Your booking summary</h1>
+            <p class="step-panel__desc">Review your selections before we proceed. You can make changes at any point.</p>
           </div>
 
           <!-- Retreat overview -->
@@ -1262,8 +1117,64 @@
             </div>
           </div>
 
+          <div style="margin-top: var(--s7);">
+            <button class="btn btn--primary btn--lg btn--full" onclick="document.getElementById('nav-continue').click()">
+              Continue
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </section>
+
+
+        <!-- ─────────────────────────────────────────────────
+             STEP 4: Review
+        ───────────────────────────────────────────────── -->
+        <section id="step-4" class="step-panel">
+          <div class="step-panel__header">
+            <p class="label-caps step-panel__eyebrow">Step 4 of 8</p>
+            <h1 class="step-panel__title">Review your booking</h1>
+            <p class="step-panel__desc">Please read the retreat policies before confirming. You can return and make changes at any time.</p>
+          </div>
+
+          <!-- Booking snapshot -->
+          <div class="review-section" style="margin-bottom: var(--s7);">
+            <div class="review-section__header">
+              <span class="review-section__title">Booking Snapshot</span>
+            </div>
+            <div class="review-section__body">
+              <div class="review-row">
+                <span class="review-row__key">Retreat</span>
+                <span class="review-row__val">Elevation Barn, Bali</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Dates</span>
+                <span class="review-row__val" id="review-dates">21 – 28 June 2026</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Room</span>
+                <span class="review-row__val" id="review-room">Private Valley Room</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Guests</span>
+                <span class="review-row__val" id="review-guests">1 guest</span>
+              </div>
+              <div id="review-promo-row" class="review-row" style="display:none;">
+                <span class="review-row__key" style="color: var(--sage);">Promo code (<span id="review-promo-code"></span>)</span>
+                <span class="review-row__val" id="review-promo-discount" style="color: var(--sage);">—</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Total</span>
+                <span class="review-row__val" id="review-total" style="font-family: var(--serif); font-size: var(--t-lg);">£2,895</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Deposit today</span>
+                <span class="review-row__val" id="review-deposit" style="color: var(--warning); font-weight: 600;">£724</span>
+              </div>
+            </div>
+          </div>
+
           <!-- Cancellation policy -->
-          <div class="policy-box" style="margin-top: var(--s6); margin-bottom: var(--s6);">
+          <div class="policy-box" style="margin-bottom: var(--s6);">
             <p class="label-caps" style="margin-bottom: var(--s4);">Cancellation Policy</p>
             <div class="policy-timeline">
               <div class="policy-row">
@@ -1354,11 +1265,11 @@
 
 
         <!-- ─────────────────────────────────────────────────
-             STEP 4: Guest Details
+             STEP 5: Guest Details
         ───────────────────────────────────────────────── -->
-        <section id="step-4" class="step-panel">
+        <section id="step-5" class="step-panel">
           <div class="step-panel__header">
-            <p class="label-caps step-panel__eyebrow">Step 4 of 7</p>
+            <p class="label-caps step-panel__eyebrow">Step 5 of 8</p>
             <h1 class="step-panel__title">Your details</h1>
             <p class="step-panel__desc">We'll use these to prepare your booking confirmation and pre-arrival materials.</p>
           </div>
@@ -1492,11 +1403,11 @@
 
 
         <!-- ─────────────────────────────────────────────────
-             STEP 5: Retreat Questions
+             STEP 6: Retreat Questions
         ───────────────────────────────────────────────── -->
-        <section id="step-5" class="step-panel">
+        <section id="step-6" class="step-panel">
           <div class="step-panel__header">
-            <p class="label-caps step-panel__eyebrow">Step 5 of 7</p>
+            <p class="label-caps step-panel__eyebrow">Step 6 of 8</p>
             <h1 class="step-panel__title">A little about you</h1>
             <p class="step-panel__desc">To ensure we create the best possible experience, please share a little about yourself. All information is confidential and shared only with your facilitators.</p>
           </div>
@@ -1656,11 +1567,11 @@
 
 
         <!-- ─────────────────────────────────────────────────
-             STEP 6: Payment
+             STEP 7: Payment
         ───────────────────────────────────────────────── -->
-        <section id="step-6" class="step-panel">
+        <section id="step-7" class="step-panel">
           <div class="step-panel__header">
-            <p class="label-caps step-panel__eyebrow">Step 6 of 7</p>
+            <p class="label-caps step-panel__eyebrow">Step 7 of 8</p>
             <h1 class="step-panel__title">Secure payment</h1>
             <p class="step-panel__desc">Your payment is encrypted and processed securely. We never store your card details.</p>
           </div>
@@ -1741,9 +1652,9 @@
 
 
         <!-- ─────────────────────────────────────────────────
-             STEP 7: Confirmation
+             STEP 8: Confirmation
         ───────────────────────────────────────────────── -->
-        <section id="step-7" class="step-panel">
+        <section id="step-8" class="step-panel">
 
           <div class="confirmation-hero">
             <div class="confirmation-hero__icon">
@@ -2001,7 +1912,7 @@
     </div>
   </nav>
 
-  <script src="booking.js"></script>
+  <script src="booking-2.js"></script>
   <script>
 
     // Expose app for inline onclick
@@ -2059,39 +1970,6 @@
           panel.classList.remove('is-hidden');
         }
       }
-    });
-
-    // Room image carousels
-    document.querySelectorAll('[data-carousel]').forEach(carousel => {
-      const track = carousel.querySelector('.room-carousel__track');
-      const slides = carousel.querySelectorAll('.room-carousel__slide');
-      const dots   = carousel.querySelectorAll('.room-carousel__dot');
-      const prev   = carousel.querySelector('.room-carousel__btn--prev');
-      const next   = carousel.querySelector('.room-carousel__btn--next');
-      let current  = 0;
-
-      function goTo(n) {
-        current = (n + slides.length) % slides.length;
-        track.style.transform = `translateX(-${current * 100}%)`;
-        dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
-      }
-
-      prev.addEventListener('click', e => { e.stopPropagation(); goTo(current - 1); });
-      next.addEventListener('click', e => { e.stopPropagation(); goTo(current + 1); });
-      dots.forEach((dot, i) => dot.addEventListener('click', e => { e.stopPropagation(); goTo(i); }));
-    });
-
-    // Room details expandable panels
-    document.querySelectorAll('.room-details-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const list = btn.nextElementSibling;
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', !expanded);
-        btn.textContent = '';
-        btn.insertAdjacentHTML('beforeend', (!expanded ? 'Hide room details' : 'See room details') +
-          `<svg class="room-details-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>`);
-        list.classList.toggle('is-open', !expanded);
-      });
     });
   </script>
 
