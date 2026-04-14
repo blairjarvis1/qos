@@ -16,10 +16,9 @@
     /* Offset scroll top to sit below both sticky header (60px) and progress bar (~68px) */
     html { scroll-padding-top: 168px; }
 
-    /* ── Hide nav summary on confirmation step ── */
-    .booking-nav--no-summary .booking-nav__summary {
-      display: none;
-    }
+    /* ── On confirmation step: hide everything in nav except back button ── */
+    .booking-nav--no-summary .booking-nav__summary { display: none; }
+    .booking-nav--no-summary .booking-nav__right    { display: none; }
 
     /* ── Booking nav summary ── */
     .booking-nav__summary {
@@ -527,14 +526,6 @@
             <span class="progress-step__label">Payment</span>
           </div>
         </div>
-        <div class="progress-step__line"></div>
-
-        <div class="progress-step" data-step="7">
-          <div class="progress-step__dot-wrap">
-            <div class="progress-step__dot">7</div>
-            <span class="progress-step__label">Confirmed</span>
-          </div>
-        </div>
 
       </div>
     </div>
@@ -557,7 +548,7 @@
         <section id="step-1" class="step-panel is-active">
           <div>
             <div class="step-panel__header">
-              <p class="label-caps step-panel__eyebrow">Step 1 of 7</p>
+              <p class="label-caps step-panel__eyebrow">Step 1 of 6</p>
               <h1 class="step-panel__title">When would you like to attend?</h1>
               <p class="step-panel__desc">All programmes run Saturday to Saturday, 7 nights. Choose the week that works for you.</p>
             </div>
@@ -964,7 +955,7 @@
         ───────────────────────────────────────────────── -->
         <section id="step-2" class="step-panel">
           <div class="step-panel__header">
-            <p class="label-caps step-panel__eyebrow">Step 2 of 7</p>
+            <p class="label-caps step-panel__eyebrow">Step 2 of 6</p>
             <h1 class="step-panel__title">Choose your room</h1>
             <p class="step-panel__desc">All rooms are en-suite and include the full retreat programme. Select the option that suits you best.</p>
           </div>
@@ -1155,7 +1146,7 @@
         ───────────────────────────────────────────────── -->
         <section id="step-3" class="step-panel">
           <div class="step-panel__header">
-            <p class="label-caps step-panel__eyebrow">Step 3 of 7</p>
+            <p class="label-caps step-panel__eyebrow">Step 3 of 6</p>
             <h1 class="step-panel__title">Review your booking</h1>
             <p class="step-panel__desc" style="white-space: nowrap;">Review your booking and confirm the retreat policies before continuing. You can make changes at any point.</p>
           </div>
@@ -1358,7 +1349,7 @@
         ───────────────────────────────────────────────── -->
         <section id="step-4" class="step-panel">
           <div class="step-panel__header">
-            <p class="label-caps step-panel__eyebrow">Step 4 of 7</p>
+            <p class="label-caps step-panel__eyebrow">Step 4 of 6</p>
             <h1 class="step-panel__title">Your details</h1>
             <p class="step-panel__desc">We'll use these to prepare your booking confirmation and pre-arrival materials.</p>
           </div>
@@ -1371,7 +1362,7 @@
           <!-- Login to your account -->
           <div class="form-section" style="margin-bottom: var(--s5);">
             <button class="accordion-trigger" style="padding: var(--s4) var(--s6); background: var(--parchment); border: none; border-bottom: 1px solid var(--border); font-family: var(--sans); font-size: var(--t-base); font-weight: 600; color: var(--ink);">
-              <span>Login to your account <span style="font-weight: 400; color: var(--stone); font-size: var(--t-sm);">(optional)</span></span>
+              <span>Login to your account <span style="font-weight: 400; color: var(--stone); font-size: var(--t-sm);">(to book with your saved details)</span></span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="accordion-body" style="padding: var(--s6);">
@@ -1496,7 +1487,7 @@
         ───────────────────────────────────────────────── -->
         <section id="step-5" class="step-panel">
           <div class="step-panel__header">
-            <p class="label-caps step-panel__eyebrow">Step 5 of 7</p>
+            <p class="label-caps step-panel__eyebrow">Step 5 of 6</p>
             <h1 class="step-panel__title">A little about you</h1>
             <p class="step-panel__desc">To ensure we create the best possible experience, please share a little about yourself. All information is confidential and shared only with your facilitators.</p>
           </div>
@@ -1660,7 +1651,7 @@
         ───────────────────────────────────────────────── -->
         <section id="step-6" class="step-panel">
           <div class="step-panel__header">
-            <p class="label-caps step-panel__eyebrow">Step 6 of 7</p>
+            <p class="label-caps step-panel__eyebrow">Step 6 of 6</p>
             <h1 class="step-panel__title">Secure payment</h1>
             <p class="step-panel__desc">Your payment is encrypted and processed securely. We never store your card details.</p>
           </div>
@@ -1733,7 +1724,7 @@
           </div>
 
           <!-- Pay CTA -->
-          <button id="pay-now-label" class="btn btn--ink btn--lg btn--full" style="margin-top: var(--s6);" onclick="window.bookingApp && bookingApp.renderStep(8)">
+          <button id="pay-now-label" class="btn btn--ink btn--lg btn--full" style="margin-top: var(--s6);" onclick="window.bookingApp && bookingApp.renderStep(7)">
             Pay £724 &amp; Confirm Booking
           </button>
 
@@ -1752,7 +1743,7 @@
             <p class="label-caps" style="color: var(--sage); margin-bottom: var(--s3);">Booking confirmed</p>
             <h1 style="font-size: var(--t-3xl); font-weight: 300;">Your retreat is confirmed.</h1>
             <p style="font-size: var(--t-md); color: var(--stone); margin-top: var(--s3); max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.6;">
-              We're looking forward to welcoming you to Quinta da Levada. A detailed confirmation has been sent to your email.
+              We're looking forward to welcoming you to Elevation Barn. A detailed confirmation has been sent to your email.
             </p>
             <span class="confirmation-hero__ref">Booking ref: QR-2026-08847</span>
           </div>
@@ -1781,7 +1772,7 @@
                   <div class="next-step__number">3</div>
                   <div class="next-step__content">
                     <h5>Balance reminder — 60 days before</h5>
-                    <p>We'll send an automatic reminder when your balance of £2,171 is due. No surprises.</p>
+                    <p>We'll send an automatic reminder when your balance of <span id="conf-balance-text">£2,171</span> is due. No surprises.</p>
                   </div>
                 </div>
                 <div class="next-step">
@@ -1815,8 +1806,8 @@
                 <img src="images/header_vale-de-moses.jpg"
                      alt="Quinta da Levada" class="receipt-image">
                 <div class="receipt-card__header">
-                  <p style="font-family: var(--serif); font-size: var(--t-lg); color: var(--ink);">Quinta da Levada</p>
-                  <p style="font-size: var(--t-sm); color: var(--stone);">Alentejo, Portugal</p>
+                  <p style="font-family: var(--serif); font-size: var(--t-lg); color: var(--ink);">Elevation Barn</p>
+                  <p style="font-size: var(--t-sm); color: var(--stone);">Gianyar, Bali</p>
                 </div>
                 <div class="receipt-card__body">
                   <div class="receipt-row">
@@ -1825,32 +1816,32 @@
                   </div>
                   <div class="receipt-row">
                     <span class="receipt-row__key">Dates</span>
-                    <span class="receipt-row__val">21 – 28 June 2026</span>
+                    <span class="receipt-row__val" id="conf-dates">21 – 28 June 2026</span>
                   </div>
                   <div class="receipt-row">
                     <span class="receipt-row__key">Room</span>
-                    <span class="receipt-row__val">Private Valley Room</span>
+                    <span class="receipt-row__val" id="conf-room">Private Valley Room</span>
                   </div>
                   <div class="receipt-row">
                     <span class="receipt-row__key">Guest</span>
-                    <span class="receipt-row__val">1 person</span>
+                    <span class="receipt-row__val" id="conf-guests">1 person</span>
                   </div>
                   <div class="receipt-row">
-                    <span class="receipt-row__key">Deposit paid</span>
-                    <span class="receipt-row__val" style="color: var(--success); font-weight: 600;">£724 ✓</span>
+                    <span class="receipt-row__key" id="conf-deposit-label">Deposit paid</span>
+                    <span class="receipt-row__val" id="conf-deposit" style="color: var(--success); font-weight: 600;">£724 ✓</span>
                   </div>
-                  <div class="receipt-row">
+                  <div class="receipt-row" id="conf-balance-row">
                     <span class="receipt-row__key">Balance due</span>
-                    <span class="receipt-row__val">£2,171</span>
+                    <span class="receipt-row__val" id="conf-balance">£2,171</span>
                   </div>
-                  <div class="receipt-row">
+                  <div class="receipt-row" id="conf-balance-date-row">
                     <span class="receipt-row__key">Balance due date</span>
-                    <span class="receipt-row__val">22 April 2026</span>
+                    <span class="receipt-row__val" id="conf-balance-date">22 April 2026</span>
                   </div>
                 </div>
                 <div class="receipt-total">
                   <span style="font-size: var(--t-sm); color: var(--stone);">Total booking value</span>
-                  <span style="font-family: var(--serif); font-size: var(--t-xl); color: var(--ink); font-weight: 500;">£2,895</span>
+                  <span style="font-family: var(--serif); font-size: var(--t-xl); color: var(--ink); font-weight: 500;" id="conf-total">£2,895</span>
                 </div>
               </div>
 

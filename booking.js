@@ -148,28 +148,70 @@ function renderStep(n, animate = true) {
   updateSidebar();
   updateNavButtons(n);
 
+
   // Recalculate calendar widths when step 1 becomes visible —
   // needed when navigating back from a later step where step 1 was hidden (offsetWidth=0)
   if (n === 1 && calResize) {
     requestAnimationFrame(calResize);
   }
 
-  // Booking nav summary: hide on step 8 (confirmation), show on all others
+  // Populate confirmation receipt with live state values
+  if (n === 7 && state.selectedRoom) {
+    const base     = state.selectedRoom.price;
+    const count    = state.guestCount;
+    const subtotal = base * count;
+    const discount = Math.round(subtotal * state.promoDiscount);
+    const total    = subtotal - discount;
+    const deposit  = Math.ceil(total * 0.25);
+    const balance  = total - deposit;
+    const paidFull = state.paymentOption === 'full';
+    const amountPaid   = paidFull ? total    : deposit;
+    const amountOwed   = paidFull ? 0        : balance;
+
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+    // Receipt card rows
+    if (state.selectedDate) set('conf-dates', state.selectedDate.label);
+    set('conf-room',    state.selectedRoom.name);
+    set('conf-guests',  count === 1 ? '1 person' : `${count} people`);
+    set('conf-deposit', `£${amountPaid.toLocaleString()} ✓`);
+    set('conf-total',   `£${total.toLocaleString()}`);
+
+    // Deposit label and balance rows — adjust for payment option
+    const balanceRow     = document.getElementById('conf-balance-row');
+    const balanceDateRow = document.getElementById('conf-balance-date-row');
+    if (paidFull) {
+      set('conf-deposit-label', 'Paid in full');
+      if (balanceRow)     balanceRow.style.display     = 'none';
+      if (balanceDateRow) balanceDateRow.style.display = 'none';
+    } else {
+      set('conf-deposit-label', 'Deposit paid');
+      if (balanceRow)     balanceRow.style.display     = '';
+      if (balanceDateRow) balanceDateRow.style.display = '';
+      set('conf-balance', `£${amountOwed.toLocaleString()}`);
+    }
+
+    // "What happens next" inline balance mention
+    set('conf-balance-text', `£${amountOwed.toLocaleString()}`);
+  }
+
+  // Booking nav: hide entirely on step 7 (confirmation)
   const bookingNav = document.querySelector('.booking-nav');
   if (bookingNav) {
-    bookingNav.classList.toggle('booking-nav--no-summary', n === 8);
+    bookingNav.classList.toggle('hidden', n === 7);
+    bookingNav.classList.toggle('booking-nav--no-summary', n === 7);
   }
 
-  // Sidebar visibility: hidden on step 1 and step 8
+  // Sidebar visibility: hidden on step 1 and step 7
   const sidebar = document.getElementById('booking-sidebar');
   if (sidebar) {
-    sidebar.classList.toggle('hidden', n === 1 || n === 8);
+    sidebar.classList.toggle('hidden', n === 1 || n === 7);
   }
 
-  // Layout swap: step 1 and 8 are full-width
+  // Layout swap: step 1 and 7 are full-width
   const layout = document.getElementById('booking-layout');
   if (layout) {
-    if (n === 1 || n === 8) {
+    if (n === 1 || n === 7) {
       layout.classList.remove('booking-layout');
       layout.classList.add('booking-layout--full');
     } else {
@@ -224,11 +266,11 @@ function updateNavButtons(n) {
   if (stepInfo) stepInfo.textContent = `${n} of ${state.totalSteps}`;
 
   if (continueBtn) {
-    if (n === 7) {
+    if (n === 6) {
       continueBtn.textContent = 'Complete Booking';
       continueBtn.classList.add('btn--ink');
       continueBtn.classList.remove('btn--primary');
-    } else if (n === 8) {
+    } else if (n === 7) {
       continueBtn.classList.add('hidden');
     } else {
       continueBtn.textContent = 'Continue';
