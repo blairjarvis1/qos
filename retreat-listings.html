@@ -448,16 +448,15 @@
     }
 
     /* ── RESULTS SECTION ────────────────────────────────────────────── */
-    .results { background: var(--parchment); }
+    .results { background: var(--white); }
 
     /* ── FEATURED CARD ──────────────────────────────────────────────── */
     .lr-featured {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 530px 1fr;
       overflow: hidden;
       background: var(--white);
-      border: none;
-      margin: 48px;
+      border-bottom: 1px solid var(--border);
       cursor: pointer;
       text-decoration: none;
       color: inherit;
@@ -466,7 +465,7 @@
     .lr-featured:hover { box-shadow: 0 8px 40px rgba(0,0,0,0.10); }
     .lr-featured__image-wrap {
       position: relative;
-      aspect-ratio: 5 / 4;
+      height: 530px;
       overflow: hidden;
     }
     .lr-featured__image-wrap img {
@@ -523,7 +522,7 @@
     }
     .lr-featured__title {
       font-family: var(--serif);
-      font-size: 35px;
+      font-size: clamp(20px, 1.8vw, 28px);
       font-weight: 400;
       color: var(--ink);
       line-height: 1.2;
@@ -649,29 +648,28 @@
 
     /* ── GRID ───────────────────────────────────────────────────────── */
     .lr-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      padding: 0 48px 48px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      background: var(--white);
     }
     .lr-card {
       background: var(--white);
-      border: none;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
       overflow: hidden;
       cursor: pointer;
-      transition: box-shadow var(--dur-fast), transform var(--dur-fast);
+      transition: box-shadow var(--dur-fast);
       display: flex;
-      flex-direction: row;
-      align-items: stretch;
+      flex-direction: column;
       text-decoration: none;
       color: inherit;
     }
-    .lr-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.10); transform: translateY(-2px); }
+    .lr-card:nth-child(3n) { border-right: none; }
+    .lr-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.09); z-index: 1; position: relative; }
     .lr-card__image {
       position: relative;
-      width: 420px;
-      aspect-ratio: 1 / 1;
-      flex-shrink: 0;
+      aspect-ratio: 4 / 3;
       overflow: hidden;
     }
     .lr-card__image img {
@@ -723,7 +721,7 @@
       border-radius: var(--r-pill);
     }
     .lr-card__body {
-      padding: 28px 32px;
+      padding: 18px 20px 16px;
       display: flex;
       flex-direction: column;
       flex: 1;
@@ -738,10 +736,10 @@
     }
     .lr-card__title {
       font-family: var(--serif);
-      font-size: 35px;
+      font-size: 17px;
       font-weight: 400;
       color: var(--ink);
-      line-height: 1.2;
+      line-height: 1.25;
       margin-bottom: 6px;
     }
     .lr-card__location {
@@ -809,7 +807,7 @@
     .lr-card__from { font-size: 10px; color: var(--stone); display: block; line-height: 1; }
     .lr-card__price {
       font-family: var(--serif);
-      font-size: 35px;
+      font-size: 17px;
       color: var(--ink);
       line-height: 1.2;
     }
@@ -847,9 +845,9 @@
     /* ── EDITORIAL IN-FEED ──────────────────────────────────────────── */
     .editorial-feed {
       background: var(--parchment);
-      padding: 40px 48px 80px;
-      border-top: none;
-      border-bottom: none;
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
       display: grid;
       grid-template-columns: 1fr 380px;
       gap: 48px;
@@ -936,6 +934,7 @@
       display: flex;
       justify-content: center;
       padding: 48px 0 64px;
+      background: var(--white);
     }
 
   </style>
@@ -946,88 +945,7 @@
   <header class="site-header" id="site-header">
     <div class="site-header__inner">
       <nav class="site-header__nav">
-
-        <!-- Retreats + Mega Menu -->
-        <div class="nav-item--mega">
-          <a href="listings.html">Retreats</a>
-          <div class="mega-menu">
-            <div class="mega-menu__inner">
-
-              <!-- Rail 1: By Category -->
-              <div class="mega-menu__rail">
-                <div class="mega-menu__rail-label">Browse by category</div>
-                <div class="mega-menu__scroll">
-                  <a href="#" class="mega-cat-card">
-                    <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Yoga & Meditation">
-                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Yoga &amp; Meditation</span></div>
-                  </a>
-                  <a href="#" class="mega-cat-card">
-                    <img src="images/header_casa-ana_20230628180415.jpg" alt="Detox & Cleanse">
-                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Detox &amp; Cleanse</span></div>
-                  </a>
-                  <a href="#" class="mega-cat-card">
-                    <img src="images/header_vale-de-moses.jpg" alt="Fitness & Adventure">
-                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Fitness &amp; Adventure</span></div>
-                  </a>
-                  <a href="#" class="mega-cat-card">
-                    <img src="images/header_les-marguerites.jpg" alt="Meditation & Mindfulness">
-                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Meditation &amp; Mindfulness</span></div>
-                  </a>
-                  <a href="#" class="mega-cat-card">
-                    <img src="images/header_vale-de-moses.webp" alt="Health & Healing">
-                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Health &amp; Healing</span></div>
-                  </a>
-                  <a href="#" class="mega-cat-card">
-                    <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Personal Growth">
-                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Personal Growth</span></div>
-                  </a>
-                </div>
-              </div>
-
-              <!-- Rail 2: By Intent -->
-              <div class="mega-menu__rail">
-                <div class="mega-menu__rail-label">What are you looking for?</div>
-                <div class="mega-menu__scroll">
-                  <a href="#" class="mega-intent-card">
-                    <div class="mega-intent-card__icon">🌿</div>
-                    <div class="mega-intent-card__name">Relaxation</div>
-                    <div class="mega-intent-card__desc">Slow down and restore your sense of calm</div>
-                  </a>
-                  <a href="#" class="mega-intent-card">
-                    <div class="mega-intent-card__icon">✨</div>
-                    <div class="mega-intent-card__name">Transformation</div>
-                    <div class="mega-intent-card__desc">Break old patterns and emerge renewed</div>
-                  </a>
-                  <a href="#" class="mega-intent-card">
-                    <div class="mega-intent-card__icon">🏃</div>
-                    <div class="mega-intent-card__name">Active &amp; Fitness</div>
-                    <div class="mega-intent-card__desc">Challenge your body in beautiful settings</div>
-                  </a>
-                  <a href="#" class="mega-intent-card">
-                    <div class="mega-intent-card__icon">📵</div>
-                    <div class="mega-intent-card__name">Digital Detox</div>
-                    <div class="mega-intent-card__desc">Unplug, breathe, and reconnect with yourself</div>
-                  </a>
-                  <a href="#" class="mega-intent-card">
-                    <div class="mega-intent-card__icon">🤝</div>
-                    <div class="mega-intent-card__name">Reconnect</div>
-                    <div class="mega-intent-card__desc">Find community with like-minded souls</div>
-                  </a>
-                  <a href="#" class="mega-intent-card">
-                    <div class="mega-intent-card__icon">🔮</div>
-                    <div class="mega-intent-card__name">Inner Work</div>
-                    <div class="mega-intent-card__desc">Therapy, journalling, and deep self-enquiry</div>
-                  </a>
-                </div>
-              </div>              <!-- Footer -->
-              <div class="mega-menu__footer">
-                <a href="listings.html" class="mega-menu__footer-link">View all retreats →</a>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
+        <a href="listings.html">Retreats</a>
         <a href="#">Destinations</a>
         <a href="#">Inspiration</a>
         <a href="#">About</a>
@@ -1048,9 +966,9 @@
 
   <!-- ── 2. CONTEXT LAYER ────────────────────────────────────────────── -->
   <section class="ctx">
-    <p class="ctx__label">QoR Vetted</p>
-    <h1 class="ctx__h1">All retreats · May 2026</h1>
-    <p class="ctx__sub">100 retreats curated by Queen of Retreats</p>
+    <p class="ctx__label">Search results</p>
+    <h1 class="ctx__h1">Yoga retreats · Bali · May 2026</h1>
+    <p class="ctx__sub">42 retreats curated by Queen of Retreats</p>
     <div class="ctx__chips">
       <span class="ctx__chip">Yoga &amp; Meditation <button class="ctx__chip-x" aria-label="Remove filter">×</button></span>
       <span class="ctx__chip">Bali <button class="ctx__chip-x" aria-label="Remove filter">×</button></span>
@@ -1161,7 +1079,99 @@
           <div class="intent-card__desc">Therapy, journalling, and deep self-enquiry</div>
         </div>
       </div>
-    </div>  <!-- ── 6. RESULTS ─────────────────────────────────────────────────── -->
+    </div>
+
+    <!-- Rail 3: By Destination -->
+    <div class="discovery__rail" style="margin-bottom: 0;">
+      <div class="discovery__rail-label">Browse by destination</div>
+      <div class="discovery__scroll">
+        <div class="dest-card">
+          <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Bali">
+          <div class="dest-card__overlay">
+            <div class="dest-card__name">Bali</div>
+            <div class="dest-card__count">48 retreats</div>
+          </div>
+        </div>
+        <div class="dest-card">
+          <img src="images/header_vale-de-moses.jpg" alt="Portugal">
+          <div class="dest-card__overlay">
+            <div class="dest-card__name">Portugal</div>
+            <div class="dest-card__count">62 retreats</div>
+          </div>
+        </div>
+        <div class="dest-card">
+          <img src="images/header_casa-ana_20230628180415.jpg" alt="Spain">
+          <div class="dest-card__overlay">
+            <div class="dest-card__name">Spain</div>
+            <div class="dest-card__count">39 retreats</div>
+          </div>
+        </div>
+        <div class="dest-card">
+          <img src="images/header_les-marguerites.jpg" alt="Greece">
+          <div class="dest-card__overlay">
+            <div class="dest-card__name">Greece</div>
+            <div class="dest-card__count">51 retreats</div>
+          </div>
+        </div>
+        <div class="dest-card">
+          <img src="images/header_vale-de-moses.webp" alt="Morocco">
+          <div class="dest-card__overlay">
+            <div class="dest-card__name">Morocco</div>
+            <div class="dest-card__count">27 retreats</div>
+          </div>
+        </div>
+        <div class="dest-card">
+          <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="France">
+          <div class="dest-card__overlay">
+            <div class="dest-card__name">France</div>
+            <div class="dest-card__count">34 retreats</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 5. FILTER + SORT BAR ──────────────────────────────────────── -->
+  <div class="filter-bar" id="filter-bar">
+    <div class="filter-bar__row">
+      <div class="filter-bar__left">
+        <button class="filter-pill is-active" data-filter="category">
+          Category
+          <span class="fp-x">×</span>
+        </button>
+        <button class="filter-pill" data-filter="destination">Destination</button>
+        <button class="filter-pill" data-filter="dates">Dates</button>
+        <button class="filter-pill" data-filter="price">Price</button>
+        <button class="filter-pill" data-filter="more">
+          More filters
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="filter-bar__right">
+        <span class="result-count">42 retreats</span>
+        <div style="position: relative;">
+          <button class="sort-pill" id="sort-btn">
+            Sort: Recommended
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+          <div class="sort-dropdown" id="sort-dropdown">
+            <div class="sort-dropdown__item is-selected">Recommended</div>
+            <div class="sort-dropdown__item">Price: Low to high</div>
+            <div class="sort-dropdown__item">Price: High to low</div>
+            <div class="sort-dropdown__item">Highest rated</div>
+            <div class="sort-dropdown__item">Soonest available</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="filter-bar__chips" id="filter-chips">
+      <span class="fb-chip">Yoga &amp; Meditation <button class="fb-chip-x">×</button></span>
+      <span class="fb-chip">Bali <button class="fb-chip-x">×</button></span>
+      <span class="fb-chip">May 2026 <button class="fb-chip-x">×</button></span>
+    </div>
+  </div>
+
+  <!-- ── 6. RESULTS ─────────────────────────────────────────────────── -->
   <main class="results">
 
     <!-- Featured Card -->
@@ -1176,13 +1186,13 @@
           QoR Vetted
         </div>
         <div class="lr-featured__type">Yoga &amp; Meditation Retreat</div>
-        <h2 class="lr-featured__title">Elevation Barn — A Yoga Retreat in the wilderness of Gianyar, Bali</h2>
+        <h2 class="lr-featured__title">Vale de Moses — A transformative yoga retreat in the mountains of central Portugal</h2>
         <div class="lr-featured__location">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          Gianyar, Bali
+          Arganil, Central Portugal
         </div>
         <p class="lr-featured__desc">
-          Based at a tropical oasis at Gianyar, near Ubud, these hand-held transformative retreats transformative retreats, for individuals, families and corporates, will help you smash through limiting boundaries, identify your ambition and harness your power.
+          Nestled in a forested valley above the Ceira river, Vale de Moses offers intimate, hand-crafted retreats built around daily yoga, wild swimming and organic farm-to-table meals. Each week is limited to 12 guests — expect genuine connection and lasting change.
         </p>
         <div class="lr-featured__info">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
@@ -1217,7 +1227,7 @@
         </div>
         <div class="lr-featured__ctas">
           <button class="lr-featured__cta-primary">View Retreat →</button>
-          <button class="lr-featured__cta-secondary" onclick="window.location.href='enquiry.html'">Enquire</button>
+          <button class="lr-featured__cta-secondary">Enquire</button>
         </div>
       </div>
     </a>
@@ -1226,9 +1236,9 @@
     <div class="lr-grid">
 
       <!-- Card 1 -->
-      <a href="pdp-enquire.html" class="lr-card">
+      <a href="pdp.html" class="lr-card">
         <div class="lr-card__image">
-          <img src="images/retreats/ananda/ANANDA+hot+oil+2.webp" alt="Mellulah Yoga Retreat">
+          <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Mellulah Yoga Retreat">
           <button class="lr-card__save" aria-label="Save" onclick="event.preventDefault()">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </button>
@@ -1237,10 +1247,10 @@
         </div>
         <div class="lr-card__body">
           <div class="lr-card__type">Yoga</div>
-          <div class="lr-card__title">Ananda in the Himalayas, India</div>
+          <div class="lr-card__title">Mellulah Yoga Retreat, Comporta</div>
           <div class="lr-card__location">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            Uttarakhand, India
+            Comporta, Alentejo
           </div>
           <div class="lr-card__info">5 nights · All levels · Max 8</div>
           <div class="lr-card__tags">
@@ -1277,7 +1287,7 @@
       </a>
 
       <!-- Card 2 -->
-      <a href="#casa-ana-wellness" class="lr-card">
+      <a href="pdp.html" class="lr-card">
         <div class="lr-card__image">
           <img src="images/header_casa-ana_20230628180415.jpg" alt="Casa Ana">
           <button class="lr-card__save" aria-label="Save" onclick="event.preventDefault()">
@@ -1327,7 +1337,7 @@
       </a>
 
       <!-- Card 3 -->
-      <a href="#les-marguerites" class="lr-card">
+      <a href="pdp.html" class="lr-card">
         <div class="lr-card__image">
           <img src="images/header_les-marguerites.jpg" alt="Les Marguerites">
           <button class="lr-card__save" aria-label="Save" onclick="event.preventDefault()">
@@ -1383,7 +1393,7 @@
     <div class="lr-grid">
 
       <!-- Card 4 -->
-      <a href="#quinta-do-reguengo" class="lr-card">
+      <a href="pdp.html" class="lr-card">
         <div class="lr-card__image">
           <img src="images/header_vale-de-moses.jpg" alt="Quinta do Reguengo">
           <button class="lr-card__save" aria-label="Save" onclick="event.preventDefault()">
@@ -1433,7 +1443,7 @@
       </a>
 
       <!-- Card 5 -->
-      <a href="#estalagem-do-vale" class="lr-card">
+      <a href="pdp.html" class="lr-card">
         <div class="lr-card__image">
           <img src="images/header_casa-ana_20230628180415.jpg" alt="Estalagem do Vale">
           <button class="lr-card__save" aria-label="Save" onclick="event.preventDefault()">
@@ -1484,7 +1494,7 @@
       </a>
 
       <!-- Card 6 -->
-      <a href="#surf-and-soul-ericeira" class="lr-card">
+      <a href="pdp.html" class="lr-card">
         <div class="lr-card__image">
           <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Surf & Soul Ericeira">
           <button class="lr-card__save" aria-label="Save" onclick="event.preventDefault()">
@@ -1570,7 +1580,7 @@
     <div class="lr-grid">
 
       <!-- Card 7 -->
-      <a href="#monte-velho-energy" class="lr-card">
+      <a href="pdp.html" class="lr-card">
         <div class="lr-card__image">
           <img src="images/header_les-marguerites.jpg" alt="Monte Velho">
           <button class="lr-card__save" aria-label="Save" onclick="event.preventDefault()">
@@ -1620,7 +1630,7 @@
       </a>
 
       <!-- Card 8 -->
-      <a href="#herdade-dos-grous" class="lr-card">
+      <a href="pdp.html" class="lr-card">
         <div class="lr-card__image">
           <img src="images/header_vale-de-moses.webp" alt="Herdade dos Grous">
           <button class="lr-card__save" aria-label="Save" onclick="event.preventDefault()">

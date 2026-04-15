@@ -1,25 +1,18 @@
 /* ============================================================
-   Queen of Retreats — Booking Flow JS
+   Queen of Retreats — Enquiry Flow JS
    v1.0 · 2026
    ============================================================ */
 
 'use strict';
 
-/* --- Module-level carousel handles -------------------------- */
-let calScrollTo = null; // set by initCalCarousel; call calScrollTo(index) to jump
-let calResize   = null; // set by initCalCarousel; call calResize() to recalculate card widths
-
 /* --- State --------------------------------------------------- */
 const state = {
   currentStep: 1,
-  totalSteps: 7,
+  totalSteps: 6,
   selectedDate: null,
   selectedRoom: null,
   guestCount: 1,
-  guestType: 'solo',       // 'solo' | 'couple'
-  paymentOption: 'deposit', // 'deposit' | 'full'
-  promoCode: null,          // applied promo code string
-  promoDiscount: 0,         // discount multiplier (0.2 = 20%)
+  guestType: 'solo',
 };
 
 const RETREAT_DATES = [
@@ -44,94 +37,74 @@ const RETREAT_DATES = [
 ];
 
 const ROOMS = [
-  { id: 'r1', name: 'Shared Garden Room',   type: 'Twin share · Garden view',     price: 2195, badge: null },
-  { id: 'r2', name: 'Private Valley Room',  type: 'Double or twin · Valley view', price: 2895, badge: 'Most popular' },
-  { id: 'r3', name: 'Quinta Suite',         type: 'Junior suite · Private terrace', price: 3750, badge: 'Premium' },
+  { id: 'r1', name: 'Premium en-suite',    type: 'En-suite · Mountain view',        price: 2195, badge: null },
+  { id: 'r2', name: 'Luxury en-suite',     type: 'En-suite · Panoramic view',       price: 2895, badge: 'Most popular' },
+  { id: 'r3', name: 'Private villa',       type: 'Private villa · Terrace · Plunge pool', price: 3750, badge: 'Premium' },
 ];
 
 /* --- Init ---------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
-  // Clear hash so browser doesn't auto-scroll to step anchor
   history.replaceState(null, '', window.location.pathname);
 
-  // ── PDP preselect: check if user arrived via the bottom bar "Book" CTA ──
-  let startStep = 1;
-  const preselectRaw = sessionStorage.getItem('qor_preselect');
-  if (preselectRaw) {
-    sessionStorage.removeItem('qor_preselect');
-    try {
-      const ps = JSON.parse(preselectRaw);
-      // Map date ID → full date object
-      const date = ps.dateId ? RETREAT_DATES.find(d => d.id === ps.dateId) : null;
-      // Map room price → full room object
-      const room = ps.roomPrice ? ROOMS.find(r => r.price === ps.roomPrice) : null;
-      if (date) state.selectedDate = date;
-      if (room) state.selectedRoom = room;
-      if (ps.guests && ps.guests >= 1) state.guestCount = ps.guests;
-      if (room) startStep = 3; // only jump ahead if a room was actually selected
-    } catch (e) {
-      // Malformed data — fall back to step 1
-    }
-  }
-
-  // Handle URL hash on load (only used when no preselect)
-  if (startStep === 1) {
-    const hash = window.location.hash;
-    const stepMatch = hash.match(/^#step-(\d)$/);
-    if (stepMatch) {
-      const n = parseInt(stepMatch[1]);
-      if (n >= 1 && n <= 8) startStep = n;
-    }
-  }
-
-  renderStep(startStep, false);
-
+  // Initialise all interactive components first so DOM is ready
   initNavButtons();
   initDateSelection();
   initRoomSelection();
   initGuestStepper();
   initGuestType();
-  initPaymentToggle();
   initViewToggle();
-  initCalendar();   // ← calendar DOM cells are created here
+  initCalendar();
   initAccordions();
   initTabs();
   initConditionalFields();
-  initCardFormatting();
-  initPromoCode();
 
-  // Apply preselect UI *after* all inits so calendar cells and room cards exist
-  if (startStep === 3) {
-    if (state.selectedDate) {
-      selectDate(state.selectedDate.id);
-      // Scroll the calendar carousel — two rAF frames: first resize, then scroll
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        if (calScrollTo) {
-          const dayEl   = document.querySelector(`.cal-day[data-date-id="${state.selectedDate.id}"]`);
-          const calCard = dayEl && dayEl.closest('.calendar');
-          if (calCard) {
-            const allCards = Array.from(document.querySelectorAll('.cal-months .calendar'));
-            const idx = allCards.indexOf(calCard);
-            if (idx >= 0) calScrollTo(idx);
-          }
+  // Check for preselect data passed from PDP enquire page
+  let didPreselect = false;
+  try {
+    const raw = sessionStorage.getItem('qor_preselect');
+    if (raw) {
+      sessionStorage.removeItem('qor_preselect');
+      const preselect = JSON.parse(raw);
+      if (preselect.dateId && preselect.roomPrice) {
+        // Select date (updates state + date list UI + calendar + sidebar)
+        selectDate(preselect.dateId);
+
+        // Select room by matching price
+        const room = ROOMS.find(r => r.price === Number(preselect.roomPrice));
+        if (room) {
+          state.selectedRoom = room;
+          document.querySelectorAll('.room-card[data-room-id]').forEach(c => {
+            c.classList.toggle('is-selected', c.dataset.roomId === room.id);
+          });
         }
-      }));
+
+        // Set guest count
+        state.guestCount = Number(preselect.guests) || 1;
+        const guestVal = document.getElementById('guest-count');
+        if (guestVal) guestVal.textContent = state.guestCount;
+        const minusBtn = document.getElementById('guest-minus');
+        if (minusBtn) minusBtn.disabled = state.guestCount <= 1;
+
+        updateSidebar();
+        renderStep(3, false);
+        didPreselect = true;
+      }
     }
-    if (state.selectedRoom) selectRoom(state.selectedRoom.id);
-    applyStep3Fields();
+  } catch (e) {
+    // ignore parse errors — fall through to default
+  }
+
+  if (!didPreselect) {
+    const hash = window.location.hash;
+    const stepMatch = hash.match(/^#step-(\d)$/);
+    if (stepMatch) {
+      const n = parseInt(stepMatch[1]);
+      if (n >= 1 && n <= 6) renderStep(n, false);
+    } else {
+      renderStep(1, false);
+    }
   }
 });
-
-/* --- Populate Step 3 summary fields (also used after preselect) ---------- */
-function applyStep3Fields() {
-  const s = state;
-  const d3dates  = document.getElementById('step3-dates');
-  const d3room   = document.getElementById('step3-room');
-  const d3guests = document.getElementById('step3-guests');
-  if (d3dates)  d3dates.textContent  = s.selectedDate ? s.selectedDate.label : 'Dates not yet selected';
-  if (d3room)   d3room.textContent   = s.selectedRoom  ? s.selectedRoom.name  : 'No room selected';
-  if (d3guests) d3guests.textContent = s.guestCount === 1 ? '1 guest' : `${s.guestCount} guests`;
-}
 
 /* --- Step Navigation ----------------------------------------- */
 function renderStep(n, animate = true) {
@@ -148,70 +121,22 @@ function renderStep(n, animate = true) {
   updateSidebar();
   updateNavButtons(n);
 
-
-  // Recalculate calendar widths when step 1 becomes visible —
-  // needed when navigating back from a later step where step 1 was hidden (offsetWidth=0)
-  if (n === 1 && calResize) {
-    requestAnimationFrame(calResize);
-  }
-
-  // Populate confirmation receipt with live state values
-  if (n === 7 && state.selectedRoom) {
-    const base     = state.selectedRoom.price;
-    const count    = state.guestCount;
-    const subtotal = base * count;
-    const discount = Math.round(subtotal * state.promoDiscount);
-    const total    = subtotal - discount;
-    const deposit  = Math.ceil(total * 0.25);
-    const balance  = total - deposit;
-    const paidFull = state.paymentOption === 'full';
-    const amountPaid   = paidFull ? total    : deposit;
-    const amountOwed   = paidFull ? 0        : balance;
-
-    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-
-    // Receipt card rows
-    if (state.selectedDate) set('conf-dates', state.selectedDate.label);
-    set('conf-room',    state.selectedRoom.name);
-    set('conf-guests',  count === 1 ? '1 person' : `${count} people`);
-    set('conf-deposit', `£${amountPaid.toLocaleString()} ✓`);
-    set('conf-total',   `£${total.toLocaleString()}`);
-
-    // Deposit label and balance rows — adjust for payment option
-    const balanceRow     = document.getElementById('conf-balance-row');
-    const balanceDateRow = document.getElementById('conf-balance-date-row');
-    if (paidFull) {
-      set('conf-deposit-label', 'Paid in full');
-      if (balanceRow)     balanceRow.style.display     = 'none';
-      if (balanceDateRow) balanceDateRow.style.display = 'none';
-    } else {
-      set('conf-deposit-label', 'Deposit paid');
-      if (balanceRow)     balanceRow.style.display     = '';
-      if (balanceDateRow) balanceDateRow.style.display = '';
-      set('conf-balance', `£${amountOwed.toLocaleString()}`);
-    }
-
-    // "What happens next" inline balance mention
-    set('conf-balance-text', `£${amountOwed.toLocaleString()}`);
-  }
-
-  // Booking nav: hide entirely on step 7 (confirmation)
+  // Enquiry nav summary: hide on step 6 (submitted), show on all others
   const bookingNav = document.querySelector('.booking-nav');
   if (bookingNav) {
-    bookingNav.classList.toggle('hidden', n === 7);
-    bookingNav.classList.toggle('booking-nav--no-summary', n === 7);
+    bookingNav.classList.toggle('booking-nav--no-summary', n === 6);
   }
 
-  // Sidebar visibility: hidden on step 1 and step 7
+  // Sidebar visibility: hidden on step 1 and step 6
   const sidebar = document.getElementById('booking-sidebar');
   if (sidebar) {
-    sidebar.classList.toggle('hidden', n === 1 || n === 7);
+    sidebar.classList.toggle('hidden', n === 1 || n === 6);
   }
 
-  // Layout swap: step 1 and 7 are full-width
+  // Layout swap: step 1 and 6 are full-width
   const layout = document.getElementById('booking-layout');
   if (layout) {
-    if (n === 1 || n === 7) {
+    if (n === 1 || n === 6) {
       layout.classList.remove('booking-layout');
       layout.classList.add('booking-layout--full');
     } else {
@@ -220,7 +145,6 @@ function renderStep(n, animate = true) {
     }
   }
 
-  // Don't scroll to top or alter hash (preserves scroll position on step change)
   history.replaceState(null, '', `#step-${n}`);
 }
 
@@ -229,16 +153,14 @@ const STEP_ICONS = [
   `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
   /* 2 Room */
   `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9h18"/><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"/><path d="M3 9v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M3 14h18"/><path d="M8 14v6"/><path d="M16 14v6"/></svg>`,
-  /* 3 Review */
+  /* 3 Summary */
   `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>`,
   /* 4 Your Details */
   `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
   /* 5 About You */
   `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
-  /* 6 Payment */
-  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
-  /* 7 Confirmed */
-  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
+  /* 6 Submit Enquiry */
+  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`,
 ];
 const DONE_ICON = `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
 
@@ -263,14 +185,15 @@ function updateNavButtons(n) {
   const stepInfo = document.getElementById('nav-step-info');
 
   if (backBtn) backBtn.style.visibility = n === 1 ? 'hidden' : 'visible';
-  if (stepInfo) stepInfo.textContent = `${n} of 6`;
+  if (stepInfo) stepInfo.textContent = `${n} of ${state.totalSteps}`;
 
   if (continueBtn) {
-    if (n === 6) {
-      continueBtn.textContent = 'Complete Booking';
+    if (n === 5) {
+      continueBtn.textContent = 'SUBMIT ENQUIRY';
       continueBtn.classList.add('btn--ink');
       continueBtn.classList.remove('btn--primary');
-    } else if (n === 7) {
+      continueBtn.classList.remove('hidden');
+    } else if (n === 6) {
       continueBtn.classList.add('hidden');
     } else {
       continueBtn.textContent = 'Continue';
@@ -297,7 +220,6 @@ function initNavButtons() {
     });
   }
 
-  // Step click on progress bar
   document.querySelectorAll('.progress-step[data-step]').forEach(step => {
     step.addEventListener('click', () => {
       const n = parseInt(step.dataset.step);
@@ -321,15 +243,6 @@ function validateStep(n) {
         return false;
       }
       return true;
-    case 3: {
-      const cb1 = document.getElementById('agree-policies');
-      const cb2 = document.getElementById('agree-tcs');
-      if (!cb1?.checked || !cb2?.checked) {
-        showError('Please read and accept the policies to continue.');
-        return false;
-      }
-      return true;
-    }
     case 4: {
       const req = document.querySelectorAll('#step-4 [required]');
       let valid = true;
@@ -372,7 +285,6 @@ function showError(msg) {
 
 /* --- Date Selection ----------------------------------------- */
 function initDateSelection() {
-  // List view items
   document.querySelectorAll('.date-list-item[data-date-id]').forEach(item => {
     if (item.dataset.status === 'soldout') return;
     item.addEventListener('click', () => selectDate(item.dataset.dateId));
@@ -385,12 +297,10 @@ function selectDate(id) {
 
   state.selectedDate = date;
 
-  // Update list items
   document.querySelectorAll('.date-list-item[data-date-id]').forEach(el => {
     el.classList.toggle('is-selected', el.dataset.dateId === id);
   });
 
-  // Update calendar
   document.querySelectorAll('.cal-day[data-date-id]').forEach(el => {
     el.classList.toggle('cal-day--selected', el.dataset.dateId === id);
     if (el.dataset.dateId === id) {
@@ -423,22 +333,14 @@ function restoreCalDay(el) {
 function initRoomSelection() {
   document.querySelectorAll('.room-card[data-room-id]').forEach(card => {
     card.addEventListener('click', () => {
-      selectRoom(card.dataset.roomId);
+      const id = card.dataset.roomId;
+      state.selectedRoom = ROOMS.find(r => r.id === id) || null;
+      document.querySelectorAll('.room-card[data-room-id]').forEach(c => {
+        c.classList.toggle('is-selected', c.dataset.roomId === id);
+      });
+      updateSidebar();
     });
   });
-}
-
-function selectRoom(id) {
-  const room = ROOMS.find(r => r.id === id);
-  if (!room) return;
-
-  state.selectedRoom = room;
-
-  document.querySelectorAll('.room-card[data-room-id]').forEach(c => {
-    c.classList.toggle('is-selected', c.dataset.roomId === id);
-  });
-
-  updateSidebar();
 }
 
 /* --- Guest Stepper ------------------------------------------ */
@@ -448,10 +350,6 @@ function initGuestStepper() {
   const val   = document.getElementById('guest-count');
 
   if (!minus || !plus || !val) return;
-
-  // Reflect any preselected guest count in the stepper UI
-  val.textContent = state.guestCount;
-  minus.disabled = state.guestCount <= 1;
 
   minus.addEventListener('click', () => {
     if (state.guestCount > 1) {
@@ -507,19 +405,6 @@ function initGuestType() {
   }
 }
 
-/* --- Payment Toggle ----------------------------------------- */
-function initPaymentToggle() {
-  document.querySelectorAll('.payment-option[data-payment]').forEach(opt => {
-    opt.addEventListener('click', () => {
-      state.paymentOption = opt.dataset.payment;
-      document.querySelectorAll('.payment-option[data-payment]').forEach(o => {
-        o.classList.toggle('is-active', o.dataset.payment === state.paymentOption);
-      });
-      updateSidebar();
-    });
-  });
-}
-
 /* --- View Toggle (Calendar / List) -------------------------- */
 function initViewToggle() {
   const buttons  = document.querySelectorAll('.view-toggle__btn');
@@ -563,7 +448,7 @@ function initCalCarousel() {
   const arrowsEl  = document.getElementById('cal-arrows');
   if (!viewport || !track || !prevBtn || !nextBtn) return;
 
-  const GAP     = 20; // --s5
+  const GAP     = 20;
   const VISIBLE = 3;
   let offset    = 0;
 
@@ -583,7 +468,6 @@ function initCalCarousel() {
     track.style.transform = `translateX(-${offset * step}px)`;
     prevBtn.disabled = offset === 0;
     nextBtn.disabled = offset >= cards.length - VISIBLE;
-    // Hide arrows if all months fit
     if (arrowsEl) arrowsEl.style.display = cards.length <= VISIBLE ? 'none' : 'flex';
   }
 
@@ -593,13 +477,12 @@ function initCalCarousel() {
     if (offset < cards.length - VISIBLE) { offset++; applyTransform(); }
   });
 
-  /* ── Drag (live tracking, snap to nearest on release) ── */
   let isDragging  = false;
   let pointerDown = false;
   let dragStartX  = 0;
   let dragDelta   = 0;
   let capturedId  = null;
-  const DRAG_THRESHOLD = 6; // px before we commit to a drag
+  const DRAG_THRESHOLD = 6;
 
   function getStep() {
     const cards = getCards();
@@ -619,7 +502,6 @@ function initCalCarousel() {
     if (!pointerDown) return;
     dragDelta = e.clientX - dragStartX;
     if (!isDragging && Math.abs(dragDelta) > DRAG_THRESHOLD) {
-      // Commit to drag — now capture the pointer so move stays smooth
       isDragging = true;
       viewport.setPointerCapture(capturedId);
       viewport.style.cursor = 'grabbing';
@@ -633,7 +515,7 @@ function initCalCarousel() {
     pointerDown = false;
     viewport.style.cursor = '';
     track.style.transition = '';
-    if (!isDragging) return; // was a click — let it through
+    if (!isDragging) return;
     isDragging = false;
 
     const step      = getStep();
@@ -655,69 +537,55 @@ function initCalCarousel() {
     applyTransform();
   });
 
-  // Prevent click-through only on intentional drags
   viewport.addEventListener('click', e => {
     if (Math.abs(dragDelta) > DRAG_THRESHOLD) e.stopPropagation();
   }, true);
 
-  // Defer first width calculation until after layout is settled
-  requestAnimationFrame(setWidths);
+  setWidths();
   window.addEventListener('resize', setWidths);
-
-  // Expose handles so renderStep can resize/scroll when step 1 becomes visible
-  calResize   = setWidths;
-  calScrollTo = function(index) {
-    const cards = getCards();
-    const max   = Math.max(0, cards.length - VISIBLE);
-    offset = Math.min(Math.max(0, index), max);
-    applyTransform();
-  };
 }
 
 function renderCalendarMonth(containerId, year, month) {
   const container = document.getElementById(containerId);
   if (!container) return;
 
-  const firstDay = new Date(year, month, 1).getDay(); // 0 = Sun
+  const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  // Map retreat dates to day ranges
-  const dayStates = {}; // day number → { status, dateId }
-  // June retreat blocks: 7-14, 21-28
-  // July retreat blocks: 5-12, 19-26
-  if (month === 5) { // June
+  const dayStates = {};
+  if (month === 5) {
     for (let d = 7; d <= 14; d++)  dayStates[d] = { status: 'limited',   id: 'd1' };
     for (let d = 21; d <= 28; d++) dayStates[d] = { status: 'available', id: 'd2' };
   }
-  if (month === 6) { // July
+  if (month === 6) {
     for (let d = 5; d <= 12; d++)  dayStates[d] = { status: 'soldout',   id: 'd3' };
     for (let d = 19; d <= 26; d++) dayStates[d] = { status: 'available', id: 'd4' };
   }
-  if (month === 7) { // August
+  if (month === 7) {
     for (let d = 2; d <= 9;   d++) dayStates[d] = { status: 'limited',   id: 'd5' };
     for (let d = 16; d <= 23; d++) dayStates[d] = { status: 'available', id: 'd6' };
   }
-  if (month === 8) { // September
+  if (month === 8) {
     for (let d = 6; d <= 13;  d++) dayStates[d] = { status: 'available', id: 'd7' };
     for (let d = 20; d <= 27; d++) dayStates[d] = { status: 'limited',   id: 'd8' };
   }
-  if (month === 9) { // October
+  if (month === 9) {
     for (let d = 4; d <= 11;  d++) dayStates[d] = { status: 'available', id: 'd9' };
     for (let d = 18; d <= 25; d++) dayStates[d] = { status: 'soldout',   id: 'd10' };
   }
-  if (month === 10) { // November
+  if (month === 10) {
     for (let d = 1; d <= 8;   d++) dayStates[d] = { status: 'available', id: 'd11' };
     for (let d = 15; d <= 22; d++) dayStates[d] = { status: 'limited',   id: 'd12' };
   }
-  if (month === 11) { // December
+  if (month === 11) {
     for (let d = 6; d <= 13;  d++) dayStates[d] = { status: 'available', id: 'd13' };
     for (let d = 20; d <= 27; d++) dayStates[d] = { status: 'limited',   id: 'd14' };
   }
-  if (year === 2027 && month === 0) { // January 2027
+  if (year === 2027 && month === 0) {
     for (let d = 3; d <= 10;  d++) dayStates[d] = { status: 'available', id: 'd15' };
     for (let d = 17; d <= 24; d++) dayStates[d] = { status: 'available', id: 'd16' };
   }
-  if (year === 2027 && month === 1) { // February 2027
+  if (year === 2027 && month === 1) {
     for (let d = 7; d <= 14;  d++) dayStates[d] = { status: 'limited',   id: 'd17' };
     for (let d = 21; d <= 28; d++) dayStates[d] = { status: 'available', id: 'd18' };
   }
@@ -725,10 +593,8 @@ function renderCalendarMonth(containerId, year, month) {
   const grid = container.querySelector('.calendar__grid');
   if (!grid) return;
 
-  // Clear
   grid.innerHTML = '';
 
-  // Empty cells for offset (Monday start)
   const startOffset = firstDay === 0 ? 6 : firstDay - 1;
   for (let i = 0; i < startOffset; i++) {
     const empty = document.createElement('div');
@@ -738,13 +604,13 @@ function renderCalendarMonth(containerId, year, month) {
 
   for (let d = 1; d <= daysInMonth; d++) {
     const cell = document.createElement('div');
-    const state = dayStates[d];
-    cell.className = `cal-day${state ? ` cal-day--${state.status}` : ''}`;
+    const st = dayStates[d];
+    cell.className = `cal-day${st ? ` cal-day--${st.status}` : ''}`;
     cell.textContent = d;
-    if (state) {
-      cell.dataset.dateId = state.id;
-      if (state.status !== 'soldout') {
-        cell.addEventListener('click', () => selectDate(state.id));
+    if (st) {
+      cell.dataset.dateId = st.id;
+      if (st.status !== 'soldout') {
+        cell.addEventListener('click', () => selectDate(st.id));
       }
     }
     grid.appendChild(cell);
@@ -753,7 +619,6 @@ function renderCalendarMonth(containerId, year, month) {
 
 /* --- Sidebar Update ----------------------------------------- */
 function updateSidebar() {
-  // Date line
   const dateVal = document.getElementById('sidebar-date');
   const navDate = document.getElementById('nav-date');
   if (state.selectedDate) {
@@ -764,7 +629,6 @@ function updateSidebar() {
     if (navDate) { navDate.textContent = 'Select dates'; navDate.classList.add('placeholder'); }
   }
 
-  // Room line
   const roomVal = document.getElementById('sidebar-room');
   const navRoom = document.getElementById('nav-room');
   if (state.selectedRoom) {
@@ -775,55 +639,22 @@ function updateSidebar() {
     if (navRoom) { navRoom.textContent = 'Select room'; navRoom.classList.add('placeholder'); }
   }
 
-  // Guests line
   const guestVal = document.getElementById('sidebar-guests');
   const navGuests = document.getElementById('nav-guests');
   const guestLabel = state.guestCount === 1 ? '1 guest' : `${state.guestCount} guests`;
   if (guestVal) { guestVal.textContent = guestLabel; guestVal.classList.remove('placeholder'); }
   if (navGuests) { navGuests.textContent = guestLabel; }
 
-  // Price breakdown
   updatePriceBreakdown();
 }
 
 function updatePriceBreakdown() {
   if (!state.selectedRoom) return;
 
-  const base = state.selectedRoom.price;
+  const base  = state.selectedRoom.price;
   const count = state.guestCount;
-  const subtotalBeforePromo = base * count;
-  const discountAmount = Math.round(subtotalBeforePromo * state.promoDiscount);
-  const total = subtotalBeforePromo - discountAmount;
-  const deposit = Math.ceil(total * 0.25);
-  const balance = total - deposit;
+  const total = base * count;
 
-  // Promo discount rows (step 3 price table + step 4 review snapshot)
-  const promoDiscountStr = `−£${discountAmount.toLocaleString()}`;
-  [
-    { row: 'promo-discount-row',  discount: 'price-promo-discount',  code: 'promo-code-applied' },
-    { row: 'review-promo-row',    discount: 'review-promo-discount',  code: 'review-promo-code'  },
-  ].forEach(({ row, discount, code }) => {
-    const rowEl  = document.getElementById(row);
-    const discEl = document.getElementById(discount);
-    const codeEl = document.getElementById(code);
-    if (!rowEl) return;
-    if (state.promoCode) {
-      rowEl.style.display = '';
-      if (discEl) discEl.textContent = promoDiscountStr;
-      if (codeEl) codeEl.textContent = state.promoCode;
-    } else {
-      rowEl.style.display = 'none';
-    }
-  });
-
-  // Room line shows pre-discount subtotal
-  const roomLineEl = document.getElementById('price-room-line');
-  if (roomLineEl) roomLineEl.textContent = `£${base.toLocaleString()} × ${count} guest${count > 1 ? 's' : ''}`;
-
-  const subtotalEl = document.getElementById('price-subtotal');
-  if (subtotalEl) subtotalEl.textContent = `£${total.toLocaleString()}`;
-
-  // Update sidebar + nav total
   const totalEl = document.getElementById('sidebar-total');
   if (totalEl) totalEl.textContent = `£${total.toLocaleString()}`;
   const navTotal = document.getElementById('nav-total');
@@ -832,40 +663,14 @@ function updatePriceBreakdown() {
   const perEl = document.getElementById('sidebar-per');
   if (perEl) perEl.textContent = `per person`;
 
+  const roomLineEl = document.getElementById('price-room-line');
+  if (roomLineEl) roomLineEl.textContent = `£${base.toLocaleString()} × ${count} guest${count > 1 ? 's' : ''}`;
+
+  const subtotalEl = document.getElementById('price-subtotal');
+  if (subtotalEl) subtotalEl.textContent = `£${total.toLocaleString()}`;
+
   const totalSumEl = document.getElementById('price-total');
   if (totalSumEl) totalSumEl.textContent = `£${total.toLocaleString()}`;
-
-  const depositEl = document.getElementById('price-deposit');
-  if (depositEl) depositEl.textContent = `£${deposit.toLocaleString()}`;
-
-  const balanceEl = document.getElementById('price-balance');
-  if (balanceEl) balanceEl.textContent = `£${balance.toLocaleString()}`;
-
-  // Step 4 review snapshot
-  const reviewTotalEl = document.getElementById('review-total');
-  if (reviewTotalEl) reviewTotalEl.textContent = `£${total.toLocaleString()}`;
-
-  const reviewDepositEl = document.getElementById('review-deposit');
-  if (reviewDepositEl) reviewDepositEl.textContent = `£${deposit.toLocaleString()}`;
-
-  // Payment step
-  const payDepositEl = document.getElementById('pay-deposit-amount');
-  if (payDepositEl) payDepositEl.textContent = `£${deposit.toLocaleString()}`;
-
-  const payFullEl = document.getElementById('pay-full-amount');
-  if (payFullEl) payFullEl.textContent = `£${total.toLocaleString()}`;
-
-  const payNowEl = document.getElementById('pay-now-label');
-  if (payNowEl) {
-    const amount = state.paymentOption === 'deposit' ? deposit : total;
-    payNowEl.textContent = `Pay £${amount.toLocaleString()} & Confirm Booking`;
-  }
-
-  const payBalanceEl = document.getElementById('pay-balance-note');
-  if (payBalanceEl && state.paymentOption === 'deposit') {
-    const dateStr = state.selectedDate ? `60 days before your arrival` : '60 days before arrival';
-    payBalanceEl.textContent = `Balance of £${balance.toLocaleString()} due ${dateStr}.`;
-  }
 }
 
 /* --- Accordions --------------------------------------------- */
@@ -908,58 +713,6 @@ function initConditionalFields() {
       target.classList.toggle('hidden', !trigger.checked);
     });
   });
-}
-
-/* --- Card Formatting --------------------------------------- */
-function initCardFormatting() {
-  const cardNum = document.getElementById('card-number');
-  if (cardNum) {
-    cardNum.addEventListener('input', e => {
-      let val = e.target.value.replace(/\D/g, '').slice(0, 16);
-      e.target.value = val.match(/.{1,4}/g)?.join(' ') ?? val;
-    });
-  }
-
-  const expiry = document.getElementById('card-expiry');
-  if (expiry) {
-    expiry.addEventListener('input', e => {
-      let val = e.target.value.replace(/\D/g, '').slice(0, 4);
-      if (val.length >= 3) val = val.slice(0, 2) + ' / ' + val.slice(2);
-      e.target.value = val;
-    });
-  }
-}
-
-/* --- Promo Code -------------------------------------------- */
-function initPromoCode() {
-  const input    = document.getElementById('promo-code-input');
-  const btn      = document.getElementById('promo-apply-btn');
-  const feedback = document.getElementById('promo-feedback');
-  if (!input || !btn || !feedback) return;
-
-  btn.addEventListener('click', () => {
-    const code = input.value.trim();
-    if (!code) {
-      showPromoFeedback(feedback, 'Please enter a promo code.', false);
-      return;
-    }
-
-    // Any non-empty code is valid for prototype purposes
-    state.promoCode     = code.toUpperCase();
-    state.promoDiscount = 0.20;
-    input.disabled      = true;
-    btn.disabled        = true;
-    btn.textContent     = 'Applied';
-
-    showPromoFeedback(feedback, `Promo code "${state.promoCode}" applied — 20% discount added.`, true);
-    updateSidebar();
-  });
-}
-
-function showPromoFeedback(el, msg, success) {
-  el.textContent = msg;
-  el.style.display = 'block';
-  el.style.color = success ? 'var(--sage)' : 'var(--error)';
 }
 
 /* --- Edit links --------------------------------------------- */

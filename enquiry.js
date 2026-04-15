@@ -46,15 +46,7 @@ const ROOMS = [
 document.addEventListener('DOMContentLoaded', () => {
   history.replaceState(null, '', window.location.pathname);
 
-  const hash = window.location.hash;
-  const stepMatch = hash.match(/^#step-(\d)$/);
-  if (stepMatch) {
-    const n = parseInt(stepMatch[1]);
-    if (n >= 1 && n <= 6) renderStep(n, false);
-  } else {
-    renderStep(1, false);
-  }
-
+  // Initialise all interactive components first so DOM is ready
   initNavButtons();
   initDateSelection();
   initRoomSelection();
@@ -65,6 +57,53 @@ document.addEventListener('DOMContentLoaded', () => {
   initAccordions();
   initTabs();
   initConditionalFields();
+
+  // Check for preselect data passed from PDP enquire page
+  let didPreselect = false;
+  try {
+    const raw = sessionStorage.getItem('qor_preselect');
+    if (raw) {
+      sessionStorage.removeItem('qor_preselect');
+      const preselect = JSON.parse(raw);
+      if (preselect.dateId && preselect.roomPrice) {
+        // Select date (updates state + date list UI + calendar + sidebar)
+        selectDate(preselect.dateId);
+
+        // Select room by matching price
+        const room = ROOMS.find(r => r.price === Number(preselect.roomPrice));
+        if (room) {
+          state.selectedRoom = room;
+          document.querySelectorAll('.room-card[data-room-id]').forEach(c => {
+            c.classList.toggle('is-selected', c.dataset.roomId === room.id);
+          });
+        }
+
+        // Set guest count
+        state.guestCount = Number(preselect.guests) || 1;
+        const guestVal = document.getElementById('guest-count');
+        if (guestVal) guestVal.textContent = state.guestCount;
+        const minusBtn = document.getElementById('guest-minus');
+        if (minusBtn) minusBtn.disabled = state.guestCount <= 1;
+
+        updateSidebar();
+        renderStep(3, false);
+        didPreselect = true;
+      }
+    }
+  } catch (e) {
+    // ignore parse errors — fall through to default
+  }
+
+  if (!didPreselect) {
+    const hash = window.location.hash;
+    const stepMatch = hash.match(/^#step-(\d)$/);
+    if (stepMatch) {
+      const n = parseInt(stepMatch[1]);
+      if (n >= 1 && n <= 6) renderStep(n, false);
+    } else {
+      renderStep(1, false);
+    }
+  }
 });
 
 /* --- Step Navigation ----------------------------------------- */
@@ -109,6 +148,22 @@ function renderStep(n, animate = true) {
   history.replaceState(null, '', `#step-${n}`);
 }
 
+const STEP_ICONS = [
+  /* 1 Dates */
+  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+  /* 2 Room */
+  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 9h18"/><path d="M3 9V7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2"/><path d="M3 9v9a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"/><path d="M3 14h18"/><path d="M8 14v6"/><path d="M16 14v6"/></svg>`,
+  /* 3 Summary */
+  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>`,
+  /* 4 Your Details */
+  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+  /* 5 About You */
+  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
+  /* 6 Submit Enquiry */
+  `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`,
+];
+const DONE_ICON = `<svg width="22.75" height="22.75" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+
 function updateProgressBar(current) {
   const steps = document.querySelectorAll('.progress-step[data-step]');
   steps.forEach(step => {
@@ -119,7 +174,7 @@ function updateProgressBar(current) {
 
     const dot = step.querySelector('.progress-step__dot');
     if (dot) {
-      dot.textContent = n < current ? '✓' : n;
+      dot.innerHTML = n < current ? DONE_ICON : (STEP_ICONS[n - 1] || n);
     }
   });
 }

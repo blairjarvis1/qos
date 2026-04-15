@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Results — Queen of Retreats</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+
+    html, body { overflow-x: hidden; background: var(--parchment); }
+
+    /* ── HERO / SEARCH BAR ───────────────────────────────────────── */
+    .lr-hero {
+      position: relative;
+      background: var(--parchment);
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+    .lr-hero__bg { display: none; }
+    .lr-hero__overlay { display: none; }
+    .lr-hero__content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 150px 48px 9px;
+    }
+    .lr-hero__row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+    }
+    .lr-hero__title-block { flex-shrink: 0; }
+    .lr-hero__label {
+      font-family: var(--ui, var(--sans));
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--stone);
+      margin-bottom: 10px;
+    }
+    .lr-hero__query {
+      font-family: var(--serif);
+      font-size: clamp(22px, 2.8vw, 38px);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.1;
+      margin-bottom: 0;
+    }
+    /* Force dark nav on listings page */
+    #site-header .site-header__logo,
+    #site-header .site-header__nav a,
+    #site-header .btn--ghost {
+      color: var(--ink) !important;
+    }
+    #site-header { background: var(--parchment) !important; }
+    #site-header.is-scrolled { background: var(--white) !important; }
+
+    /* ── SEARCH PILL (compact) ───────────────────────────────────── */
+    .lr-search-bar {
+      background: var(--white);
+      border-radius: var(--r-pill);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.12), 0 0 0 1px var(--border);
+      display: flex;
+      align-items: center;
+      height: 52px;
+      padding: 0 6px 0 0;
+      width: 100%;
+      max-width: 820px;
+      margin: 0;
+      position: relative;
+      z-index: 10;
+    }
+    .lr-search__section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 20px;
+      cursor: pointer;
+      border-radius: var(--r-pill);
+      transition: background var(--dur-fast);
+      height: 100%;
+    }
+    .lr-search__section:hover { background: var(--cloud); }
+    .lr-search__label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink);
+      line-height: 1;
+      margin-bottom: 2px;
+    }
+    .lr-search__value {
+      font-size: 13px;
+      color: var(--stone);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .lr-search__div {
+      width: 1px;
+      height: 24px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+    .lr-search__btn {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      transition: background var(--dur-fast);
+    }
+    .lr-search__btn:hover { background: #333; }
+    .lr-search__btn svg { color: var(--white); display: block; }
+
+    /* ── MAIN LAYOUT ─────────────────────────────────────────────── */
+    .lr-main {
+      padding: 13px 0 80px;
+    }
+    .lr-main__inner {
+      padding: 0 24px;
+      margin-bottom: 40px;
+    }
+
+    /* ── RESULTS META ────────────────────────────────────────────── */
+    .lr-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 0 48px;
+    }
+    .lr-meta__count {
+      font-family: var(--serif);
+      font-size: clamp(18px, 1.8vw, 26px);
+      color: var(--ink);
+    }
+    .lr-meta__count span { color: var(--stone); font-size: 0.75em; margin-left: 8px; }
+    .lr-filters {
+      display: flex;
+      gap: 8px;
+    }
+    .lr-filter-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-pill);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--ink);
+      background: var(--white);
+      cursor: pointer;
+      transition: all var(--dur-fast);
+    }
+    .lr-filter-btn:hover { border-color: var(--ink); }
+    .lr-filter-btn--active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+
+    /* ── FEATURED CARD ───────────────────────────────────────────── */
+    .lr-featured {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-radius: 0;
+      overflow: hidden;
+      background: var(--white);
+      border: none;
+      margin: 48px;
+      cursor: pointer;
+      transition: box-shadow var(--dur-fast);
+    }
+    .lr-featured:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.10); }
+    .lr-featured__image-wrap {
+      position: relative;
+      height: 532px;
+      overflow: hidden;
+    }
+    .lr-featured__image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .lr-featured:hover .lr-featured__image-wrap img { transform: scale(1.03); }
+    .lr-featured__badge {
+      position: absolute;
+      top: 48px;
+      left: 48px;
+      background: var(--white);
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: var(--r-pill);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+    }
+    .lr-featured__details {
+      padding: 40px 40px 36px;
+      display: flex;
+      flex-direction: column;
+    }
+    .lr-featured__type {
+      font-family: var(--sans);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 12px;
+    }
+    .lr-featured__title {
+      font-family: var(--serif);
+      font-size: 35px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .lr-featured__location {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: var(--stone);
+      margin-bottom: 20px;
+    }
+    .lr-featured__desc {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--stone);
+      margin-bottom: 24px;
+      flex: 1;
+    }
+    .lr-featured__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 28px;
+    }
+    .lr-tag {
+      padding: 4px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      font-size: 12px;
+      color: var(--stone);
+    }
+    .lr-featured__footer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: auto;
+    }
+    .lr-featured__rating {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .lr-stars { color: #C9A84C; font-size: 13px; letter-spacing: 1px; }
+    .lr-rating-score { font-size: 13px; font-weight: 600; color: var(--ink); }
+    .lr-rating-count { font-size: 12px; color: var(--stone); }
+    .lr-featured__price { text-align: right; }
+    .lr-price-from { font-size: 11px; color: var(--stone); display: block; margin-bottom: 2px; }
+    .lr-price-amount {
+      font-family: var(--serif);
+      font-size: 26px;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .lr-price-per { font-size: 12px; color: var(--stone); margin-left: 2px; }
+    .lr-featured__cta {
+      margin-top: 16px;
+      width: 100%;
+      padding: 14px;
+      background: var(--ink);
+      color: var(--white);
+      border: none;
+      border-radius: var(--r-lg);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: background var(--dur-fast);
+    }
+    .lr-featured__cta:hover { background: #333; }
+
+    /* ── GRID CARDS ──────────────────────────────────────────────── */
+    .lr-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      padding: 0 48px 48px;
+    }
+    .lr-card {
+      background: var(--white);
+      border-radius: 0;
+      overflow: hidden;
+      border: none;
+      cursor: pointer;
+      transition: box-shadow var(--dur-fast), transform var(--dur-fast);
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+    }
+    .lr-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.10); transform: translateY(-2px); }
+    .lr-card__image {
+      position: relative;
+      width: 420px;
+      aspect-ratio: 1 / 1;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .lr-card__image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .lr-card:hover .lr-card__image img { transform: scale(1.04); }
+    .lr-card__save {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.90);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      transition: background var(--dur-fast);
+    }
+    .lr-card__save:hover { background: var(--white); }
+    .lr-card__body {
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .lr-card__type {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--sage);
+      margin-bottom: 8px;
+    }
+    .lr-card__title {
+      font-family: var(--serif);
+      font-size: 35px;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .lr-card__location {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 13px;
+      color: var(--stone);
+      margin-bottom: 0;
+    }
+    .lr-card__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto;
+      padding-top: 16px;
+      margin-bottom: 16px;
+    }
+    .lr-card__footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      margin-top: 0;
+    }
+    .lr-card__rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .lr-card__stars { color: #C9A84C; font-size: 11px; }
+    .lr-card__score { font-size: 12px; font-weight: 600; color: var(--ink); }
+    .lr-card__price-wrap { text-align: right; }
+    .lr-card__from { font-size: 10px; color: var(--stone); display: block; }
+    .lr-card__price {
+      font-family: var(--serif);
+      font-size: 35px;
+      color: var(--ink);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ──────────────────────────────────────────────────── -->
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <nav class="site-header__nav">
+
+        <!-- Retreats + Mega Menu -->
+        <div class="nav-item--mega">
+          <a href="listings.html">Retreats</a>
+          <div class="mega-menu">
+            <div class="mega-menu__inner">
+
+              <!-- Rail 1: By Category -->
+              <div class="mega-menu__rail">
+                <div class="mega-menu__rail-label">Browse by category</div>
+                <div class="mega-menu__scroll">
+                  <a href="#" class="mega-cat-card">
+                    <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Yoga & Meditation">
+                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Yoga &amp; Meditation</span></div>
+                  </a>
+                  <a href="#" class="mega-cat-card">
+                    <img src="images/header_casa-ana_20230628180415.jpg" alt="Detox & Cleanse">
+                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Detox &amp; Cleanse</span></div>
+                  </a>
+                  <a href="#" class="mega-cat-card">
+                    <img src="images/header_vale-de-moses.jpg" alt="Fitness & Adventure">
+                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Fitness &amp; Adventure</span></div>
+                  </a>
+                  <a href="#" class="mega-cat-card">
+                    <img src="images/header_les-marguerites.jpg" alt="Meditation & Mindfulness">
+                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Meditation &amp; Mindfulness</span></div>
+                  </a>
+                  <a href="#" class="mega-cat-card">
+                    <img src="images/header_vale-de-moses.webp" alt="Health & Healing">
+                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Health &amp; Healing</span></div>
+                  </a>
+                  <a href="#" class="mega-cat-card">
+                    <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Personal Growth">
+                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Personal Growth</span></div>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Rail 2: By Intent -->
+              <div class="mega-menu__rail">
+                <div class="mega-menu__rail-label">What are you looking for?</div>
+                <div class="mega-menu__scroll">
+                  <a href="#" class="mega-intent-card">
+                    <div class="mega-intent-card__icon">🌿</div>
+                    <div class="mega-intent-card__name">Relaxation</div>
+                    <div class="mega-intent-card__desc">Slow down and restore your sense of calm</div>
+                  </a>
+                  <a href="#" class="mega-intent-card">
+                    <div class="mega-intent-card__icon">✨</div>
+                    <div class="mega-intent-card__name">Transformation</div>
+                    <div class="mega-intent-card__desc">Break old patterns and emerge renewed</div>
+                  </a>
+                  <a href="#" class="mega-intent-card">
+                    <div class="mega-intent-card__icon">🏃</div>
+                    <div class="mega-intent-card__name">Active &amp; Fitness</div>
+                    <div class="mega-intent-card__desc">Challenge your body in beautiful settings</div>
+                  </a>
+                  <a href="#" class="mega-intent-card">
+                    <div class="mega-intent-card__icon">📵</div>
+                    <div class="mega-intent-card__name">Digital Detox</div>
+                    <div class="mega-intent-card__desc">Unplug, breathe, and reconnect with yourself</div>
+                  </a>
+                  <a href="#" class="mega-intent-card">
+                    <div class="mega-intent-card__icon">🤝</div>
+                    <div class="mega-intent-card__name">Reconnect</div>
+                    <div class="mega-intent-card__desc">Find community with like-minded souls</div>
+                  </a>
+                  <a href="#" class="mega-intent-card">
+                    <div class="mega-intent-card__icon">🔮</div>
+                    <div class="mega-intent-card__name">Inner Work</div>
+                    <div class="mega-intent-card__desc">Therapy, journalling, and deep self-enquiry</div>
+                  </a>
+                </div>
+              </div>              <!-- Footer -->
+              <div class="mega-menu__footer">
+                <a href="listings.html" class="mega-menu__footer-link">View all retreats →</a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <a href="#">Destinations</a>
+        <a href="#">Inspiration</a>
+        <a href="#">About</a>
+      </nav>
+      <a href="index.html" class="site-header__logo">Queen of Retreats</a>
+      <div class="site-header__actions">
+        <button class="btn btn--ghost" style="gap:6px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          Search
+        </button>
+        <button class="btn btn--ghost" style="gap:6px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Sign In
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── HERO ────────────────────────────────────────────────────── -->
+  <section class="lr-hero">
+    <div class="lr-hero__bg"></div>
+    <div class="lr-hero__overlay"></div>
+    <div class="lr-hero__content">
+      <div class="lr-hero__row">
+        <div class="lr-hero__title-block">
+          <p class="lr-hero__label">Search results</p>
+          <h1 class="lr-hero__query">Yoga &amp; Meditation · Bali · May 2026</h1>
+        </div>
+        <!-- Compact search bar -->
+        <div class="lr-search-bar">
+          <div class="lr-search__section">
+            <div class="lr-search__label">Type</div>
+            <div class="lr-search__value">Yoga &amp; Meditation</div>
+          </div>
+          <div class="lr-search__div"></div>
+          <div class="lr-search__section">
+            <div class="lr-search__label">Destination</div>
+            <div class="lr-search__value">Bali</div>
+          </div>
+          <div class="lr-search__div"></div>
+          <div class="lr-search__section">
+            <div class="lr-search__label">When</div>
+            <div class="lr-search__value">May 2026</div>
+          </div>
+          <div class="lr-search__div"></div>
+          <div class="lr-search__section">
+            <div class="lr-search__label">Guests</div>
+            <div class="lr-search__value">Just me</div>
+          </div>
+          <button class="lr-search__btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </button>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── MAIN ─────────────────────────────────────────────────────── -->
+  <main class="lr-main">
+
+    <div class="lr-main__inner">
+    </div><!-- /.lr-main__inner -->
+
+    <!-- Results meta -->
+    <div class="lr-meta">
+      <div class="lr-meta__count">
+        9 retreats found <span>matching your search</span>
+      </div>
+      <div class="lr-filters">
+        <button class="lr-filter-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          Filters
+        </button>
+        <button class="lr-filter-btn">Sort: Recommended</button>
+      </div>
+    </div>
+
+    <!-- ── FEATURED LISTING ──────────────────────────────────────── -->
+    <a href="pdp.html" class="lr-featured" style="text-decoration: none; color: inherit;">
+      <div class="lr-featured__image-wrap">
+        <img src="images/header_vale-de-moses.jpg" alt="Vale de Moses">
+        <div class="lr-featured__badge">✦ &nbsp;Best match</div>
+      </div>
+      <div class="lr-featured__details">
+        <div class="lr-featured__type">Yoga &amp; Meditation Retreat</div>
+        <h2 class="lr-featured__title">Elevation Barn — A Yoga Retreat in the wilderness of Gianyar, Bali</h2>
+        <div class="lr-featured__location">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Gianyar, Bali
+        </div>
+        <p class="lr-featured__desc">
+          Based at a tropical oasis at Gianyar, near Ubud, these hand-held transformative retreats transformative retreats, for individuals, families and corporates, will help you smash through limiting boundaries, identify your ambition and harness your power.
+        </p>
+        <div class="lr-featured__tags">
+          <span class="lr-tag">Yoga</span>
+          <span class="lr-tag">Meditation</span>
+          <span class="lr-tag">Organic food</span>
+          <span class="lr-tag">River swimming</span>
+          <span class="lr-tag">7 nights</span>
+        </div>
+        <div class="lr-featured__footer">
+          <div class="lr-featured__rating">
+            <span class="lr-stars">★★★★★</span>
+            <span class="lr-rating-score">9.8</span>
+            <span class="lr-rating-count">(214 reviews)</span>
+          </div>
+          <div class="lr-featured__price">
+            <span class="lr-price-from">From</span>
+            <span class="lr-price-amount">£1,850<span class="lr-price-per"> /person</span></span>
+          </div>
+        </div>
+        <div class="lr-featured__cta">View Retreat →</div>
+      </div>
+    </a>
+
+    <!-- ── GRID ──────────────────────────────────────────────────── -->
+    <h2 style="font-family: var(--serif); font-weight: 400; font-size: 22px; color: var(--ink); padding: 0 48px 24px;">Retreats that closely match your search</h2>
+    <div class="lr-grid">
+
+      <!-- Card 1 -->
+      <a href="pdp-enquire.html" class="lr-card" style="text-decoration:none;color:inherit;">
+        <div class="lr-card__image">
+          <img src="images/retreats/ananda/ANANDA+hot+oil+2.webp" alt="Mellulah">
+          <button class="lr-card__save" aria-label="Save">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="lr-card__body">
+          <div class="lr-card__type">Yoga · Mindfulness</div>
+          <div class="lr-card__title">Ananda in the Himalayas, India</div>
+          <div class="lr-card__location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Uttarakhand, India
+          </div>
+          <div class="lr-card__tags">
+            <span class="lr-tag">Yoga</span>
+            <span class="lr-tag">Mindfulness</span>
+            <span class="lr-tag">7 nights</span>
+            <span class="lr-tag">Portugal</span>
+          </div>
+          <div class="lr-card__footer">
+            <div class="lr-card__rating">
+              <span class="lr-card__stars">★★★★★</span>
+              <span class="lr-card__score">9.6</span>
+              <span class="lr-rating-count">(187 reviews)</span>
+            </div>
+            <div class="lr-card__price-wrap">
+              <span class="lr-card__from">From</span>
+              <span class="lr-card__price">£1,290</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 2 -->
+      <a href="#casa-ana-wellness" class="lr-card" style="text-decoration:none;color:inherit;">
+        <div class="lr-card__image">
+          <img src="images/header_casa-ana_20230628180415.jpg" alt="Casa Ana">
+          <button class="lr-card__save" aria-label="Save">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="lr-card__body">
+          <div class="lr-card__type">Detox · Wellness</div>
+          <div class="lr-card__title">Casa Ana Wellness &amp; Detox Retreat</div>
+          <div class="lr-card__location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Sintra, Lisbon Coast
+          </div>
+          <div class="lr-card__tags">
+            <span class="lr-tag">Detox</span>
+            <span class="lr-tag">Wellness</span>
+            <span class="lr-tag">5 nights</span>
+            <span class="lr-tag">Lisbon Coast</span>
+          </div>
+          <div class="lr-card__footer">
+            <div class="lr-card__rating">
+              <span class="lr-card__stars">★★★★★</span>
+              <span class="lr-card__score">9.4</span>
+              <span class="lr-rating-count">(143 reviews)</span>
+            </div>
+            <div class="lr-card__price-wrap">
+              <span class="lr-card__from">From</span>
+              <span class="lr-card__price">£1,650</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 3 -->
+      <a href="#les-marguerites" class="lr-card" style="text-decoration:none;color:inherit;">
+        <div class="lr-card__image">
+          <img src="images/header_les-marguerites.jpg" alt="Les Marguerites">
+          <button class="lr-card__save" aria-label="Save">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="lr-card__body">
+          <div class="lr-card__type">Meditation · Healing</div>
+          <div class="lr-card__title">Les Marguerites Silent Retreat</div>
+          <div class="lr-card__location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Algarve, Southern Portugal
+          </div>
+          <div class="lr-card__tags">
+            <span class="lr-tag">Meditation</span>
+            <span class="lr-tag">Silence</span>
+            <span class="lr-tag">6 nights</span>
+            <span class="lr-tag">Algarve</span>
+          </div>
+          <div class="lr-card__footer">
+            <div class="lr-card__rating">
+              <span class="lr-card__stars">★★★★★</span>
+              <span class="lr-card__score">9.7</span>
+              <span class="lr-rating-count">(209 reviews)</span>
+            </div>
+            <div class="lr-card__price-wrap">
+              <span class="lr-card__from">From</span>
+              <span class="lr-card__price">£980</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 4 -->
+      <a href="#quinta-do-reguengo" class="lr-card" style="text-decoration:none;color:inherit;">
+        <div class="lr-card__image">
+          <img src="images/header_vale-de-moses.jpg" alt="Retreat">
+          <button class="lr-card__save" aria-label="Save">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="lr-card__body">
+          <div class="lr-card__type">Yoga · Nature</div>
+          <div class="lr-card__title">Quinta do Reguengo Yoga &amp; Nature</div>
+          <div class="lr-card__location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Douro Valley, Porto
+          </div>
+          <div class="lr-card__tags">
+            <span class="lr-tag">Yoga</span>
+            <span class="lr-tag">Nature</span>
+            <span class="lr-tag">7 nights</span>
+            <span class="lr-tag">Douro Valley</span>
+          </div>
+          <div class="lr-card__footer">
+            <div class="lr-card__rating">
+              <span class="lr-card__stars">★★★★½</span>
+              <span class="lr-card__score">9.1</span>
+              <span class="lr-rating-count">(98 reviews)</span>
+            </div>
+            <div class="lr-card__price-wrap">
+              <span class="lr-card__from">From</span>
+              <span class="lr-card__price">£1,120</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 5 -->
+      <a href="#estalagem-do-vale" class="lr-card" style="text-decoration:none;color:inherit;">
+        <div class="lr-card__image">
+          <img src="images/header_casa-ana_20230628180415.jpg" alt="Retreat">
+          <button class="lr-card__save" aria-label="Save">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="lr-card__body">
+          <div class="lr-card__type">Health &amp; Healing</div>
+          <div class="lr-card__title">Estalagem do Vale Ayurveda Retreat</div>
+          <div class="lr-card__location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Minho, Northern Portugal
+          </div>
+          <div class="lr-card__tags">
+            <span class="lr-tag">Ayurveda</span>
+            <span class="lr-tag">Healing</span>
+            <span class="lr-tag">10 nights</span>
+            <span class="lr-tag">Minho</span>
+          </div>
+          <div class="lr-card__footer">
+            <div class="lr-card__rating">
+              <span class="lr-card__stars">★★★★★</span>
+              <span class="lr-card__score">9.5</span>
+              <span class="lr-rating-count">(162 reviews)</span>
+            </div>
+            <div class="lr-card__price-wrap">
+              <span class="lr-card__from">From</span>
+              <span class="lr-card__price">£2,100</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 6 -->
+      <a href="#surf-and-soul-ericeira" class="lr-card" style="text-decoration:none;color:inherit;">
+        <div class="lr-card__image">
+          <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Retreat">
+          <button class="lr-card__save" aria-label="Save">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="lr-card__body">
+          <div class="lr-card__type">Yoga · Surf</div>
+          <div class="lr-card__title">Surf &amp; Soul Yoga Retreat, Ericeira</div>
+          <div class="lr-card__location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Ericeira, Silver Coast
+          </div>
+          <div class="lr-card__tags">
+            <span class="lr-tag">Yoga</span>
+            <span class="lr-tag">Surf</span>
+            <span class="lr-tag">5 nights</span>
+            <span class="lr-tag">Silver Coast</span>
+          </div>
+          <div class="lr-card__footer">
+            <div class="lr-card__rating">
+              <span class="lr-card__stars">★★★★½</span>
+              <span class="lr-card__score">9.2</span>
+              <span class="lr-rating-count">(74 reviews)</span>
+            </div>
+            <div class="lr-card__price-wrap">
+              <span class="lr-card__from">From</span>
+              <span class="lr-card__price">£890</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 7 -->
+      <a href="#monte-velho-energy" class="lr-card" style="text-decoration:none;color:inherit;">
+        <div class="lr-card__image">
+          <img src="images/header_les-marguerites.jpg" alt="Retreat">
+          <button class="lr-card__save" aria-label="Save">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="lr-card__body">
+          <div class="lr-card__type">Personal Growth</div>
+          <div class="lr-card__title">Monte Velho Energy &amp; Nature Retreat</div>
+          <div class="lr-card__location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Alentejo Coast
+          </div>
+          <div class="lr-card__tags">
+            <span class="lr-tag">Nature</span>
+            <span class="lr-tag">Personal Growth</span>
+            <span class="lr-tag">7 nights</span>
+            <span class="lr-tag">Alentejo</span>
+          </div>
+          <div class="lr-card__footer">
+            <div class="lr-card__rating">
+              <span class="lr-card__stars">★★★★★</span>
+              <span class="lr-card__score">9.3</span>
+              <span class="lr-rating-count">(121 reviews)</span>
+            </div>
+            <div class="lr-card__price-wrap">
+              <span class="lr-card__from">From</span>
+              <span class="lr-card__price">£1,450</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Card 8 -->
+      <a href="#herdade-dos-grous" class="lr-card" style="text-decoration:none;color:inherit;">
+        <div class="lr-card__image">
+          <img src="images/header_vale-de-moses.webp" alt="Retreat">
+          <button class="lr-card__save" aria-label="Save">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+        </div>
+        <div class="lr-card__body">
+          <div class="lr-card__type">Wellness · Fitness</div>
+          <div class="lr-card__title">Herdade dos Grous Wellness Week</div>
+          <div class="lr-card__location">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Beja, Alentejo
+          </div>
+          <div class="lr-card__footer">
+            <div class="lr-card__rating">
+              <span class="lr-card__stars">★★★★½</span>
+              <span class="lr-card__score">9.0</span>
+            </div>
+            <div class="lr-card__price-wrap">
+              <span class="lr-card__from">From</span>
+              <span class="lr-card__price">£1,780</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+    </div><!-- /.lr-grid -->
+
+    <div style="display:flex; justify-content:center; padding: 48px 0 64px;">
+      <button style="
+        font-family: var(--sans);
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--ink);
+        background: var(--white);
+        border: 1.5px solid var(--border);
+        border-radius: var(--r-pill);
+        padding: 14px 40px;
+        cursor: pointer;
+        transition: border-color 0.18s, background 0.18s;
+      " onmouseover="this.style.borderColor='var(--ink)'" onmouseout="this.style.borderColor='var(--border)'">
+        Load more retreats
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ──────────────────────────────────────────────────── -->
+  <footer style="background: var(--ink); color: var(--white); padding: 64px 48px 40px;">
+    <div style="max-width: 1320px; margin: 0 auto;">
+
+      <!-- Top row -->
+      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.12);">
+
+        <!-- Brand -->
+        <div>
+          <a href="index.html" style="font-family: var(--serif); font-size: 22px; color: var(--white); margin-bottom: 16px; text-decoration: none; display: block;">Queen of Retreats</a>
+          <p style="font-size: 13px; line-height: 1.7; color: rgba(255,255,255,0.55); max-width: 280px;">Expertly vetted, personally selected retreats from around the world. We only list what we truly believe in.</p>
+        </div>
+
+        <!-- Retreats -->
+        <div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.40); margin-bottom: 16px;">Retreats</div>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Yoga &amp; Meditation</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Health &amp; Healing</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Fitness &amp; Adventure</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Personal Growth</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Creative &amp; Cultural</a></li>
+          </ul>
+        </div>
+
+        <!-- Destinations -->
+        <div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.40); margin-bottom: 16px;">Destinations</div>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Portugal</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Spain</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Greece</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Indonesia</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">France</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <div style="font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.40); margin-bottom: 16px;">Company</div>
+          <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">About Us</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">How It Works</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">List Your Retreat</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Inspiration</a></li>
+            <li><a href="#" style="font-size: 13px; color: rgba(255,255,255,0.70); text-decoration: none;">Contact</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Bottom row -->
+      <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 28px;">
+        <p style="font-size: 12px; color: rgba(255,255,255,0.35); margin: 0;">© 2026 Queen of Retreats. All rights reserved.</p>
+        <div style="display: flex; gap: 24px;">
+          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none;">Privacy Policy</a>
+          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none;">Terms of Use</a>
+          <a href="#" style="font-size: 12px; color: rgba(255,255,255,0.35); text-decoration: none;">Cookie Settings</a>
+        </div>
+      </a>
+
+    </div>
+  </footer>
+
+  <script>
+    const header = document.querySelector('.site-header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 20);
+    }, { passive: true });
+  </script>
+
+</body>
+</html>

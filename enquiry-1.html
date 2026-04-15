@@ -3,22 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Book Your Retreat — Queen of Retreats</title>
-  <!-- Disable browser scroll restoration and strip any hash before layout -->
+  <title>Enquire About This Retreat — Queen of Retreats</title>
   <script>
     history.scrollRestoration = 'manual';
     if (location.hash) history.replaceState(null, '', location.pathname);
   </script>
-  <!-- Adobe Fonts: replace with your project embed URL -->
   <!-- <link rel="stylesheet" href="https://use.typekit.net/XXXXXXX.css"> -->
   <link rel="stylesheet" href="styles.css">
   <style>
     /* Offset scroll top to sit below both sticky header (60px) and progress bar (~68px) */
     html { scroll-padding-top: 168px; }
 
-    /* ── On confirmation step: hide everything in nav except back button ── */
-    .booking-nav--no-summary .booking-nav__summary { display: none; }
-    .booking-nav--no-summary .booking-nav__right    { display: none; }
+    /* ── Hide nav summary on confirmation step ── */
+    .booking-nav--no-summary .booking-nav__summary {
+      display: none;
+    }
 
     /* ── Booking nav summary ── */
     .booking-nav__summary {
@@ -61,7 +60,6 @@
       color: var(--stone);
       white-space: nowrap;
     }
-    /* Re-centre non-stretching children of booking-nav__left */
     .booking-nav__step-info { align-self: center; }
     .booking-nav__label {
       font-size: 10px;
@@ -87,7 +85,6 @@
       height: auto;
       align-self: stretch;
     }
-    /* Total section gets sage-light background — full nav height, no rounded corners */
     .booking-nav__total-wrap {
       background: var(--sage-light);
       border-radius: 0;
@@ -126,7 +123,7 @@
       will-change: transform;
     }
     .cal-months .calendar {
-      flex: 0 0 auto; /* width set by JS */
+      flex: 0 0 auto;
       min-width: 0;
     }
     .cal-arrow-btn {
@@ -235,27 +232,6 @@
       padding: 0 var(--s7) var(--s12);
     }
 
-    /* Payment security note */
-    .payment-security {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: var(--s5);
-      padding: var(--s4);
-      background: var(--parchment);
-      border: 1px solid var(--border);
-      border-radius: var(--r-md);
-      margin-top: var(--s4);
-    }
-    .payment-security__item {
-      display: flex;
-      align-items: center;
-      gap: var(--s2);
-      font-size: var(--t-xs);
-      font-weight: 500;
-      color: var(--stone);
-    }
-
     /* Includes list in step 2 */
     .room-includes-list {
       margin-top: var(--s4);
@@ -354,103 +330,10 @@
       background: var(--sage-pale);
       border-top: 1px solid var(--sage-light);
     }
-    /* Room image carousel */
-    .room-carousel {
-      position: relative;
-      overflow: hidden;
-      aspect-ratio: 4/3;
-      background: var(--sand-mid);
-    }
-    .room-carousel__track {
-      display: flex;
-      height: 100%;
-      transition: transform 0.4s ease;
-    }
-    .room-carousel__slide {
-      min-width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .room-carousel__btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(255,255,255,0.60);
-      border: none;
-      border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 2;
-      color: var(--ink);
-      transition: background 0.2s;
-    }
-    .room-carousel__btn:hover { background: var(--white); }
-    .room-carousel__btn--prev { left: 8px; }
-    .room-carousel__btn--next { right: 8px; }
-    .room-carousel__dots {
-      position: absolute;
-      bottom: 8px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 5px;
-      z-index: 2;
-    }
-    .room-carousel__dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.5);
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .room-carousel__dot.is-active { background: var(--white); }
 
-    /* Room details expandable */
-    .room-details-toggle { margin-top: var(--s4); }
-    .room-details-btn {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 5px;
-      width: 100%;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: var(--t-xs);
-      font-weight: 500;
-      color: var(--stone);
-      padding: 0;
-      letter-spacing: 0.03em;
-    }
-    .room-details-btn:hover { color: var(--ink); }
-    .room-details-arrow {
-      transition: transform 0.25s ease;
-      flex-shrink: 0;
-    }
-    .room-details-btn[aria-expanded="true"] .room-details-arrow {
-      transform: rotate(180deg);
-    }
-    .room-includes-list--collapsible {
-      margin-top: var(--s3);
-      overflow: hidden;
-      max-height: 0;
-      opacity: 0;
-      transition: max-height 0.3s ease, opacity 0.25s ease;
-    }
-    .room-includes-list--collapsible.is-open {
-      max-height: 400px;
-      opacity: 1;
-    }
-
-    /* Icon stepper — no border, no filled circle; icon colour */
+    /* ── Icon stepper ── */
     .progress-bar { background: var(--parchment); border-bottom: none; }
-    .progress-step__dot                              { border: none; background: transparent; }
+    .progress-step__dot { border: none; background: transparent; }
     .progress-step.is-done .progress-step__dot       { border: none; background: transparent; color: var(--ink); }
     .progress-step.is-active .progress-step__dot     { border: none; background: transparent; color: var(--ink); }
     .progress-step.is-done:hover .progress-step__dot { border: none; background: transparent; color: var(--ink); }
@@ -458,11 +341,11 @@
 </head>
 <body>
 
-  <!-- ===== Booking Header ===== -->
+  <!-- ===== Enquiry Header ===== -->
   <header class="booking-header">
     <div class="booking-header__inner">
       <div style="display:flex; justify-content:flex-start; margin-left: -24px;">
-        <a href="pdp.html" class="btn btn--ghost" style="font-size: var(--t-sm);">
+        <a href="pdp-enquire.html" class="btn btn--ghost" style="font-size: var(--t-sm);">
           <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           BACK TO RETREAT
         </a>
@@ -500,6 +383,14 @@
         <div class="progress-step" data-step="3">
           <div class="progress-step__dot-wrap">
             <div class="progress-step__dot">3</div>
+            <span class="progress-step__label">Summary</span>
+          </div>
+        </div>
+        <!-- Step 4 (Review) hidden — content preserved in step-4 panel below -->
+        <div class="progress-step__line" style="display:none"></div>
+        <div class="progress-step" data-step="4" style="display:none">
+          <div class="progress-step__dot-wrap">
+            <div class="progress-step__dot">4</div>
             <span class="progress-step__label">Review</span>
           </div>
         </div>
@@ -524,7 +415,7 @@
         <div class="progress-step" data-step="6">
           <div class="progress-step__dot-wrap">
             <div class="progress-step__dot">6</div>
-            <span class="progress-step__label">Payment</span>
+            <span class="progress-step__label">Submit Enquiry</span>
           </div>
         </div>
 
@@ -532,15 +423,11 @@
     </div>
   </div>
 
-  <!-- ===== Booking Body ===== -->
+  <!-- ===== Enquiry Body ===== -->
   <div class="booking-body">
 
-    <!-- Dual layout wrapper (JS swaps classes between steps) -->
     <div id="booking-layout" class="booking-layout--full">
 
-      <!-- ====================================================
-           STEP PANELS
-      ==================================================== -->
       <div id="booking-steps">
 
         <!-- ─────────────────────────────────────────────────
@@ -573,7 +460,6 @@
                   <div class="cal-legend__item"><div class="cal-legend__dot cal-legend__dot--soldout"></div> Sold out</div>
                 </div>
               </div>
-              <!-- Calendar carousel arrows -->
               <div id="cal-arrows" style="display:flex; gap: var(--s2);">
                 <button id="cal-prev" class="cal-arrow-btn" disabled aria-label="Previous months">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
@@ -589,7 +475,6 @@
               <div class="cal-months-viewport">
               <div class="cal-months">
 
-                <!-- June -->
                 <div class="calendar" id="cal-june">
                   <div class="cal-nav-bar">
                     <div style="width:32px"></div>
@@ -602,7 +487,6 @@
                   <div class="calendar__grid" id="cal-june-grid"></div>
                 </div>
 
-                <!-- July -->
                 <div class="calendar" id="cal-july">
                   <div class="cal-nav-bar">
                     <div style="width:32px"></div>
@@ -615,7 +499,6 @@
                   <div class="calendar__grid" id="cal-july-grid"></div>
                 </div>
 
-                <!-- August -->
                 <div class="calendar" id="cal-aug">
                   <div class="cal-nav-bar">
                     <div style="width:32px"></div>
@@ -628,7 +511,6 @@
                   <div class="calendar__grid" id="cal-aug-grid"></div>
                 </div>
 
-                <!-- September -->
                 <div class="calendar" id="cal-sep">
                   <div class="cal-nav-bar">
                     <div style="width:32px"></div>
@@ -641,7 +523,6 @@
                   <div class="calendar__grid" id="cal-sep-grid"></div>
                 </div>
 
-                <!-- October -->
                 <div class="calendar" id="cal-oct">
                   <div class="cal-nav-bar">
                     <div style="width:32px"></div>
@@ -654,7 +535,6 @@
                   <div class="calendar__grid" id="cal-oct-grid"></div>
                 </div>
 
-                <!-- November -->
                 <div class="calendar" id="cal-nov">
                   <div class="cal-nav-bar">
                     <div style="width:32px"></div>
@@ -667,7 +547,6 @@
                   <div class="calendar__grid" id="cal-nov-grid"></div>
                 </div>
 
-                <!-- December -->
                 <div class="calendar" id="cal-dec">
                   <div class="cal-nav-bar">
                     <div style="width:32px"></div>
@@ -680,7 +559,6 @@
                   <div class="calendar__grid" id="cal-dec-grid"></div>
                 </div>
 
-                <!-- January 2027 -->
                 <div class="calendar" id="cal-jan27">
                   <div class="cal-nav-bar">
                     <div style="width:32px"></div>
@@ -693,7 +571,6 @@
                   <div class="calendar__grid" id="cal-jan27-grid"></div>
                 </div>
 
-                <!-- February 2027 -->
                 <div class="calendar" id="cal-feb27">
                   <div class="cal-nav-bar">
                     <div style="width:32px"></div>
@@ -709,14 +586,12 @@
               </div><!-- /.cal-months -->
               </div><!-- /.cal-months-viewport -->
               <p class="text-small text-muted" style="margin-top: var(--s4);">All 2026 dates shown &nbsp;·&nbsp; Prices from £2,195 pp</p>
-
             </div>
 
             <!-- List view -->
             <div id="list-view" class="hidden">
               <div style="display: grid; grid-template-columns: 1fr var(--sidebar-w); gap: var(--s8); align-items: start;">
 
-                <!-- Left: date list -->
                 <div class="date-list">
 
                   <p class="label-caps" style="padding: var(--s4) 0 var(--s3); color: var(--stone); font-size: calc(var(--t-xs) * 1.25);">2026</p>
@@ -923,7 +798,6 @@
 
                 </div>
 
-                <!-- Right: selected date card -->
                 <div style="align-self: start;">
                   <div class="selected-date-info is-hidden" id="date-selected-panel">
                     <div>
@@ -963,140 +837,78 @@
 
           <div class="room-grid">
 
-            <!-- Room 1 -->
             <div class="room-card" data-room-id="r1">
-              <div class="room-carousel" data-carousel>
-                <div class="room-carousel__track">
-                  <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Shared Garden Room" class="room-carousel__slide">
-                  <img src="images/header_vale-de-moses.jpg" alt="Shared Garden Room" class="room-carousel__slide">
-                  <img src="images/header_casa-ana_20230628180415.jpg" alt="Shared Garden Room" class="room-carousel__slide">
-                </div>
-                <button class="room-carousel__btn room-carousel__btn--prev" aria-label="Previous"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
-                <button class="room-carousel__btn room-carousel__btn--next" aria-label="Next"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
-                <div class="room-carousel__dots">
-                  <span class="room-carousel__dot is-active"></span>
-                  <span class="room-carousel__dot"></span>
-                  <span class="room-carousel__dot"></span>
-                </div>
-              </div>
-              <div class="room-card__badge">
-                <!-- no badge -->
-              </div>
+              <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg"
+                   alt="Premium en-suite" class="room-card__image">
+              <div class="room-card__badge"></div>
               <div class="room-card__body">
-                <h3 class="room-card__name">Shared Garden Room</h3>
+                <h3 class="room-card__name">Premium en-suite</h3>
                 <p class="room-card__type">Twin share · Garden view · En-suite</p>
-                <div class="room-details-toggle">
-                  <button class="room-details-btn" aria-expanded="false">
-                    See room details
-                    <svg class="room-details-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                  </button>
-                  <ul class="room-includes-list room-includes-list--collapsible">
-                    <li>Twin beds, Egyptian cotton linen</li>
-                    <li>Garden terrace access</li>
-                    <li>Shared with one other guest</li>
-                    <li>En-suite bathroom with rain shower</li>
-                    <li>All meals &amp; programme included</li>
-                    <li>Lisbon transfers included</li>
-                  </ul>
-                </div>
+                <ul class="room-includes-list">
+                  <li>Twin beds, Egyptian cotton linen</li>
+                  <li>Garden terrace access</li>
+                  <li>Shared with one other guest</li>
+                  <li>En-suite bathroom with rain shower</li>
+                  <li>All meals &amp; programme included</li>
+                  <li>Lisbon transfers included</li>
+                </ul>
               </div>
               <div class="room-card__footer">
                 <div>
                   <div class="room-card__price">£2,195 <span>per person</span></div>
-                  <p style="font-size: var(--t-xs); color: var(--stone); margin-top: 2px;">25% deposit to secure</p>
                 </div>
                 <button class="btn btn--secondary btn--sm">Select</button>
               </div>
             </div>
 
-            <!-- Room 2 -->
             <div class="room-card" data-room-id="r2">
-              <div class="room-carousel" data-carousel>
-                <div class="room-carousel__track">
-                  <img src="images/header_casa-ana_20230628180415.jpg" alt="Private Valley Room" class="room-carousel__slide">
-                  <img src="images/header_vale-de-moses.jpg" alt="Private Valley Room" class="room-carousel__slide">
-                  <img src="images/header_les-marguerites.jpg" alt="Private Valley Room" class="room-carousel__slide">
-                </div>
-                <button class="room-carousel__btn room-carousel__btn--prev" aria-label="Previous"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
-                <button class="room-carousel__btn room-carousel__btn--next" aria-label="Next"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
-                <div class="room-carousel__dots">
-                  <span class="room-carousel__dot is-active"></span>
-                  <span class="room-carousel__dot"></span>
-                  <span class="room-carousel__dot"></span>
-                </div>
-              </div>
+              <img src="images/header_casa-ana_20230628180415.jpg"
+                   alt="Luxury en-suite" class="room-card__image">
               <div class="room-card__badge">
                 <span class="badge badge--sage">Most popular</span>
               </div>
               <div class="room-card__body">
-                <h3 class="room-card__name">Private Valley Room</h3>
+                <h3 class="room-card__name">Luxury en-suite</h3>
                 <p class="room-card__type">Double or twin · Valley view · En-suite</p>
-                <div class="room-details-toggle">
-                  <button class="room-details-btn" aria-expanded="false">
-                    See room details
-                    <svg class="room-details-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                  </button>
-                  <ul class="room-includes-list room-includes-list--collapsible">
-                    <li>King or twin beds — your choice</li>
-                    <li>Private room for solo or couple</li>
-                    <li>Valley view with morning light</li>
-                    <li>En-suite with walk-in shower</li>
-                    <li>All meals &amp; programme included</li>
-                    <li>Denpasar International Airport transfers included</li>
-                  </ul>
-                </div>
+                <ul class="room-includes-list">
+                  <li>King or twin beds — your choice</li>
+                  <li>Private room for solo or couple</li>
+                  <li>Valley view with morning light</li>
+                  <li>En-suite with walk-in shower</li>
+                  <li>All meals &amp; programme included</li>
+                  <li>Lisbon transfers included</li>
+                </ul>
               </div>
               <div class="room-card__footer">
                 <div>
                   <div class="room-card__price">£2,895 <span>per person</span></div>
-                  <p style="font-size: var(--t-xs); color: var(--stone); margin-top: 2px;">25% deposit to secure</p>
                 </div>
                 <button class="btn btn--secondary btn--sm">Select</button>
               </div>
             </div>
 
-            <!-- Room 3 -->
             <div class="room-card" data-room-id="r3">
-              <div class="room-carousel" data-carousel>
-                <div class="room-carousel__track">
-                  <img src="images/header_les-marguerites.jpg" alt="Quinta Suite" class="room-carousel__slide">
-                  <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Quinta Suite" class="room-carousel__slide">
-                  <img src="images/header_vale-de-moses.jpg" alt="Quinta Suite" class="room-carousel__slide">
-                </div>
-                <button class="room-carousel__btn room-carousel__btn--prev" aria-label="Previous"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
-                <button class="room-carousel__btn room-carousel__btn--next" aria-label="Next"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
-                <div class="room-carousel__dots">
-                  <span class="room-carousel__dot is-active"></span>
-                  <span class="room-carousel__dot"></span>
-                  <span class="room-carousel__dot"></span>
-                </div>
-              </div>
+              <img src="images/header_les-marguerites.jpg"
+                   alt="Private villa" class="room-card__image">
               <div class="room-card__badge">
                 <span class="badge badge--stone">Premium</span>
               </div>
               <div class="room-card__body">
-                <h3 class="room-card__name">Quinta Suite</h3>
+                <h3 class="room-card__name">Private villa</h3>
                 <p class="room-card__type">Junior suite · Private terrace · Deep-soak bath</p>
-                <div class="room-details-toggle">
-                  <button class="room-details-btn" aria-expanded="false">
-                    See room details
-                    <svg class="room-details-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-                  </button>
-                  <ul class="room-includes-list room-includes-list--collapsible">
-                    <li>Spacious suite with lounge area</li>
-                    <li>Private terrace with valley views</li>
-                    <li>Deep-soak bath + rain shower</li>
-                    <li>All meals &amp; programme included</li>
-                    <li>Lisbon transfers included</li>
-                    <li class="extra">2× private coaching sessions</li>
-                    <li class="extra">In-room aromatherapy welcome kit</li>
-                  </ul>
-                </div>
+                <ul class="room-includes-list">
+                  <li>Spacious suite with lounge area</li>
+                  <li>Private terrace with valley views</li>
+                  <li>Deep-soak bath + rain shower</li>
+                  <li>All meals &amp; programme included</li>
+                  <li>Lisbon transfers included</li>
+                  <li class="extra">2× private coaching sessions</li>
+                  <li class="extra">In-room aromatherapy welcome kit</li>
+                </ul>
               </div>
               <div class="room-card__footer">
                 <div>
                   <div class="room-card__price">£3,750 <span>per person</span></div>
-                  <p style="font-size: var(--t-xs); color: var(--stone); margin-top: 2px;">25% deposit to secure</p>
                 </div>
                 <button class="btn btn--secondary btn--sm">Select</button>
               </div>
@@ -1104,9 +916,8 @@
 
           </div>
 
-          <!-- Guest count -->
           <div style="margin-top: var(--s7);">
-            <h4 style="font-family: var(--serif); font-size: var(--t-xl); font-weight: 500; color: var(--ink); margin-bottom: 24px; padding-top: 24px;">Are you travelling alone, with someone or in a group?</h4>
+            <h4 style="font-family: var(--sans); font-size: var(--t-base); font-weight: 600; margin-bottom: var(--s4);">Are you travelling alone, with someone or in a group?</h4>
             <div class="guest-type-grid" style="grid-template-columns: 1fr 1fr 1fr;">
               <div class="guest-type-card is-active" data-type="solo">
                 <div class="guest-type-card__title">Solo traveller</div>
@@ -1143,13 +954,13 @@
 
 
         <!-- ─────────────────────────────────────────────────
-             STEP 3: Booking Summary
+             STEP 3: Enquiry Summary
         ───────────────────────────────────────────────── -->
         <section id="step-3" class="step-panel">
           <div class="step-panel__header">
             <p class="label-caps step-panel__eyebrow">Step 3 of 6</p>
-            <h1 class="step-panel__title">Review your booking</h1>
-            <p class="step-panel__desc" style="white-space: nowrap;">Review your booking and confirm the retreat policies before continuing. You can make changes at any point.</p>
+            <h1 class="step-panel__title">Enquiry summary</h1>
+            <p class="step-panel__desc">Review your selections before we proceed. You can make changes at any point.</p>
           </div>
 
           <!-- Retreat overview -->
@@ -1160,11 +971,11 @@
             </div>
             <div class="booking-summary-card__body">
               <div style="display: grid; grid-template-columns: 120px 1fr; gap: var(--s5);">
-                <img src="images/header_vale-de-moses.jpg"
+                <img src="images/retreats/ananda/ANANDA+hot+oil+2.webp"
                      alt="Quinta da Levada" style="width:100%; height:80px; object-fit:cover; border-radius: var(--r-md);">
                 <div>
-                  <h4 style="font-family: var(--serif); font-weight: 400; margin-bottom: var(--s1);">Elevation Barn</h4>
-                  <p style="font-size: var(--t-sm); color: var(--stone);">Gianyar, Bali &nbsp;·&nbsp; 7 nights / 8 days</p>
+                  <h4 style="font-family: var(--serif); font-weight: 400; margin-bottom: var(--s1);">Ananda in the Himalayas</h4>
+                  <p style="font-size: var(--t-sm); color: var(--stone);">Narendra Nagar, India &nbsp;·&nbsp; 7 nights / 8 days</p>
                   <p id="step3-dates" style="font-size: var(--t-sm); color: var(--sage); font-weight: 500; margin-top: var(--s2);">Dates not yet selected</p>
                 </div>
               </div>
@@ -1189,31 +1000,13 @@
 
               <p class="label-caps" style="margin-bottom: var(--s4);">What's included</p>
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2) var(--s5);">
-                <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;Return Denpasar International Airport transfers</div>
+                <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;Return Lisbon transfers</div>
                 <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;All meals included</div>
                 <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;2× daily yoga sessions</div>
                 <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;Guided forest bathing</div>
                 <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;Daily meditation</div>
                 <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;Closing ceremony &amp; dinner</div>
               </div>
-            </div>
-          </div>
-
-          <!-- Promo code -->
-          <div class="booking-summary-card">
-            <div class="booking-summary-card__header">
-              <span class="booking-summary-card__title">Add a promo code</span>
-            </div>
-            <div class="booking-summary-card__body" style="padding-top: var(--s4); padding-bottom: var(--s4);">
-              <div style="display: flex; gap: var(--s4); align-items: stretch;">
-                <input id="promo-code-input" type="text" class="form-input" placeholder="e.g. 123456778"
-                  style="flex: 1; height: 45px;"
-                  autocomplete="off" spellcheck="false">
-                <button id="promo-apply-btn" class="btn btn--secondary" style="height: 45px; padding: 0 var(--s6); white-space: nowrap; flex-shrink: 0;">
-                  Update
-                </button>
-              </div>
-              <p id="promo-feedback" style="display:none; margin-top: var(--s3); font-size: var(--t-sm);"></p>
             </div>
           </div>
 
@@ -1232,30 +1025,65 @@
                   <td style="color: var(--stone);">Meals, programme &amp; transfers</td>
                   <td style="text-align:right; color: var(--ink);">Included</td>
                 </tr>
-                <tr id="promo-discount-row" style="display:none;">
-                  <td style="color: var(--sage);">Promo code (<span id="promo-code-applied"></span>)</td>
-                  <td id="price-promo-discount" style="text-align:right; color: var(--sage); font-weight: 500;">—</td>
-                </tr>
                 <tr class="subtotal">
                   <td style="color: var(--ink); font-weight: 600;">Total</td>
                   <td id="price-subtotal" style="text-align:right; font-weight: 600; color: var(--ink);">—</td>
                 </tr>
               </table>
+            </div>
+          </div>
 
-              <div class="divider"></div>
+          <div style="margin-top: var(--s7);">
+            <button class="btn btn--primary btn--lg btn--full" onclick="document.getElementById('nav-continue').click()">
+              Continue
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </section>
 
-              <div style="background: var(--warning-bg); border-radius: var(--r-md); padding: var(--s4) var(--s5);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--s2);">
-                  <span style="font-size: var(--t-sm); font-weight: 600; color: var(--warning);">Deposit due today (25%)</span>
-                  <span id="price-deposit" style="font-size: var(--t-lg); font-weight: 600; color: var(--warning); font-family: var(--serif);">—</span>
-                </div>
-                <p style="font-size: var(--t-xs); color: var(--warning);">Balance of <span id="price-balance">—</span> due 60 days before your arrival date.</p>
+
+        <!-- ─────────────────────────────────────────────────
+             STEP 4: Review
+        ───────────────────────────────────────────────── -->
+        <!-- Step 4 (Review) hidden — not deleted, available to restore -->
+        <section id="step-review-hidden" class="step-panel" style="display:none">
+          <div class="step-panel__header">
+            <p class="label-caps step-panel__eyebrow">Step 4 of 6</p>
+            <h1 class="step-panel__title">Review your booking</h1>
+            <p class="step-panel__desc">Please read the retreat policies before confirming. You can return and make changes at any time.</p>
+          </div>
+
+          <!-- Booking snapshot -->
+          <div class="review-section" style="margin-bottom: var(--s7);">
+            <div class="review-section__header">
+              <span class="review-section__title">Booking Snapshot</span>
+            </div>
+            <div class="review-section__body">
+              <div class="review-row">
+                <span class="review-row__key">Retreat</span>
+                <span class="review-row__val">Ananda in the Himalayas</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Dates</span>
+                <span class="review-row__val" id="review-dates">21 – 28 June 2026</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Room</span>
+                <span class="review-row__val" id="review-room">Luxury en-suite</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Guests</span>
+                <span class="review-row__val" id="review-guests">1 guest</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Total</span>
+                <span class="review-row__val" id="review-total" style="font-family: var(--serif); font-size: var(--t-lg);">£2,895</span>
               </div>
             </div>
           </div>
 
           <!-- Cancellation policy -->
-          <div class="policy-box" style="margin-top: var(--s6); margin-bottom: var(--s6);">
+          <div class="policy-box" style="margin-bottom: var(--s6);">
             <p class="label-caps" style="margin-bottom: var(--s4);">Cancellation Policy</p>
             <div class="policy-timeline">
               <div class="policy-row">
@@ -1281,7 +1109,7 @@
             </p>
           </div>
 
-          <!-- Accordion: House rules -->
+          <!-- Accordions -->
           <div style="margin-bottom: var(--s6);">
             <div class="accordion-item">
               <button class="accordion-trigger">
@@ -1289,7 +1117,7 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
               </button>
               <div class="accordion-body">
-                <p style="margin-bottom: var(--s3);">Quinta da Levada is a place of rest and mutual respect. We ask all guests to observe the following:</p>
+                <p style="margin-bottom: var(--s3);">Ananda in the Himalayas is a place of rest and mutual respect. We ask all guests to observe the following:</p>
                 <ul style="display: flex; flex-direction: column; gap: var(--s2); color: var(--stone); font-size: var(--t-sm);">
                   <li>— Quiet hours: 10pm – 7am</li>
                   <li>— No external alcohol during the programme</li>
@@ -1335,24 +1163,17 @@
               </div>
             </label>
           </div>
-
-          <div style="margin-top: var(--s7);">
-            <button class="btn btn--primary btn--lg btn--full" onclick="document.getElementById('nav-continue').click()">
-              Continue
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-            </button>
-          </div>
         </section>
 
 
         <!-- ─────────────────────────────────────────────────
-             STEP 4: Guest Details
+             STEP 5: Guest Details
         ───────────────────────────────────────────────── -->
         <section id="step-4" class="step-panel">
           <div class="step-panel__header">
             <p class="label-caps step-panel__eyebrow">Step 4 of 6</p>
             <h1 class="step-panel__title">Your details</h1>
-            <p class="step-panel__desc">We'll use these to prepare your booking confirmation and pre-arrival materials.</p>
+            <p class="step-panel__desc">We'll use these to prepare your enquiry confirmation and pre-arrival materials.</p>
           </div>
 
           <div class="alert alert--info">
@@ -1363,25 +1184,24 @@
           <!-- Login to your account -->
           <div class="form-section" style="margin-bottom: var(--s5);">
             <button class="accordion-trigger" style="padding: var(--s4) var(--s6); background: var(--parchment); border: none; border-bottom: 1px solid var(--border); font-family: var(--sans); font-size: var(--t-base); font-weight: 600; color: var(--ink);">
-              <span>Login to your account <span style="font-weight: 400; color: var(--stone); font-size: var(--t-sm);">(to book with your saved details)</span></span>
+              <span>Login to your account <span style="font-weight: 400; color: var(--stone); font-size: var(--t-sm);">(optional)</span></span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </button>
             <div class="accordion-body" style="padding: var(--s6);">
               <p style="font-size: var(--t-sm); color: var(--stone); line-height: 1.6; margin-bottom: var(--s5);">If you already have an account, login here to use your saved guest details.</p>
               <div class="form-group">
-                <label class="form-label" for="login-email">Username</label>
-                <input class="form-input" type="email" id="login-email" placeholder="e.g. name@email.com">
+                <label class="form-label" for="login-email-enq">Username</label>
+                <input class="form-input" type="email" id="login-email-enq" placeholder="e.g. name@email.com">
               </div>
               <div class="form-group">
-                <label class="form-label" for="login-password">Password</label>
-                <input class="form-input" type="password" id="login-password" placeholder="Minimum 8 characters">
+                <label class="form-label" for="login-password-enq">Password</label>
+                <input class="form-input" type="password" id="login-password-enq" placeholder="Minimum 8 characters">
               </div>
               <p style="font-size: var(--t-sm); margin-bottom: var(--s6);"><a href="#" style="color: var(--sage);">Forgot your password? Reset here</a></p>
               <button class="btn btn--primary" type="button">LOGIN</button>
             </div>
           </div>
 
-          <!-- Account creation -->
           <div class="form-section">
             <div class="form-section__header">
               <h4>Create an account <span style="font-weight: 400; color: var(--stone); font-size: var(--t-sm);">(optional)</span></h4>
@@ -1404,7 +1224,6 @@
             </div>
           </div>
 
-          <!-- Lead guest -->
           <div class="form-section">
             <div class="form-section__header">
               <h4>Lead guest</h4>
@@ -1423,7 +1242,7 @@
               <div class="form-group">
                 <label class="form-label" for="email">Email address</label>
                 <input class="form-input" type="email" id="email" placeholder="sarah@example.com" required>
-                <p class="form-hint">Your booking confirmation will be sent here.</p>
+                <p class="form-hint">Your enquiry confirmation will be sent here.</p>
               </div>
               <div class="form-row form-row--2">
                 <div class="form-group">
@@ -1449,9 +1268,6 @@
             </div>
           </div>
 
- 
-
-          <!-- Billing address -->
           <div class="form-section">
             <div class="form-section__header">
               <h4>Billing address</h4>
@@ -1484,7 +1300,7 @@
 
 
         <!-- ─────────────────────────────────────────────────
-             STEP 5: Retreat Questions
+             STEP 6: About You
         ───────────────────────────────────────────────── -->
         <section id="step-5" class="step-panel">
           <div class="step-panel__header">
@@ -1493,7 +1309,6 @@
             <p class="step-panel__desc">To ensure we create the best possible experience, please share a little about yourself. All information is confidential and shared only with your facilitators.</p>
           </div>
 
-          <!-- Health -->
           <div class="form-section">
             <div class="form-section__header">
               <h4>Health &amp; Wellbeing</h4>
@@ -1526,7 +1341,6 @@
             </div>
           </div>
 
-          <!-- Dietary -->
           <div class="form-section">
             <div class="form-section__header">
               <h4>Dietary Requirements</h4>
@@ -1565,7 +1379,6 @@
             </div>
           </div>
 
-          <!-- Experience -->
           <div class="form-section">
             <div class="form-section__header">
               <h4>Movement &amp; Practice Experience</h4>
@@ -1596,14 +1409,13 @@
             </div>
           </div>
 
-          <!-- Travel logistics -->
           <div class="form-section">
             <div class="form-section__header">
               <h4>Travel &amp; Logistics</h4>
             </div>
             <div class="form-section__body">
               <div class="form-group">
-                <label class="form-label">Will you be joining the group transfer from Lisbon Airport?</label>
+                <label class="form-label">Will you be joining the group transfer from Denpasar International Airport?</label>
                 <div class="check-group">
                   <label class="check-item" style="padding: var(--s2) 0;">
                     <input type="radio" name="transfer" value="yes" checked>
@@ -1639,8 +1451,8 @@
           </div>
 
           <div style="margin-top: var(--s7);">
-            <button class="btn btn--primary btn--lg btn--full" onclick="document.getElementById('nav-continue').click()">
-              Continue
+            <button class="btn btn--ink btn--lg btn--full" onclick="document.getElementById('nav-continue').click()">
+              SUBMIT ENQUIRY
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
           </div>
@@ -1648,110 +1460,25 @@
 
 
         <!-- ─────────────────────────────────────────────────
-             STEP 6: Payment
+             STEP 7: Enquiry Submitted
         ───────────────────────────────────────────────── -->
         <section id="step-6" class="step-panel">
-          <div class="step-panel__header">
-            <p class="label-caps step-panel__eyebrow">Step 6 of 6</p>
-            <h1 class="step-panel__title">Secure payment</h1>
-            <p class="step-panel__desc">Your payment is encrypted and processed securely. We never store your card details.</p>
-          </div>
-
-          <!-- Payment option toggle -->
-          <h4 style="font-family: var(--sans); font-size: var(--t-base); font-weight: 600; margin-bottom: var(--s4);">How would you like to pay?</h4>
-          <div class="payment-toggle" style="margin-bottom: var(--s7);">
-            <div class="payment-option is-active" data-payment="deposit">
-              <div class="payment-option__label">Pay deposit today</div>
-              <div class="payment-option__amount" id="pay-deposit-amount">£724</div>
-              <div class="payment-option__desc">Balance due 60 days before arrival. No interest, no fees.</div>
-            </div>
-            <div class="payment-option" data-payment="full">
-              <div class="payment-option__label">Pay in full</div>
-              <div class="payment-option__amount" id="pay-full-amount">£2,895</div>
-              <div class="payment-option__desc">Pay everything now. Nothing more to manage.</div>
-            </div>
-          </div>
-
-          <p id="pay-balance-note" style="font-size: var(--t-sm); color: var(--stone); margin-bottom: var(--s7);">Balance of £2,171 due 60 days before your arrival date. You'll receive an automatic reminder.</p>
-
-          <!-- Card form -->
-          <div class="form-section">
-            <div class="form-section__header">
-              <h4>Card details</h4>
-            </div>
-            <div class="form-section__body">
-              <div class="form-group">
-                <label class="form-label" for="card-name">Name on card</label>
-                <input class="form-input" type="text" id="card-name" placeholder="As it appears on your card">
-              </div>
-              <div class="form-group">
-                <label class="form-label" for="card-number">Card number</label>
-                <input class="form-input" type="text" id="card-number" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric">
-              </div>
-              <div class="card-field-row">
-                <div class="form-group">
-                  <label class="form-label" for="card-expiry">Expiry date</label>
-                  <input class="form-input" type="text" id="card-expiry" placeholder="MM / YY" maxlength="7" inputmode="numeric">
-                </div>
-                <div class="form-group">
-                  <label class="form-label" for="card-cvc">CVC</label>
-                  <input class="form-input" type="text" id="card-cvc" placeholder="000" maxlength="4" inputmode="numeric">
-                </div>
-                <div></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Security badges -->
-          <div class="payment-security">
-            <div class="payment-security__item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              256-bit SSL encrypted
-            </div>
-            <div class="payment-security__item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-              3D Secure verified
-            </div>
-            <div class="payment-security__item">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-              Stripe payment processing
-            </div>
-          </div>
-
-          <!-- Cancellation reminder -->
-          <div class="alert alert--info" style="margin-top: var(--s5);">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <span><strong>Free cancellation</strong> up to 90 days before your arrival date. Your deposit is fully refundable within this window.</span>
-          </div>
-
-          <!-- Pay CTA -->
-          <button id="pay-now-label" class="btn btn--ink btn--lg btn--full" style="margin-top: var(--s6);" onclick="window.bookingApp && bookingApp.renderStep(7)">
-            Pay £724 &amp; Confirm Booking
-          </button>
-
-        </section>
-
-
-        <!-- ─────────────────────────────────────────────────
-             STEP 7: Confirmation
-        ───────────────────────────────────────────────── -->
-        <section id="step-7" class="step-panel">
 
           <div class="confirmation-hero">
             <div class="confirmation-hero__icon">
               <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#637A5E" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
-            <p class="label-caps" style="color: var(--sage); margin-bottom: var(--s3);">Booking confirmed</p>
-            <h1 style="font-size: var(--t-3xl); font-weight: 300;">Your retreat is confirmed.</h1>
+            <p class="label-caps" style="color: var(--sage); margin-bottom: var(--s3);">Enquiry Submitted</p>
+            <h1 style="font-size: var(--t-3xl); font-weight: 300;">Thank you for your enquiry.</h1>
             <p style="font-size: var(--t-md); color: var(--stone); margin-top: var(--s3); max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.6;">
-              We're looking forward to welcoming you to Elevation Barn. A detailed confirmation has been sent to your email.
+              We have sent your enquiry to the retreat host and they will respond once they have checked your details.
             </p>
-            <span class="confirmation-hero__ref">Booking ref: QR-2026-08847</span>
+            <span class="confirmation-hero__ref">Enquiry ref: EQ-2026-08847</span>
           </div>
 
           <div class="confirmation-grid">
 
-            <!-- Left: Next steps -->
+            <!-- Left: What happens next -->
             <div>
               <h3 style="font-family: var(--sans); font-size: var(--t-lg); font-weight: 600; margin-bottom: var(--s6);">What happens next</h3>
               <div class="next-steps">
@@ -1759,90 +1486,67 @@
                   <div class="next-step__number">1</div>
                   <div class="next-step__content">
                     <h5>Confirmation email sent</h5>
-                    <p>Check your inbox for a full confirmation with booking details and retreat information pack.</p>
+                    <p>Check your inbox for a confirmation with your enquiry reference and the retreat details you selected.</p>
                   </div>
                 </div>
                 <div class="next-step">
                   <div class="next-step__number">2</div>
                   <div class="next-step__content">
-                    <h5>Pre-arrival call</h5>
-                    <p>One of your facilitators will be in touch within 5 days to introduce themselves and answer any questions.</p>
+                    <h5>Retreat host notified</h5>
+                    <p>Your enquiry has been forwarded to the retreat host along with your details and preferences.</p>
                   </div>
                 </div>
                 <div class="next-step">
                   <div class="next-step__number">3</div>
                   <div class="next-step__content">
-                    <h5>Balance reminder — 60 days before</h5>
-                    <p>We'll send an automatic reminder when your balance of <span id="conf-balance-text">£2,171</span> is due. No surprises.</p>
+                    <h5>Response within 48 hours</h5>
+                    <p>The host will review your enquiry and respond directly to your email address within 48 hours.</p>
                   </div>
                 </div>
                 <div class="next-step">
                   <div class="next-step__number">4</div>
                   <div class="next-step__content">
-                    <h5>Welcome pack — 2 weeks before</h5>
-                    <p>A printed welcome pack arrives by post with everything you need to know: packing list, travel details, and a few words from Sofia and Jamie.</p>
-                  </div>
-                </div>
-                <div class="next-step">
-                  <div class="next-step__number">5</div>
-                  <div class="next-step__content">
-                    <h5>Arrival — Saturday 21 June 2026</h5>
-                    <p>Meet your group at Lisbon Airport at 08:30. You'll travel together to Quinta da Levada, arriving in time for lunch.</p>
+                    <h5>Ready to book?</h5>
+                    <p>If everything looks right for you, our team will guide you through the booking process from there.</p>
                   </div>
                 </div>
               </div>
 
               <div style="display: flex; gap: var(--s3); margin-top: var(--s8);">
-                <a href="index.html" class="btn btn--secondary">← Return to Queen of Retreats</a>
-                <button class="btn btn--primary">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                  Add to calendar
-                </button>
+                <a href="pdp-enquire.html" class="btn btn--secondary">← Return to Queen of Retreats</a>
               </div>
             </div>
 
-            <!-- Right: Receipt -->
+            <!-- Right: Enquiry summary card -->
             <div>
               <div class="receipt-card">
-                <img src="images/header_vale-de-moses.jpg"
+                <img src="images/retreats/ananda/ANANDA+hot+oil+2.webp"
                      alt="Quinta da Levada" class="receipt-image">
                 <div class="receipt-card__header">
-                  <p style="font-family: var(--serif); font-size: var(--t-lg); color: var(--ink);">Elevation Barn</p>
-                  <p style="font-size: var(--t-sm); color: var(--stone);">Gianyar, Bali</p>
+                  <p style="font-family: var(--serif); font-size: var(--t-lg); color: var(--ink);">Ananda in the Himalayas</p>
+                  <p style="font-size: var(--t-sm); color: var(--stone);">Narendra Nagar, India</p>
                 </div>
                 <div class="receipt-card__body">
                   <div class="receipt-row">
-                    <span class="receipt-row__key">Booking ref</span>
-                    <span class="receipt-row__val" style="font-family: monospace; letter-spacing: 0.05em;">QR-2026-08847</span>
+                    <span class="receipt-row__key">Enquiry ref</span>
+                    <span class="receipt-row__val" style="font-family: monospace; letter-spacing: 0.05em;">EQ-2026-08847</span>
                   </div>
                   <div class="receipt-row">
                     <span class="receipt-row__key">Dates</span>
-                    <span class="receipt-row__val" id="conf-dates">21 – 28 June 2026</span>
+                    <span class="receipt-row__val">21 – 28 June 2026</span>
                   </div>
                   <div class="receipt-row">
                     <span class="receipt-row__key">Room</span>
-                    <span class="receipt-row__val" id="conf-room">Private Valley Room</span>
+                    <span class="receipt-row__val">Luxury en-suite</span>
                   </div>
                   <div class="receipt-row">
-                    <span class="receipt-row__key">Guest</span>
-                    <span class="receipt-row__val" id="conf-guests">1 person</span>
-                  </div>
-                  <div class="receipt-row">
-                    <span class="receipt-row__key" id="conf-deposit-label">Deposit paid</span>
-                    <span class="receipt-row__val" id="conf-deposit" style="color: var(--success); font-weight: 600;">£724 ✓</span>
-                  </div>
-                  <div class="receipt-row" id="conf-balance-row">
-                    <span class="receipt-row__key">Balance due</span>
-                    <span class="receipt-row__val" id="conf-balance">£2,171</span>
-                  </div>
-                  <div class="receipt-row" id="conf-balance-date-row">
-                    <span class="receipt-row__key">Balance due date</span>
-                    <span class="receipt-row__val" id="conf-balance-date">22 April 2026</span>
+                    <span class="receipt-row__key">Guests</span>
+                    <span class="receipt-row__val">1 person</span>
                   </div>
                 </div>
                 <div class="receipt-total">
-                  <span style="font-size: var(--t-sm); color: var(--stone);">Total booking value</span>
-                  <span style="font-family: var(--serif); font-size: var(--t-xl); color: var(--ink); font-weight: 500;" id="conf-total">£2,895</span>
+                  <span style="font-size: var(--t-sm); color: var(--stone);">Estimated price from</span>
+                  <span style="font-family: var(--serif); font-size: var(--t-xl); color: var(--ink); font-weight: 500;">£2,895</span>
                 </div>
               </div>
 
@@ -1852,8 +1556,8 @@
                   <div class="trust-item__text"><strong>QoR Vetted</strong><span>This retreat has been personally assessed by our team</span></div>
                 </div>
                 <div class="trust-item">
-                  <svg class="trust-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                  <div class="trust-item__text"><strong>Secure booking</strong><span>Payment processed via Stripe with 256-bit encryption</span></div>
+                  <svg class="trust-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  <div class="trust-item__text"><strong>Safe &amp; confidential</strong><span>Your details are kept private and shared only with the retreat host</span></div>
                 </div>
               </div>
             </div>
@@ -1864,12 +1568,12 @@
       </div><!-- end booking-steps -->
 
       <!-- ====================================================
-           SIDEBAR (hidden on step 1 & 8)
+           SIDEBAR (hidden on step 1 & 7)
       ==================================================== -->
       <aside id="booking-sidebar" class="booking-sidebar hidden">
 
         <div class="summary-card">
-          <img src="images/header_vale-de-moses.jpg"
+          <img src="images/retreats/ananda/ANANDA+hot+oil+2.webp"
                alt="Quinta da Levada" class="summary-card__image">
           <div class="summary-card__body">
             <div class="summary-card__retreat-name">Quinta da Levada</div>
@@ -1909,15 +1613,15 @@
         <div class="sidebar-trust" style="padding: var(--s4) 0;">
           <div class="trust-item">
             <svg class="trust-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            <div class="trust-item__text"><strong>Free cancellation</strong><span>Full refund up to 90 days before</span></div>
+            <div class="trust-item__text"><strong>No obligation</strong><span>Enquiring doesn't commit you to booking</span></div>
           </div>
           <div class="trust-item">
             <svg class="trust-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             <div class="trust-item__text"><strong>QoR Vetted</strong><span>Curated and quality-checked</span></div>
           </div>
           <div class="trust-item">
-            <svg class="trust-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            <div class="trust-item__text"><strong>Secure payment</strong><span>Encrypted via Stripe</span></div>
+            <svg class="trust-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div class="trust-item__text"><strong>Response within 48hrs</strong><span>The retreat host will get back to you promptly</span></div>
           </div>
         </div>
 
@@ -1930,29 +1634,24 @@
   <nav class="booking-nav">
     <div class="booking-nav__inner">
 
-      <!-- Left: everything except continue -->
       <div class="booking-nav__left">
         <div style="display:flex; align-items:center; gap: var(--s4); min-width: 120px; flex-shrink:0; align-self:center;">
           <button id="nav-back" class="btn btn--secondary" aria-label="Back" style="width:48px; height:48px; padding:0; display:flex; align-items:center; justify-content:center; visibility:hidden;">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <span class="booking-nav__step-info" id="nav-step-info">1 of 8</span>
+          <span class="booking-nav__step-info" id="nav-step-info">1 of 6</span>
         </div>
 
-        <!-- Retreat summary -->
         <div class="booking-nav__summary">
-          <!-- 1. Image (full height) -->
-          <img src="images/header_vale-de-moses.jpg" alt="Elevation Barn – Bali" class="booking-nav__thumb">
+          <img src="images/retreats/ananda/ANANDA+hot+oil+2.webp" alt="Ananda in the Himalayas" class="booking-nav__thumb">
 
-          <!-- 2. Name + location -->
           <div class="booking-nav__section">
-            <span class="booking-nav__retreat-name">Elevation Barn – Bali</span>
-            <span class="booking-nav__retreat-loc">Gianyar · Bali · 7 nights</span>
+            <span class="booking-nav__retreat-name">Ananda in the Himalayas</span>
+            <span class="booking-nav__retreat-loc">Narendra Nagar · India · 7 nights</span>
           </div>
 
           <div class="booking-nav__vdivider booking-nav__vdivider--full"></div>
 
-          <!-- 3. Dates -->
           <div class="booking-nav__section">
             <span class="booking-nav__label">Dates</span>
             <span class="booking-nav__val placeholder" id="nav-date">Select dates</span>
@@ -1960,7 +1659,6 @@
 
           <div class="booking-nav__vdivider booking-nav__vdivider--full"></div>
 
-          <!-- 4. Room -->
           <div class="booking-nav__section">
             <span class="booking-nav__label">Room</span>
             <span class="booking-nav__val placeholder" id="nav-room">Select room</span>
@@ -1968,13 +1666,11 @@
 
           <div class="booking-nav__vdivider booking-nav__vdivider--full"></div>
 
-          <!-- 5. Guests -->
           <div class="booking-nav__section">
             <span class="booking-nav__label">Guests</span>
             <span class="booking-nav__val" id="nav-guests">1 guest</span>
           </div>
 
-          <!-- 5. Total -->
           <div class="booking-nav__total-wrap">
             <span class="booking-nav__label">Total</span>
             <span class="booking-nav__total-amount" id="nav-total">—</span>
@@ -1982,7 +1678,6 @@
         </div>
       </div>
 
-      <!-- Right: continue -->
       <div class="booking-nav__right">
         <button id="nav-continue" class="btn btn--primary btn--lg">
           Continue
@@ -1993,18 +1688,22 @@
     </div>
   </nav>
 
-  <script src="booking.js"></script>
+  <script src="enquiry-1.js"></script>
   <script>
 
-    // Expose app for inline onclick
-    window.bookingApp = { renderStep };
+    window.enquiryApp = { renderStep };
 
-    // Patch: update review fields on step 3 & 4
+    // Patch: update summary fields when navigating forward
     document.getElementById('nav-continue').addEventListener('click', function() {
       setTimeout(() => {
         const s = state;
-        // Step 3 summary (delegate to shared helper in booking.js)
-        applyStep3Fields();
+        // Step 3 summary
+        const d3dates = document.getElementById('step3-dates');
+        if (d3dates && s.selectedDate) d3dates.textContent = s.selectedDate.label;
+        const d3room = document.getElementById('step3-room');
+        if (d3room && s.selectedRoom) d3room.textContent = s.selectedRoom.name;
+        const d3guests = document.getElementById('step3-guests');
+        if (d3guests) d3guests.textContent = s.guestCount === 1 ? '1 guest' : `${s.guestCount} guests`;
 
         // Step 4 review fields
         const rDates = document.getElementById('review-dates');
@@ -2014,16 +1713,11 @@
         const rGuests = document.getElementById('review-guests');
         if (rGuests) rGuests.textContent = s.guestCount === 1 ? '1 guest' : `${s.guestCount} guests`;
 
-        // Price in review (promo-aware)
+        // Price in review
         if (s.selectedRoom) {
-          const subtotal     = s.selectedRoom.price * s.guestCount;
-          const discountAmt  = Math.round(subtotal * (s.promoDiscount || 0));
-          const total        = subtotal - discountAmt;
-          const deposit      = Math.ceil(total * 0.25);
-          const rTotal  = document.getElementById('review-total');
+          const total  = s.selectedRoom.price * s.guestCount;
+          const rTotal = document.getElementById('review-total');
           if (rTotal) rTotal.textContent = `£${total.toLocaleString()}`;
-          const rDep = document.getElementById('review-deposit');
-          if (rDep) rDep.textContent = `£${deposit.toLocaleString()}`;
         }
       }, 50);
     }, true);
@@ -2040,7 +1734,6 @@
           panel.classList.remove('is-hidden');
         }
       }
-      // Calendar date
       const calDay = e.target.closest('.cal-day--available, .cal-day--limited');
       if (calDay && calDay.dataset.dateId) {
         const panel = document.getElementById('date-selected-panel');
@@ -2051,39 +1744,6 @@
           panel.classList.remove('is-hidden');
         }
       }
-    });
-
-    // Room image carousels
-    document.querySelectorAll('[data-carousel]').forEach(carousel => {
-      const track = carousel.querySelector('.room-carousel__track');
-      const slides = carousel.querySelectorAll('.room-carousel__slide');
-      const dots   = carousel.querySelectorAll('.room-carousel__dot');
-      const prev   = carousel.querySelector('.room-carousel__btn--prev');
-      const next   = carousel.querySelector('.room-carousel__btn--next');
-      let current  = 0;
-
-      function goTo(n) {
-        current = (n + slides.length) % slides.length;
-        track.style.transform = `translateX(-${current * 100}%)`;
-        dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
-      }
-
-      prev.addEventListener('click', e => { e.stopPropagation(); goTo(current - 1); });
-      next.addEventListener('click', e => { e.stopPropagation(); goTo(current + 1); });
-      dots.forEach((dot, i) => dot.addEventListener('click', e => { e.stopPropagation(); goTo(i); }));
-    });
-
-    // Room details expandable panels
-    document.querySelectorAll('.room-details-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const list = btn.nextElementSibling;
-        const expanded = btn.getAttribute('aria-expanded') === 'true';
-        btn.setAttribute('aria-expanded', !expanded);
-        btn.textContent = '';
-        btn.insertAdjacentHTML('beforeend', (!expanded ? 'Hide room details' : 'See room details') +
-          `<svg class="room-details-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>`);
-        list.classList.toggle('is-open', !expanded);
-      });
     });
   </script>
 

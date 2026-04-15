@@ -3,22 +3,172 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Elevation Barn · Bali — Queen of Retreats</title>
+  <title>Ananda in the Himalayas — Queen of Retreats</title>
+  <!-- Adobe Fonts: replace with your project embed URL -->
+  <!-- <link rel="stylesheet" href="https://use.typekit.net/XXXXXXX.css"> -->
   <link rel="stylesheet" href="styles.css">
   <style>
+    /* Page-specific overrides */
+    .gallery-thumbs {
+      display: flex;
+      gap: var(--s2);
+      margin-top: var(--s9);
+      max-width: var(--max-content);
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 var(--s7);
+    }
+    .gallery-thumb {
+      height: 80px;
+      flex: 1;
+      object-fit: cover;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      opacity: 0.75;
+      transition: opacity var(--dur-fast);
+    }
+    .gallery-thumb:hover { opacity: 1; }
+    .section { padding: var(--s8) 0; }
+    .section + .section { border-top: 1px solid var(--border); }
+    .highlight-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--s5);
+      padding: var(--s7) 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin: var(--s7) 0;
+    }
+    .highlight-stat {}
+    .highlight-stat__value {
+      font-family: var(--serif);
+      font-size: var(--t-2xl);
+      color: var(--ink);
+      margin-bottom: var(--s1);
+    }
+    .highlight-stat__label { font-size: var(--t-sm); color: var(--stone); }
+    .programme-day {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: var(--s5);
+      padding: var(--s5) 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .programme-day:last-child { border-bottom: none; }
+    .programme-day__label { font-size: var(--t-sm); font-weight: 600; color: var(--stone); }
+    .programme-day__content {}
+    .programme-day__title { font-weight: 500; margin-bottom: var(--s1); color: var(--ink); }
+    .programme-day__desc { font-size: var(--t-sm); color: var(--stone); }
+    .room-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s4);
+    }
+    .room-preview-card { border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--border); }
+    .room-preview-card__img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background: var(--sand-mid);
+    }
+    .room-preview-card__body { padding: var(--s5); }
+    .room-preview-card__name { font-family: var(--serif); font-size: var(--t-lg); color: var(--ink); margin-bottom: var(--s1); }
+    .room-preview-card__detail { font-size: var(--t-sm); color: var(--stone); margin-bottom: var(--s3); }
+    .room-preview-card__price { font-size: var(--t-base); font-weight: 600; color: var(--charcoal); }
+    .aggregate-rating {
+      display: flex;
+      align-items: center;
+      gap: var(--s6);
+      margin-bottom: var(--s7);
+    }
+    .agg-score {
+      font-family: var(--serif);
+      font-size: 56px;
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .agg-details {}
+    .agg-stars { color: var(--sage); font-size: 20px; letter-spacing: 2px; }
+    .agg-count { font-size: var(--t-sm); color: var(--stone); margin-top: var(--s2); }
+    .map-placeholder {
+      width: 100%;
+      height: 300px;
+      background: var(--sand-mid);
+      border-radius: var(--r-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--stone);
+      font-size: var(--t-sm);
+      border: 1px solid var(--border);
+      margin-top: var(--s5);
+    }
+    .widget-dates-scroll {
+      display: flex;
+      gap: var(--s2);
+      overflow-x: auto;
+      padding-bottom: var(--s2);
+      scrollbar-width: none;
+    }
+    .widget-dates-scroll::-webkit-scrollbar { display: none; }
+    .widget-date-pill.is-soldout { opacity: 0.4; cursor: not-allowed; text-decoration: line-through; }
+    .widget-spaces {
+      font-size: var(--t-sm);
+      color: var(--warning);
+      font-weight: 500;
+    }
+    .footer {
+      border-top: 1px solid var(--border);
+      background: var(--white);
+      padding: var(--s7) 0;
+    }
+    .footer__inner {
+      max-width: var(--max-content);
+      margin: 0 auto;
+      padding: 0 var(--s7);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .footer__logo { font-family: var(--serif); font-size: 18px; color: var(--ink); }
+    .footer__links { display: flex; gap: var(--s6); }
+    .footer__links a { font-size: var(--t-sm); color: var(--stone); }
+    .footer__links a:hover { color: var(--ink); }
+    .breadcrumb { display: none; }
+    .breadcrumb__inner {
+      max-width: var(--max-content);
+      margin: 0 auto;
+      padding: 0 var(--s7);
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      font-size: var(--t-sm);
+      color: var(--stone);
+    }
+    .breadcrumb__inner a { color: var(--stone); }
+    .breadcrumb__inner a:hover { color: var(--ink); }
+    .breadcrumb__sep { color: var(--mist); }
+    .breadcrumb__current { color: var(--ink); font-weight: 500; }
 
-    body { padding-top: 60px; }
+    body { padding-top: 0; }
 
-    /* ── White header for this page (no hero image) ─── */
+    /* ── Hide vertical sidebar; full-width layout ── */
+    .rdp-sidebar { display: none !important; }
+    .rdp-layout  { grid-template-columns: 1fr !important; }
+
+    /* ── Transparent → white header + hide on scroll  */
     .site-header {
+      transition: background var(--dur-fast), box-shadow var(--dur-fast), transform 0.3s ease;
+    }
+    .site-header.is-scrolled {
       background: var(--white) !important;
       box-shadow: 0 1px 0 var(--border);
     }
-    .site-header .site-header__logo { color: var(--ink); }
-    .site-header .site-header__nav a { color: var(--stone); }
-    .site-header .site-header__nav a:hover { color: var(--ink); }
-    .site-header .site-header__actions .btn--ghost { color: var(--charcoal); }
-    .site-header .site-header__actions .btn--ghost:hover { color: var(--ink); }
+    .site-header.is-scrolled .site-header__logo { color: var(--ink); }
+    .site-header.is-scrolled .site-header__nav a { color: var(--stone); }
+    .site-header.is-scrolled .site-header__nav a:hover { color: var(--ink); }
+    .site-header.is-scrolled .site-header__actions .btn--ghost { color: var(--charcoal); }
 
     /* ── Breadcrumb ──────────────────────────────────── */
     .rdp-breadcrumb {
@@ -172,6 +322,7 @@
       z-index: 90;
       background: var(--white);
       border-bottom: 1px solid var(--border);
+      transition: top 0.3s ease;
     }
     .rdp-subnav__inner {
       max-width: var(--max-content);
@@ -230,8 +381,8 @@
       .rdp-trust-grid { grid-template-columns: 1fr; }
       .rdp-related-grid { grid-template-columns: 1fr 1fr; }
       .rdp-neighbourhood-grid { grid-template-columns: 1fr 1fr; }
-      .rdp-room-card { grid-template-columns: 1fr; }
-      .rdp-room-card__img { height: 200px; width: 100%; }
+      .rdp-room-cards { grid-template-columns: 1fr; }
+      .rdp-room-carousel { aspect-ratio: 1 / 1; }
       .rdp-facilities { grid-template-columns: 1fr; }
     }
 
@@ -467,13 +618,18 @@
     .rdp-date-card__per { font-size: var(--t-xs); color: var(--stone); }
 
     /* ── Room cards ──────────────────────────────────── */
-    .rdp-room-cards { display: flex; flex-direction: column; gap: var(--s5); }
+    .rdp-room-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--s5);
+      align-items: start;
+    }
     .rdp-room-card {
       border: 1.5px solid var(--border);
       border-radius: var(--r-lg);
       overflow: hidden;
-      display: grid;
-      grid-template-columns: 220px 1fr;
+      display: flex;
+      flex-direction: column;
       transition: border-color var(--dur-fast);
     }
     .rdp-room-card { cursor: pointer; }
@@ -495,8 +651,64 @@
     .rdp-room-card.is-selected .rdp-room-select-btn.is-primary {
       background: var(--sage); color: var(--white); border-color: var(--sage);
     }
-    .rdp-room-card__img { width: 100%; height: 100%; object-fit: cover; min-height: 200px; display: block; }
-    .rdp-room-card__body { padding: var(--s6); display: flex; flex-direction: column; }
+    /* Room image carousel — 1:1 */
+    .rdp-room-carousel {
+      position: relative;
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      background: var(--sand-mid);
+      flex-shrink: 0;
+    }
+    .rdp-room-carousel__track {
+      display: flex;
+      height: 100%;
+      transition: transform 0.4s ease;
+    }
+    .rdp-room-carousel__slide {
+      min-width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .rdp-room-carousel__btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.60);
+      border: none;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 2;
+      color: var(--ink);
+      transition: background 0.2s;
+    }
+    .rdp-room-carousel__btn:hover { background: var(--white); }
+    .rdp-room-carousel__btn--prev { left: 8px; }
+    .rdp-room-carousel__btn--next { right: 8px; }
+    .rdp-room-carousel__dots {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 5px;
+      z-index: 2;
+    }
+    .rdp-room-carousel__dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .rdp-room-carousel__dot.is-active { background: var(--white); }
+    .rdp-room-card__body { padding: var(--s5); display: flex; flex-direction: column; }
     .rdp-room-card__badge {
       display: inline-block;
       font-size: var(--t-xs);
@@ -771,17 +983,164 @@
     .rdp-widget__trust-item { display: flex; align-items: center; gap: var(--s3); font-size: var(--t-sm); color: var(--stone); }
     .rdp-widget__trust-item svg { color: var(--sage); flex-shrink: 0; }
 
+    /* ── PDP Fixed Bottom Booking Bar ───────────────────────────── */
+    #pdp-bottom-bar {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(calc(100% + 16px));
+      width: min(var(--max-content), calc(100vw - 32px));
+      z-index: 300;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 9999px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.14);
+      transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #pdp-bottom-bar.is-visible {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .pdp-bar__inner {
+      max-width: var(--max-content);
+      margin: 0 auto;
+      padding: var(--s4) var(--s7);
+      display: flex;
+      align-items: center;
+      gap: var(--s5);
+    }
+    .pdp-bar__divider {
+      width: 1px;
+      align-self: stretch;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+    .pdp-bar__price-block { flex-shrink: 0; }
+    .pdp-bar__from { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--stone); margin-bottom: 2px; }
+    .pdp-bar__amount { font-family: var(--serif); font-size: 28px; color: var(--ink); line-height: 1; }
+    .pdp-bar__per { font-size: var(--t-xs); color: var(--stone); margin-left: 3px; }
+
+    .pdp-bar__field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .pdp-bar__label { font-size: var(--t-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--stone); font-weight: 600; white-space: nowrap; }
+    .pdp-bar__value { font-size: var(--t-sm); color: var(--ink); font-weight: 500; white-space: nowrap; }
+    .pdp-bar__value--placeholder { color: var(--stone); font-weight: 400; }
+
+    .pdp-bar__select {
+      font-size: var(--t-sm);
+      height: 36px;
+      padding: 0 var(--s6) 0 var(--s3);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-md);
+      background: var(--white);
+      color: var(--ink);
+      min-width: 190px;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+    }
+    .pdp-bar__select:focus { outline: none; border-color: var(--sage); }
+
+    .pdp-bar__guests-row { display: flex; align-items: center; gap: var(--s3); }
+    .pdp-bar__guests-row .stepper__btn { width: 32px; height: 36px; }
+    .pdp-bar__guests-row .stepper { height: 36px; }
+
+    .pdp-bar__ctas { display: flex; gap: var(--s3); margin-left: auto; flex-shrink: 0; align-items: flex-end; align-self: flex-end; }
+    .pdp-bar__cta-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .pdp-bar__note { display: none; }
+
   </style>
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════════
-       SITE HEADER
-  ═══════════════════════════════════════════════ -->
+  <!-- ===== Site Header ===== -->
   <header class="site-header">
     <div class="site-header__inner">
       <nav class="site-header__nav">
-        <a href="listings.html">Retreats</a>
+
+        <!-- Retreats + Mega Menu -->
+        <div class="nav-item--mega">
+          <a href="listings.html">Retreats</a>
+          <div class="mega-menu">
+            <div class="mega-menu__inner">
+
+              <!-- Rail 1: By Category -->
+              <div class="mega-menu__rail">
+                <div class="mega-menu__rail-label">Browse by category</div>
+                <div class="mega-menu__scroll">
+                  <a href="#" class="mega-cat-card">
+                    <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Yoga & Meditation">
+                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Yoga &amp; Meditation</span></div>
+                  </a>
+                  <a href="#" class="mega-cat-card">
+                    <img src="images/header_casa-ana_20230628180415.jpg" alt="Detox & Cleanse">
+                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Detox &amp; Cleanse</span></div>
+                  </a>
+                  <a href="#" class="mega-cat-card">
+                    <img src="images/header_vale-de-moses.jpg" alt="Fitness & Adventure">
+                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Fitness &amp; Adventure</span></div>
+                  </a>
+                  <a href="#" class="mega-cat-card">
+                    <img src="images/header_les-marguerites.jpg" alt="Meditation & Mindfulness">
+                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Meditation &amp; Mindfulness</span></div>
+                  </a>
+                  <a href="#" class="mega-cat-card">
+                    <img src="images/header_vale-de-moses.webp" alt="Health & Healing">
+                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Health &amp; Healing</span></div>
+                  </a>
+                  <a href="#" class="mega-cat-card">
+                    <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Personal Growth">
+                    <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Personal Growth</span></div>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Rail 2: By Intent -->
+              <div class="mega-menu__rail">
+                <div class="mega-menu__rail-label">What are you looking for?</div>
+                <div class="mega-menu__scroll">
+                  <a href="#" class="mega-intent-card">
+                    <div class="mega-intent-card__icon">🌿</div>
+                    <div class="mega-intent-card__name">Relaxation</div>
+                    <div class="mega-intent-card__desc">Slow down and restore your sense of calm</div>
+                  </a>
+                  <a href="#" class="mega-intent-card">
+                    <div class="mega-intent-card__icon">✨</div>
+                    <div class="mega-intent-card__name">Transformation</div>
+                    <div class="mega-intent-card__desc">Break old patterns and emerge renewed</div>
+                  </a>
+                  <a href="#" class="mega-intent-card">
+                    <div class="mega-intent-card__icon">🏃</div>
+                    <div class="mega-intent-card__name">Active &amp; Fitness</div>
+                    <div class="mega-intent-card__desc">Challenge your body in beautiful settings</div>
+                  </a>
+                  <a href="#" class="mega-intent-card">
+                    <div class="mega-intent-card__icon">📵</div>
+                    <div class="mega-intent-card__name">Digital Detox</div>
+                    <div class="mega-intent-card__desc">Unplug, breathe, and reconnect with yourself</div>
+                  </a>
+                  <a href="#" class="mega-intent-card">
+                    <div class="mega-intent-card__icon">🤝</div>
+                    <div class="mega-intent-card__name">Reconnect</div>
+                    <div class="mega-intent-card__desc">Find community with like-minded souls</div>
+                  </a>
+                  <a href="#" class="mega-intent-card">
+                    <div class="mega-intent-card__icon">🔮</div>
+                    <div class="mega-intent-card__name">Inner Work</div>
+                    <div class="mega-intent-card__desc">Therapy, journalling, and deep self-enquiry</div>
+                  </a>
+                </div>
+              </div>              <!-- Footer -->
+              <div class="mega-menu__footer">
+                <a href="listings.html" class="mega-menu__footer-link">View all retreats →</a>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
         <a href="#">Destinations</a>
         <a href="#">Inspiration</a>
         <a href="#">About</a>
@@ -789,103 +1148,81 @@
       <a href="index.html" class="site-header__logo">Queen of Retreats</a>
       <div class="site-header__actions">
         <button class="btn btn--ghost" style="gap:6px">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           Search
         </button>
         <button class="btn btn--ghost" style="gap:6px">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           Sign In
         </button>
       </div>
     </div>
   </header>
 
-  <!-- ═══════════════════════════════════════════════
-       BREADCRUMB
-  ═══════════════════════════════════════════════ -->
-  <div class="rdp-breadcrumb">
-    <a href="index.html">Home</a>
-    <span class="rdp-breadcrumb__sep">/</span>
-    <a href="#">Destinations</a>
-    <span class="rdp-breadcrumb__sep">/</span>
-    <a href="#">Bali</a>
-    <span class="rdp-breadcrumb__sep">/</span>
-    <span class="rdp-breadcrumb__current">Elevation Barn</span>
-  </div>
-
-  <!-- ═══════════════════════════════════════════════
-       TITLE BLOCK
-  ═══════════════════════════════════════════════ -->
-  <div class="rdp-title-block">
-    <p class="rdp-eyebrow">Gianyar &nbsp;·&nbsp; Bali &nbsp;·&nbsp; Yoga &amp; Wellness &nbsp;·&nbsp; 7 nights</p>
-    <h1 class="rdp-h1">Elevation Barn — Bali</h1>
-    <p class="rdp-tagline">A tropical sanctuary for deep rest, inner renewal, and joyful community — set among rice paddies in the heart of Bali.</p>
-    <div class="rdp-title-meta">
-      <div class="rdp-rating">
-        <span class="rdp-rating__stars">★★★★★</span>
-        <span>4.9</span>
-        <span class="rdp-rating__count">· 47 reviews</span>
-      </div>
-      <div class="rdp-vetted">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-        QoR Vetted
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <img src="images/retreats/ananda/ANANDA+hot+oil+2.webp"
+         alt="Quinta da Levada retreat in Alentejo"
+         class="hero__image">
+    <div class="hero__overlay"></div>
+    <!-- Title, subhead & ratings — vertically centred above booking bar -->
+    <div class="hero__center">
+      <p class="hero__eyebrow">Uttarakhand &nbsp;·&nbsp; INDIA &nbsp;·&nbsp; 7 nights</p>
+      <h1 class="hero__title">Ananda in the Himalayas</h1>
+      <p class="hero__subtitle">Immersive, holistic wellness and ayurveda retreat in the Himalayan foothills</p>
+      <div class="hero__meta">
+        <div class="hero__rating">
+          <span style="color:#c9a84c;">★★★★★</span>
+          <span>4.9 &nbsp;·&nbsp; 47 reviews</span>
+        </div>
+        <div class="hero__vetted">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          QoR Vetted
+        </div>
       </div>
     </div>
-    <div class="rdp-tags">
-      <span class="rdp-tag">Solo travellers</span>
-      <span class="rdp-tag">Burnout &amp; stress recovery</span>
-      <span class="rdp-tag">Deep rest</span>
-      <span class="rdp-tag">First retreat</span>
-      <span class="rdp-tag">Nature &amp; jungle</span>
-      <span class="rdp-tag">All levels</span>
-    </div>
-  </div>
 
-  <!-- ═══════════════════════════════════════════════
-       PHOTO GALLERY
-  ═══════════════════════════════════════════════ -->
-  <div class="rdp-gallery">
-    <div class="rdp-gallery__grid">
-      <div class="rdp-gallery__main">
-        <img src="images/header_vale-de-moses.jpg" alt="Elevation Barn main property view">
+    <!-- ===== Booking Bar — overlaid on hero ===== -->
+    <div class="booking-bar">
+      <div class="booking-bar__price">
+        <span class="booking-bar__from">From</span>
+        <span class="booking-bar__amount">£2,195</span>
+        <span class="booking-bar__per">per person</span>
       </div>
-      <div class="rdp-gallery__thumb">
-        <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Yoga shala at Elevation Barn">
+
+      <div class="booking-bar__divider"></div>
+
+      <div class="booking-bar__dates" style="padding-top: 15px;">
+        <p style="font-family: var(--serif); font-weight: 500; font-size: 17px; color: rgba(255,255,255,0.7); line-height: 1.4; text-transform: none; letter-spacing: 0; margin: 0;">7-night set-date group retreats. Up to 6 guests. Private, bespoke<br>retreats for groups, corporates and families of 6 to 10 guests.</p>
       </div>
-      <div class="rdp-gallery__thumb">
-        <img src="images/header_casa-ana_20230628180415.jpg" alt="Accommodation at Elevation Barn">
-      </div>
-      <div class="rdp-gallery__thumb">
-        <img src="images/header_les-marguerites.jpg" alt="Grounds and gardens">
-        <button class="rdp-gallery__view-all">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          View all 18 photos
-        </button>
+
+      <div class="booking-bar__cta" style="padding-bottom: 24px;">
+        <a href="enquiry-1.html" class="btn btn--primary btn--lg">Enquire about this retreat</a>
+        <p class="booking-bar__note" style="display:none;">No payment today · 25% deposit to secure</p>
       </div>
     </div>
-  </div>
 
-  <!-- ═══════════════════════════════════════════════
-       TRUST BAR
-  ═══════════════════════════════════════════════ -->
+  </section>
+
+  <!-- ===== Trust Bar ===== -->
   <div class="trust-bar">
     <div class="container">
       <div class="trust-bar__inner">
         <div class="trust-bar__item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          Reviewed in person by QoR
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          QoR Curated &amp; Quality Checked
         </div>
         <div class="trust-bar__item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           Free cancellation up to 90 days
         </div>
         <div class="trust-bar__item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           Max 12 guests
         </div>
         <div class="trust-bar__item">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-          25% deposit · balance due 60 days before
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          Secure deposit — 25% to book
         </div>
       </div>
     </div>
@@ -923,10 +1260,10 @@
       <section class="rdp-section" id="overview">
         <p class="rdp-section__title">What is this experience?</p>
         <p style="font-family: var(--serif); font-size: var(--t-xl); line-height: 1.6; color: var(--ink); margin-bottom: var(--s6); font-weight: 400;">
-          Set among emerald rice paddies and jungle in Gianyar, Bali, the Elevation Barn is a place to <em>arrive fully</em> — and leave changed.
+          Set around an original maharaja’s palace in Uttarakhand with majestic views and peaceful gardens <em>arrive fully</em> — and leave changed.
         </p>
         <p style="color: var(--stone); line-height: 1.9; margin-bottom: var(--s4);">
-          Seven days of restorative yoga, guided meditation, and embodied movement — held alongside extraordinary farm-to-table meals, communal evenings, and the unhurried rhythm of Balinese life. This is not a programme about optimising yourself. It's about returning to yourself.
+          This renowned hilltop holistic retreat offers a range of brilliant wellness programmes for health and wellbeing that draw on ayurveda, yoga, meditation, traditional Chinese medicine and vedanta (the art of living). You are treated like royalty by warm, highly experienced staff, and there is a vast spa and menu of nurturing treatments.
         </p>
         <p style="color: var(--stone); line-height: 1.9;">
           Led by internationally-trained facilitators with backgrounds in trauma-informed yoga, somatic movement, and nature therapy. Suitable for all experience levels. The maximum group size of 12 guests ensures a genuinely intimate experience where connection forms naturally.
@@ -1067,7 +1404,7 @@
 
         <div class="rdp-editorial">
           <p class="rdp-editorial__lead">
-            "The Elevation Barn is one of those rare finds — a retreat that delivers on every promise, and then some."
+            "The Ananda in the Himalayas is one of those rare finds — a retreat that delivers on every promise, and then some."
           </p>
           <p class="rdp-editorial__body">
             Our editor Emma visited in September 2025 and described it as the most considered retreat environment she'd encountered in a decade of retreat reviewing. What makes it exceptional isn't any single element — it's the totality. The setting (a beautifully restored Balinese property surrounded by rice paddies) is genuinely stunning; the hosts hold the space with rare warmth and expertise; and the programme is intelligently sequenced to move you from arrival anxiety to deep rest within 48 hours.
@@ -1213,10 +1550,23 @@
         <div class="rdp-room-cards">
 
           <div class="rdp-room-card" data-price="2195" data-room="2195">
-            <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg"
-                 alt="Shared Garden Room" class="rdp-room-card__img">
+            <div class="rdp-room-carousel" data-carousel>
+              <div class="rdp-room-carousel__track">
+                <img src="images/retreats/ananda/Ananda+in+the+Himalayas+India+four-poster+bed.webp" alt="Premium en-suite" class="rdp-room-carousel__slide">
+                <img src="images/retreats/ananda/ANANDA+massage.webp" alt="Premium en-suite" class="rdp-room-carousel__slide">
+                <img src="images/retreats/ananda/Ananda+deluxe+room+view.webp" alt="Premium en-suite" class="rdp-room-carousel__slide">
+              </div>
+              <button class="rdp-room-carousel__btn rdp-room-carousel__btn--prev" aria-label="Previous"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+              <button class="rdp-room-carousel__btn rdp-room-carousel__btn--next" aria-label="Next"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+              <div class="rdp-room-carousel__dots">
+                <span class="rdp-room-carousel__dot is-active"></span>
+                <span class="rdp-room-carousel__dot"></span>
+                <span class="rdp-room-carousel__dot"></span>
+              </div>
+            </div>
             <div class="rdp-room-card__body">
-              <div class="rdp-room-card__name">Shared Garden Room</div>
+              <div class="rdp-room-card__badge" style="visibility: hidden;">–</div>
+              <div class="rdp-room-card__name">Premium en-suite</div>
               <div class="rdp-room-card__type">Twin share · Garden view · En-suite</div>
               <div class="rdp-room-card__includes">
                 <div class="rdp-room-card__include">Garden-view terrace with hammock</div>
@@ -1234,11 +1584,23 @@
           </div>
 
           <div class="rdp-room-card rdp-room-card--popular" data-price="2895" data-room="2895">
-            <img src="images/header_casa-ana_20230628180415.jpg"
-                 alt="Private Valley Room" class="rdp-room-card__img">
+            <div class="rdp-room-carousel" data-carousel>
+              <div class="rdp-room-carousel__track">
+                <img src="images/retreats/ananda/Ananda+deluxe+room+view.webp" alt="Luxury en-suite" class="rdp-room-carousel__slide">
+                <img src="images/retreats/ananda/Ananda+therapy+2.webp" alt="Luxury en-suite" class="rdp-room-carousel__slide">
+                <img src="images/retreats/ananda/ANANDA+hot+oil+2.webp" alt="Luxury en-suite" class="rdp-room-carousel__slide">
+              </div>
+              <button class="rdp-room-carousel__btn rdp-room-carousel__btn--prev" aria-label="Previous"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+              <button class="rdp-room-carousel__btn rdp-room-carousel__btn--next" aria-label="Next"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+              <div class="rdp-room-carousel__dots">
+                <span class="rdp-room-carousel__dot is-active"></span>
+                <span class="rdp-room-carousel__dot"></span>
+                <span class="rdp-room-carousel__dot"></span>
+              </div>
+            </div>
             <div class="rdp-room-card__body">
               <div class="rdp-room-card__badge">Most popular</div>
-              <div class="rdp-room-card__name">Private Valley Room</div>
+              <div class="rdp-room-card__name">Luxury en-suite</div>
               <div class="rdp-room-card__type">Double or twin · Rice paddy view · En-suite</div>
               <div class="rdp-room-card__includes">
                 <div class="rdp-room-card__include">Private balcony with rice paddy view</div>
@@ -1256,11 +1618,23 @@
           </div>
 
           <div class="rdp-room-card" data-price="3750" data-room="3750">
-            <img src="images/header_les-marguerites.jpg"
-                 alt="Quinta Suite" class="rdp-room-card__img">
+            <div class="rdp-room-carousel" data-carousel>
+              <div class="rdp-room-carousel__track">
+                <img src="images/retreats/ananda/Ananda-India-Pool-1.webp" alt="Private villa" class="rdp-room-carousel__slide">
+                <img src="images/retreats/ananda/Ananda++view+2.webp" alt="Private villa" class="rdp-room-carousel__slide">
+                <img src="images/retreats/ananda/Ananda++view.webp" alt="Private villa" class="rdp-room-carousel__slide">
+              </div>
+              <button class="rdp-room-carousel__btn rdp-room-carousel__btn--prev" aria-label="Previous"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg></button>
+              <button class="rdp-room-carousel__btn rdp-room-carousel__btn--next" aria-label="Next"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></button>
+              <div class="rdp-room-carousel__dots">
+                <span class="rdp-room-carousel__dot is-active"></span>
+                <span class="rdp-room-carousel__dot"></span>
+                <span class="rdp-room-carousel__dot"></span>
+              </div>
+            </div>
             <div class="rdp-room-card__body">
               <div class="rdp-room-card__badge" style="background: var(--warning-bg); color: var(--warning);">Premium</div>
-              <div class="rdp-room-card__name">Quinta Suite</div>
+              <div class="rdp-room-card__name">Private villa</div>
               <div class="rdp-room-card__type">Junior suite · Private terrace · Deep-soak bath</div>
               <div class="rdp-room-card__includes">
                 <div class="rdp-room-card__include">Private terrace &amp; plunge pool</div>
@@ -1283,7 +1657,7 @@
       <!-- ── 5. Facilities ────────────────────────── -->
       <section class="rdp-section" id="facilities">
         <p class="rdp-section__title">Facilities &amp; space</p>
-        <p class="rdp-section__sub">Every element of the Elevation Barn is designed to deepen your retreat — not distract from it.</p>
+        <p class="rdp-section__sub">Every element of the Ananda in the Himalayas is designed to deepen your retreat — not distract from it.</p>
 
         <div class="rdp-facilities">
           <div class="rdp-facility">
@@ -1383,7 +1757,7 @@
         <div class="rdp-food-grid">
           <div>
             <p style="color: var(--charcoal); line-height: 1.9; margin-bottom: var(--s5);">
-              The kitchen at Elevation Barn is plant-forward, locally sourced, and prepared with extraordinary care. Inspired by Balinese tradition and guided by seasonal availability, meals are designed to nourish the body and delight the senses — never to restrict.
+              The kitchen at Ananda in the Himalayas is plant-forward, locally sourced, and prepared with extraordinary care. Inspired by Balinese tradition and guided by seasonal availability, meals are designed to nourish the body and delight the senses — never to restrict.
             </p>
             <p style="color: var(--charcoal); line-height: 1.9; margin-bottom: var(--s6);">
               Some fish and ethically sourced chicken are available. All dietary requirements are accommodated with advance notice.
@@ -1438,7 +1812,7 @@
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               AI review summary
             </div>
-            <p class="rdp-review-ai">Guests consistently describe Elevation Barn as transformative without being prescriptive. The hosting team receives exceptional praise across all reviews — particularly for their ability to hold space for guests arriving at different emotional starting points. Food is regularly cited as "unexpectedly exceptional." The setting — rice paddies, open-air yoga shala — appears in nearly every review as a decisive factor. Solo travellers note how naturally community forms.</p>
+            <p class="rdp-review-ai">Guests consistently describe Ananda in the Himalayas as transformative without being prescriptive. The hosting team receives exceptional praise across all reviews — particularly for their ability to hold space for guests arriving at different emotional starting points. Food is regularly cited as "unexpectedly exceptional." The setting — rice paddies, open-air yoga shala — appears in nearly every review as a decisive factor. Solo travellers note how naturally community forms.</p>
           </div>
         </div>
 
@@ -1486,17 +1860,17 @@
       <!-- ── 9. Location & Travel ─────────────────── -->
       <section class="rdp-section" id="location">
         <p class="rdp-section__title">Location &amp; getting here</p>
-        <p class="rdp-section__sub">Gianyar, Bali — set in the cultural heartland of the island, 40 minutes from Ubud.</p>
+        <p class="rdp-section__sub">Narendra Nagar, India — set in the cultural heartland of the island, 40 minutes from Ubud.</p>
 
         <div class="map-placeholder" style="padding: 0; overflow: hidden; border-radius: var(--r-lg);">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63246.55!2d115.3283!3d-8.5411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd200e0e2a5a6c3%3A0x5030bfbcaf6e0e0!2sGianyar%2C%20Bali%2C%20Indonesia!5e0!3m2!1sen!2suk!4v1"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d55969.0!2d78.3059!3d30.1675!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3909207c94b4e3df%3A0x854f0ad4ce2d6a8a!2sNarendra+Nagar%2C+Uttarakhand%2C+India!5e0!3m2!1sen!2suk!4v1"
             width="100%" height="100%"
             style="border: 0; display: block;"
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            title="Gianyar, Bali, Indonesia">
+            title="Narendra Nagar, Uttarakhand, India">
           </iframe>
         </div>
 
@@ -1727,15 +2101,15 @@
 
           <!-- Dates -->
           <div class="rdp-widget__field-label">Dates</div>
-          <div class="select-wrap">
-            <select class="form-select" id="widget-date">
-              <option value="" disabled selected>Select dates</option>
-              <option value="d1">7–14 Jun 2026</option>
-              <option value="d2">21–28 Jun 2026</option>
-              <option value="d3">2–9 Aug 2026</option>
-              <option value="d4">16–23 Aug 2026</option>
-              <option value="d5">6–13 Sep 2026</option>
-            </select>
+          <div class="rdp-widget__placeholder" id="widget-date-placeholder">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            No date selected yet
+          </div>
+          <div class="rdp-widget__avail" id="widget-avail" style="display:none;"></div>
+          <div class="rdp-widget__date-selected" id="widget-date-selected" style="display:none;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <span id="widget-date-label">—</span>
+            <span class="rdp-widget__date-nights">· 7 nights</span>
           </div>
 
           <!-- Guests -->
@@ -1754,9 +2128,9 @@
           <div class="select-wrap">
             <select class="form-select" id="widget-room">
               <option value="" disabled selected>Select room</option>
-              <option value="2195">Shared Garden Room — £2,195 pp</option>
-              <option value="2895">Private Valley Room — £2,895 pp</option>
-              <option value="3750">Quinta Suite — £3,750 pp</option>
+              <option value="2195">Premium en-suite — £2,195 pp</option>
+              <option value="2895">Luxury en-suite — £2,895 pp</option>
+              <option value="3750">Private villa — £3,750 pp</option>
             </select>
           </div>
 
@@ -1783,7 +2157,7 @@
           <!-- CTAs -->
           <div class="rdp-widget__ctas">
             <a href="booking.html" class="btn btn--primary btn--lg btn--full">Book This Retreat</a>
-            <a href="enquiry.html" class="btn btn--outline btn--lg btn--full">Enquire Instead</a>
+            <a href="enquiry-1.html" class="btn btn--outline btn--lg btn--full">Enquire Instead</a>
           </div>
           <p class="rdp-widget__note">No payment today · 25% deposit to secure your place</p>
 
@@ -1813,7 +2187,7 @@
   <!-- ═══════════════════════════════════════════════
        FOOTER
   ═══════════════════════════════════════════════ -->
-  <footer style="background: var(--ink); color: var(--white); padding: 64px 48px 40px;">
+  <footer style="background: var(--ink); color: var(--white); padding: 64px 48px 120px;">
     <div style="max-width: 1320px; margin: 0 auto;">
       <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.12);">
         <div>
@@ -1862,6 +2236,164 @@
   <script>
     'use strict';
 
+    /* ── Header hide/show + subnav pin on scroll ─── */
+    (function() {
+      const header = document.querySelector('.site-header');
+      const subnav = document.getElementById('rdp-subnav');
+      if (!header) return;
+
+      const HEADER_H = header.offsetHeight; // ~60px
+      let lastY      = window.scrollY;
+      let hidden     = false;
+
+      function onScroll() {
+        const y         = window.scrollY;
+        const scrollingDown = y > lastY;
+
+        // White header once past hero
+        if (y > 80) {
+          header.classList.add('is-scrolled');
+        } else {
+          header.classList.remove('is-scrolled');
+        }
+
+        // Hide header on scroll down, show on scroll up
+        if (scrollingDown && y > HEADER_H && !hidden) {
+          header.style.transform = `translateY(-100%)`;
+          if (subnav) subnav.style.top = '0';
+          hidden = true;
+        } else if (!scrollingDown && hidden) {
+          header.style.transform = '';
+          if (subnav) subnav.style.top = `${HEADER_H}px`;
+          hidden = false;
+        }
+
+        lastY = y;
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    })();
+
+    /* ── PDP Bottom Bar ──────────────────────────── */
+    window.addEventListener('DOMContentLoaded', function() {
+      const bar     = document.getElementById('pdp-bottom-bar');
+      const heroBar = document.querySelector('.booking-bar');
+      if (!bar) return;
+
+      // Show bar once user scrolls past the hero
+      function updateBarVisibility() {
+        const hero = document.querySelector('.hero');
+        const threshold = hero ? hero.offsetHeight * 0.75 : 300;
+        bar.classList.toggle('is-visible', window.scrollY > threshold);
+      }
+      window.addEventListener('scroll', updateBarVisibility, { passive: true });
+      updateBarVisibility();
+
+      // Bottom bar "Book This Retreat" — save selections to sessionStorage so
+      // booking.html can pre-populate and jump straight to Step 3
+      const bookBtn = document.getElementById('pdp-bar-book');
+      if (bookBtn) {
+        bookBtn.addEventListener('click', function(e) {
+          // Only preselect if user has chosen a room; otherwise normal Step 1 flow
+          if (widgetState.roomSelected) {
+            const preselect = {
+              dateId:    widgetState.dateId,
+              dateLabel: widgetState.dateLabel,
+              roomPrice: widgetState.price,
+              guests:    widgetState.guests,
+            };
+            sessionStorage.setItem('qor_preselect', JSON.stringify(preselect));
+          }
+          // Navigation continues naturally via the href
+        });
+      }
+
+      // Guest stepper
+      let barGuests = 1;
+      document.getElementById('pdp-bar-minus').addEventListener('click', () => {
+        if (barGuests > 1) {
+          barGuests--;
+          widgetState.guests = barGuests;
+          document.getElementById('pdp-bar-count').textContent = barGuests;
+          document.getElementById('pdp-bar-minus').disabled = barGuests <= 1;
+          // Sync main widget stepper
+          const wc = document.getElementById('widget-count');
+          if (wc) wc.textContent = barGuests;
+          const wm = document.getElementById('widget-minus');
+          if (wm) wm.disabled = barGuests <= 1;
+          updateWidgetPrice();
+          syncBottomBar();
+        }
+      });
+      document.getElementById('pdp-bar-plus').addEventListener('click', () => {
+        if (barGuests < 12) {
+          barGuests++;
+          widgetState.guests = barGuests;
+          document.getElementById('pdp-bar-count').textContent = barGuests;
+          document.getElementById('pdp-bar-minus').disabled = false;
+          // Sync main widget stepper
+          const wc = document.getElementById('widget-count');
+          if (wc) wc.textContent = barGuests;
+          const wm = document.getElementById('widget-minus');
+          if (wm) wm.disabled = false;
+          updateWidgetPrice();
+          syncBottomBar();
+        }
+      });
+
+      // Date dropdown → sync widgetState + in-page date cards
+      document.getElementById('pdp-bar-date').addEventListener('change', function() {
+        if (!this.value) return;
+        const dateId = this.value;
+        const card = document.querySelector(`.rdp-date-card[data-date="${dateId}"]`);
+        if (!card) return;
+        const label = card.dataset.label || '';
+        // Update widget state
+        widgetState.dateSelected = true;
+        widgetState.dateId       = dateId;
+        widgetState.dateLabel    = label;
+        // Highlight date card in main content
+        document.querySelectorAll('.rdp-date-card').forEach(c => c.classList.remove('is-selected'));
+        card.classList.add('is-selected');
+        // Sync sidebar widget date display
+        const placeholderEl  = document.getElementById('widget-date-placeholder');
+        const dateSelectedEl = document.getElementById('widget-date-selected');
+        const dateLabelEl    = document.getElementById('widget-date-label');
+        if (placeholderEl)  placeholderEl.style.display = 'none';
+        if (dateSelectedEl && dateLabelEl) {
+          dateLabelEl.textContent = label;
+          dateSelectedEl.style.display = 'flex';
+        }
+        updateWidgetPrice();
+        syncBottomBar();
+      });
+
+      // Room dropdown → sync widgetState
+      document.getElementById('pdp-bar-room').addEventListener('change', function() {
+        if (!this.value) return;
+        widgetState.price = parseInt(this.value);
+        widgetState.roomSelected = true;
+        const wr = document.getElementById('widget-room');
+        if (wr) wr.value = this.value;
+        // Sync room card selection in main content
+        document.querySelectorAll('.rdp-room-card').forEach(c => {
+          c.classList.remove('is-selected');
+          const btn = c.querySelector('.rdp-room-select-btn');
+          if (btn) btn.textContent = 'Select room';
+        });
+        document.querySelectorAll('.rdp-room-card').forEach(c => {
+          if (c.dataset.price === this.value) {
+            c.classList.add('is-selected');
+            const btn = c.querySelector('.rdp-room-select-btn');
+            if (btn) btn.textContent = '✓ Selected';
+          }
+        });
+        updateWidgetPrice();
+        syncBottomBar();
+      });
+    }); // end DOMContentLoaded
+
     /* ── Accordion ───────────────────────────────── */
     document.querySelectorAll('.accordion-trigger').forEach(trigger => {
       trigger.addEventListener('click', () => {
@@ -1880,32 +2412,71 @@
       });
     });
 
-    /* ── Date card selection (main content → widget sync) ── */
+    /* ── Bottom bar sync helper ──────────────────── */
+    function syncBottomBar() {
+      // Date dropdown
+      const dateSel = document.getElementById('pdp-bar-date');
+      if (dateSel && widgetState.dateId) {
+        dateSel.value = widgetState.dateId;
+      }
+      // Room dropdown
+      const roomSel = document.getElementById('pdp-bar-room');
+      if (roomSel && widgetState.roomSelected && widgetState.price) {
+        roomSel.value = String(widgetState.price);
+      }
+      // Price — show total when room selected
+      const priceEl  = document.getElementById('pdp-bar-price');
+      const fromEl   = document.getElementById('pdp-bar-from');
+      if (priceEl && widgetState.roomSelected && widgetState.price) {
+        const total = widgetState.price * widgetState.guests;
+        priceEl.textContent = `£${total.toLocaleString()}`;
+        if (fromEl) fromEl.textContent = widgetState.guests > 1 ? `${widgetState.guests} guests · total` : 'per person';
+      }
+      // Guests
+      const countEl = document.getElementById('pdp-bar-count');
+      if (countEl) countEl.textContent = widgetState.guests;
+      const minusBtn = document.getElementById('pdp-bar-minus');
+      if (minusBtn) minusBtn.disabled = widgetState.guests <= 1;
+    }
+
+    /* ── Date card selection (main content → widget + bar sync) ── */
     document.querySelectorAll('.rdp-date-card:not(.rdp-date-card--soldout)').forEach(card => {
       card.addEventListener('click', () => {
         // Mark selected in main content
         document.querySelectorAll('.rdp-date-card').forEach(c => c.classList.remove('is-selected'));
         card.classList.add('is-selected');
 
-        const label  = card.dataset.label || '';
-        const dateId = card.dataset.date  || '';
+        const label = card.dataset.label || '';
 
         // Sync widget state
         widgetState.dateSelected = true;
         widgetState.dateLabel    = label;
-        widgetState.dateId       = dateId;
+        widgetState.dateId       = card.dataset.date || '';
 
-        // Sync dates dropdown in sidebar
-        const dateSel = document.getElementById('widget-date');
-        if (dateSel && dateId) dateSel.value = dateId;
-
-        // Recalculate price in widget
-        updateWidgetPrice();
-
-        // Smooth scroll to sidebar on desktop so user sees the update
-        if (window.innerWidth > 960) {
-          document.getElementById('rdp-sidebar').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        // Hide placeholder, show date confirmation banner
+        const placeholderEl  = document.getElementById('widget-date-placeholder');
+        const dateSelectedEl = document.getElementById('widget-date-selected');
+        const dateLabelEl    = document.getElementById('widget-date-label');
+        if (placeholderEl)  placeholderEl.style.display = 'none';
+        if (dateSelectedEl && dateLabelEl) {
+          dateLabelEl.textContent = label;
+          dateSelectedEl.style.display = 'flex';
         }
+
+        // Handle availability notice
+        const avail = document.getElementById('widget-avail');
+        if (avail) {
+          if (card.querySelector('.rdp-date-card__status--limited')) {
+            avail.style.display = 'block';
+            avail.textContent = 'Only a few spaces left on this date.';
+          } else {
+            avail.style.display = 'none';
+          }
+        }
+
+        // Recalculate price & sync bottom bar
+        updateWidgetPrice();
+        syncBottomBar();
       });
     });
 
@@ -1919,28 +2490,13 @@
       roomSelected: false,
     };
 
-    // Date select (dropdown) → sync widget state + in-page date cards
-    document.getElementById('widget-date').addEventListener('change', function() {
-      if (!this.value) return;
-      const dateId = this.value;
-      const card = document.querySelector(`.rdp-date-card[data-date="${dateId}"]`);
-      if (!card) return;
-      const label = card.dataset.label || '';
-      widgetState.dateSelected = true;
-      widgetState.dateId       = dateId;
-      widgetState.dateLabel    = label;
-      // Highlight matching date card in main content
-      document.querySelectorAll('.rdp-date-card').forEach(c => c.classList.remove('is-selected'));
-      card.classList.add('is-selected');
-      updateWidgetPrice();
-    });
-
     // Room select (dropdown)
     document.getElementById('widget-room').addEventListener('change', function() {
       if (this.value) {
         widgetState.price = parseInt(this.value);
         widgetState.roomSelected = true;
         updateWidgetPrice();
+        syncBottomBar();
       }
     });
 
@@ -2011,12 +2567,7 @@
         widgetState.price = price;
         widgetState.roomSelected = true;
         updateWidgetPrice();
-
-        // Scroll to widget if on mobile (single-column layout)
-        if (window.innerWidth <= 960) {
-          const widget = document.getElementById('rdp-sidebar');
-          if (widget) widget.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        syncBottomBar();
       });
     });
 
@@ -2047,7 +2598,95 @@
 
     /* Header is always dark on this page — no scroll handler needed */
 
+    // Room image carousels
+    document.querySelectorAll('[data-carousel]').forEach(carousel => {
+      const track  = carousel.querySelector('.rdp-room-carousel__track');
+      const slides = carousel.querySelectorAll('.rdp-room-carousel__slide');
+      const dots   = carousel.querySelectorAll('.rdp-room-carousel__dot');
+      const prev   = carousel.querySelector('.rdp-room-carousel__btn--prev');
+      const next   = carousel.querySelector('.rdp-room-carousel__btn--next');
+      let current  = 0;
+
+      function goTo(n) {
+        current = (n + slides.length) % slides.length;
+        track.style.transform = `translateX(-${current * 100}%)`;
+        dots.forEach((d, i) => d.classList.toggle('is-active', i === current));
+      }
+
+      prev.addEventListener('click', e => { e.stopPropagation(); goTo(current - 1); });
+      next.addEventListener('click', e => { e.stopPropagation(); goTo(current + 1); });
+      dots.forEach((dot, i) => dot.addEventListener('click', e => { e.stopPropagation(); goTo(i); }));
+    });
+
   </script>
+
+  <!-- ═══════════════════════════════════════════════
+       PDP FIXED BOTTOM BOOKING BAR
+  ═══════════════════════════════════════════════ -->
+  <div id="pdp-bottom-bar" role="complementary" aria-label="Booking">
+    <div class="pdp-bar__inner">
+
+      <!-- Price -->
+      <div class="pdp-bar__price-block">
+        <div class="pdp-bar__from" id="pdp-bar-from">From</div>
+        <div>
+          <span class="pdp-bar__amount" id="pdp-bar-price">£2,195</span>
+        </div>
+      </div>
+
+      <div class="pdp-bar__divider"></div>
+
+      <!-- Dates -->
+      <div class="pdp-bar__field">
+        <div class="pdp-bar__label">Dates</div>
+        <select class="pdp-bar__select" id="pdp-bar-date">
+          <option value="" disabled selected>Select dates</option>
+          <option value="d1">7–14 Jun 2026</option>
+          <option value="d2">21–28 Jun 2026</option>
+          <option value="d3">2–9 Aug 2026</option>
+          <option value="d4">16–23 Aug 2026</option>
+          <option value="d5">6–13 Sep 2026</option>
+        </select>
+      </div>
+
+      <div class="pdp-bar__divider"></div>
+
+      <!-- Room -->
+      <div class="pdp-bar__field">
+        <div class="pdp-bar__label">Room</div>
+        <select class="pdp-bar__select" id="pdp-bar-room">
+          <option value="" disabled selected>Select room</option>
+          <option value="2195">Premium en-suite — £2,195 pp</option>
+          <option value="2895">Luxury en-suite — £2,895 pp</option>
+          <option value="3750">Private villa — £3,750 pp</option>
+        </select>
+      </div>
+
+      <div class="pdp-bar__divider"></div>
+
+      <!-- Guests -->
+      <div class="pdp-bar__field">
+        <div class="pdp-bar__label">Guests</div>
+        <div class="pdp-bar__guests-row">
+          <div class="stepper">
+            <button class="stepper__btn" id="pdp-bar-minus" disabled>−</button>
+            <span class="stepper__val" id="pdp-bar-count">1</span>
+            <button class="stepper__btn" id="pdp-bar-plus">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pdp-bar__divider"></div>
+
+      <!-- CTAs -->
+      <div class="pdp-bar__ctas">
+        <div class="pdp-bar__cta-wrap">
+          <a href="enquiry-1.html" id="pdp-bar-book" class="btn btn--primary btn--lg" style="height: 36px; padding-top: 0; padding-bottom: 0; display: inline-flex; align-items: center; font-size: 90%;">Enquire about this retreat</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
 
 </body>
 </html>
