@@ -170,6 +170,17 @@
     .site-header.is-scrolled .site-header__nav a:hover { color: var(--ink); }
     .site-header.is-scrolled .site-header__actions .btn--ghost { color: var(--charcoal); }
 
+    /* ── Mega menu open state ────────────────────────── */
+    .site-header.mega-open {
+      background: var(--white) !important;
+      transition: background 0.4s ease !important;
+    }
+    .site-header.mega-open .site-header__nav a,
+    .site-header.mega-open .site-header__logo,
+    .site-header.mega-open .site-header__actions .btn--ghost {
+      color: var(--ink) !important;
+    }
+
     /* ── Breadcrumb ──────────────────────────────────── */
     .rdp-breadcrumb {
       max-width: var(--max-content);
@@ -1051,6 +1062,95 @@
     .pdp-bar__cta-wrap { display: flex; flex-direction: column; align-items: center; gap: 5px; }
     .pdp-bar__note { display: none; }
 
+    /* ── Bar date picker drop-up ─────────────────── */
+    .pdp-bar__dates-btn {
+      appearance: none; -webkit-appearance: none;
+      cursor: pointer; font-family: var(--sans);
+      font-size: var(--t-sm); font-weight: 500;
+      color: var(--ink); white-space: nowrap; text-align: left;
+      height: 36px; padding: 0 var(--s3);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-md);
+      background: var(--white);
+      min-width: 190px;
+    }
+    .pdp-bar__dates-btn.is-placeholder { color: var(--stone); }
+
+    #pdp-bar-datepicker {
+      position: absolute;
+      bottom: calc(100% + 14px);
+      left: 0; transform: none;
+      width: 620px;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      box-shadow: 0 -8px 40px rgba(0,0,0,0.15);
+      display: none; flex-direction: column;
+      z-index: 400; overflow: hidden;
+    }
+    #pdp-bar-datepicker.is-open { display: flex; }
+
+    /* Mini dual calendar */
+    .bdc__months { display: grid; grid-template-columns: 1fr 1px 1fr; }
+    .bdc__sep    { background: var(--border); }
+    .bdc__month  { padding: 16px; display: flex; flex-direction: column; }
+    .bdc__nav    { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .bdc__nav-title { font-weight: 600; font-size: var(--t-sm); color: var(--ink); flex: 1; text-align: center; }
+    .bdc__nav-btn {
+      width: 28px; height: 28px; border: 1px solid var(--border);
+      background: var(--white); border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ink); font-size: 18px; line-height: 1;
+      transition: background var(--dur-fast); flex-shrink: 0;
+    }
+    .bdc__nav-btn:hover { background: var(--cloud); }
+    .bdc__nav-btn.is-hidden { visibility: hidden; pointer-events: none; }
+    .bdc__weekdays {
+      display: grid; grid-template-columns: repeat(7,1fr);
+      text-align: center; font-size: 10px; font-family: var(--ui);
+      font-weight: 600; letter-spacing: 0.04em; color: var(--stone);
+      padding-bottom: 4px; margin-bottom: 2px;
+      border-bottom: 1px solid var(--border);
+    }
+    .bdc__days { display: grid; grid-template-columns: repeat(7,1fr); align-content: start; }
+    .bdc__day {
+      aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+      font-size: 11px; border-radius: 50%; cursor: pointer;
+      transition: background var(--dur-fast), color var(--dur-fast);
+      color: var(--ink); user-select: none;
+    }
+    .bdc__day.is-empty { pointer-events: none; }
+    .bdc__day.is-past  { color: var(--mist); pointer-events: none; }
+    .bdc__day.is-today { font-weight: 700; }
+    .bdc__day:not(.is-past):not(.is-empty):not(.is-start):not(.is-end):hover { background: var(--cloud); }
+    .bdc__day.is-start,
+    .bdc__day.is-end   { background: var(--ink) !important; color: var(--white) !important; font-weight: 600; }
+    .bdc__day.is-in-range { background: var(--parchment); border-radius: 0; }
+    .bdc__day.is-start { border-radius: 50% 0 0 50%; }
+    .bdc__day.is-end   { border-radius: 0 50% 50% 0; }
+    .bdc__day.is-start.is-end { border-radius: 50%; }
+    .bdc__footer { display: grid; grid-template-columns: 1fr 1px 1fr; border-top: 1px solid var(--border); }
+    .bdc__foot-sep { background: var(--border); }
+    .bdc__foot-col { padding: 12px 20px; cursor: pointer; transition: background var(--dur-fast); }
+    .bdc__foot-col:hover { background: var(--parchment); }
+    .bdc__foot-label { font-size: 10px; font-family: var(--ui); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone); margin-bottom: 2px; }
+    .bdc__foot-value { font-size: var(--t-sm); font-weight: 500; color: var(--ink); }
+    .bdc__foot-value.is-placeholder { color: var(--stone); font-weight: 400; }
+
+    /* In-page dual calendar */
+    #page-cal {
+      margin-top: var(--s5);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--white);
+    }
+    #page-cal .bdc__month { padding: 24px 28px; }
+    #page-cal .bdc__nav-title { font-size: var(--t-base); }
+    #page-cal .bdc__nav-btn { width: 32px; height: 32px; font-size: 20px; }
+    #page-cal .bdc__day { font-size: 13px; }
+    #page-cal .bdc__weekdays { font-size: 11px; }
+
   </style>
 </head>
 <body>
@@ -1066,32 +1166,37 @@
           <div class="mega-menu">
             <div class="mega-menu__inner">
 
+              <!-- Footer -->
+              <div class="mega-menu__footer" style="margin-top:0; margin-bottom:24px; padding-top:24px; padding-bottom:20px; border-top:none; border-bottom:1px solid var(--border);">
+                <a href="listings.html" class="mega-menu__footer-link">View all retreats →</a>
+              </div>
+
               <!-- Rail 1: By Category -->
               <div class="mega-menu__rail">
                 <div class="mega-menu__rail-label">Browse by category</div>
                 <div class="mega-menu__scroll">
                   <a href="#" class="mega-cat-card">
-                    <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Yoga & Meditation">
+                    <img src="images/general/05.jpg" alt="Yoga & Meditation">
                     <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Yoga &amp; Meditation</span></div>
                   </a>
                   <a href="#" class="mega-cat-card">
-                    <img src="images/header_casa-ana_20230628180415.jpg" alt="Detox & Cleanse">
+                    <img src="images/general/19.jpg" alt="Detox & Cleanse">
                     <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Detox &amp; Cleanse</span></div>
                   </a>
                   <a href="#" class="mega-cat-card">
-                    <img src="images/header_vale-de-moses.jpg" alt="Fitness & Adventure">
+                    <img src="images/general/17.jpg" alt="Fitness & Adventure">
                     <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Fitness &amp; Adventure</span></div>
                   </a>
                   <a href="#" class="mega-cat-card">
-                    <img src="images/header_les-marguerites.jpg" alt="Meditation & Mindfulness">
+                    <img src="images/general/01.jpg" alt="Meditation & Mindfulness">
                     <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Meditation &amp; Mindfulness</span></div>
                   </a>
                   <a href="#" class="mega-cat-card">
-                    <img src="images/header_vale-de-moses.webp" alt="Health & Healing">
+                    <img src="images/general/13.jpg" alt="Health & Healing">
                     <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Health &amp; Healing</span></div>
                   </a>
                   <a href="#" class="mega-cat-card">
-                    <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Personal Growth">
+                    <img src="images/general/04.jpg" alt="Personal Growth">
                     <div class="mega-cat-card__overlay"><span class="mega-cat-card__name">Personal Growth</span></div>
                   </a>
                 </div>
@@ -1132,9 +1237,6 @@
                     <div class="mega-intent-card__desc">Therapy, journalling, and deep self-enquiry</div>
                   </a>
                 </div>
-              </div>              <!-- Footer -->
-              <div class="mega-menu__footer">
-                <a href="listings.html" class="mega-menu__footer-link">View all retreats →</a>
               </div>
 
             </div>
@@ -1197,13 +1299,13 @@
       </div>
 
       <div class="booking-bar__secondary-cta">
-        <a href="enquiry.html" class="btn btn--outline-light btn--lg">Enquire</a>
+        <a href="enquiry-flexible.html" class="btn btn--outline-light btn--lg">Enquire</a>
       </div>
 
       <div class="booking-bar__divider"></div>
 
       <div class="booking-bar__cta">
-        <a href="booking.html" class="btn btn--primary btn--lg">Book This Retreat</a>
+        <a href="booking-flexible.html" class="btn btn--primary btn--lg">Book This Retreat</a>
         <p class="booking-bar__note">No payment today · 25% deposit to secure</p>
       </div>
     </div>
@@ -1451,101 +1553,24 @@
         <p class="rdp-section__title">Retreat dates &amp; pricing</p>
         <p class="rdp-section__sub">All programmes run Saturday to Saturday. Prices are per person and include accommodation, all meals, transfers, and the full programme.</p>
 
-        <div class="rdp-date-cards">
-
-          <div class="rdp-date-card rdp-date-card--soldout">
-            <div>
-              <div class="rdp-date-card__label">5–12 July 2026</div>
-              <div class="rdp-date-card__meta">
-                <span class="rdp-date-card__status rdp-date-card__status--soldout">Sold out</span>
-                <span>7 nights · 12 guests</span>
-              </div>
+        <div id="page-cal">
+          <div class="bdc__months" id="page-cal-months">
+            <div class="bdc__month" id="page-cal-left"></div>
+            <div class="bdc__sep"></div>
+            <div class="bdc__month" id="page-cal-right"></div>
+          </div>
+          <div class="bdc__footer">
+            <div class="bdc__foot-col">
+              <div class="bdc__foot-label">Check in</div>
+              <div class="bdc__foot-value is-placeholder" id="page-cal-checkin">Add date</div>
             </div>
-            <div class="rdp-date-card__price-wrap">
-              <div class="rdp-date-card__price">£2,195</div>
-              <div class="rdp-date-card__per">per person</div>
+            <div class="bdc__foot-sep"></div>
+            <div class="bdc__foot-col">
+              <div class="bdc__foot-label">Check out</div>
+              <div class="bdc__foot-value is-placeholder" id="page-cal-checkout">Add date</div>
             </div>
           </div>
-
-          <div class="rdp-date-card" data-date="d1" data-price="2195" data-label="7–14 Jun 2026" data-pill="7–14 Jun">
-            <div>
-              <div class="rdp-date-card__label">
-                7–14 June 2026
-                <span class="rdp-date-card__badge">Most popular</span>
-              </div>
-              <div class="rdp-date-card__meta">
-                <span class="rdp-date-card__status rdp-date-card__status--limited">3 spaces left</span>
-                <span>7 nights · 12 guests max</span>
-              </div>
-            </div>
-            <div class="rdp-date-card__price-wrap">
-              <div class="rdp-date-card__price">£2,195</div>
-              <div class="rdp-date-card__per">per person</div>
-            </div>
-          </div>
-
-          <div class="rdp-date-card" data-date="d2" data-price="2195" data-label="21–28 Jun 2026" data-pill="21–28 Jun">
-            <div>
-              <div class="rdp-date-card__label">21–28 June 2026</div>
-              <div class="rdp-date-card__meta">
-                <span class="rdp-date-card__status rdp-date-card__status--available">8 spaces</span>
-                <span>7 nights · 12 guests max</span>
-              </div>
-            </div>
-            <div class="rdp-date-card__price-wrap">
-              <div class="rdp-date-card__price">£2,195</div>
-              <div class="rdp-date-card__per">per person</div>
-            </div>
-          </div>
-
-          <div class="rdp-date-card" data-date="d3" data-price="2895" data-label="2–9 Aug 2026" data-pill="2–9 Aug">
-            <div>
-              <div class="rdp-date-card__label">
-                2–9 August 2026
-                <span class="rdp-date-card__badge">Best value</span>
-              </div>
-              <div class="rdp-date-card__meta">
-                <span class="rdp-date-card__status rdp-date-card__status--limited">2 spaces left</span>
-                <span>7 nights · 12 guests max</span>
-              </div>
-            </div>
-            <div class="rdp-date-card__price-wrap">
-              <div class="rdp-date-card__price">£2,895</div>
-              <div class="rdp-date-card__per">per person</div>
-            </div>
-          </div>
-
-          <div class="rdp-date-card" data-date="d4" data-price="2195" data-label="16–23 Aug 2026" data-pill="16–23 Aug">
-            <div>
-              <div class="rdp-date-card__label">16–23 August 2026</div>
-              <div class="rdp-date-card__meta">
-                <span class="rdp-date-card__status rdp-date-card__status--available">10 spaces</span>
-                <span>7 nights · 12 guests max</span>
-              </div>
-            </div>
-            <div class="rdp-date-card__price-wrap">
-              <div class="rdp-date-card__price">£2,195</div>
-              <div class="rdp-date-card__per">per person</div>
-            </div>
-          </div>
-
-          <div class="rdp-date-card" data-date="d5" data-price="2195" data-label="6–13 Sep 2026" data-pill="6–13 Sep">
-            <div>
-              <div class="rdp-date-card__label">6–13 September 2026</div>
-              <div class="rdp-date-card__meta">
-                <span class="rdp-date-card__status rdp-date-card__status--available">8 spaces</span>
-                <span>7 nights · 12 guests max</span>
-              </div>
-            </div>
-            <div class="rdp-date-card__price-wrap">
-              <div class="rdp-date-card__price">£2,195</div>
-              <div class="rdp-date-card__per">per person</div>
-            </div>
-          </div>
-
         </div>
-
-        <p style="font-size: var(--t-sm); color: var(--stone); margin-top: var(--s5);">More dates available into 2027. <a href="#" style="color: var(--ink); font-weight: 500;">View full calendar →</a></p>
       </section>
 
       <!-- ── 4. Accommodation ─────────────────────── -->
@@ -1558,7 +1583,7 @@
           <div class="rdp-room-card" data-price="2195" data-room="2195">
             <div class="rdp-room-carousel" data-carousel>
               <div class="rdp-room-carousel__track">
-                <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Shared Garden Room" class="rdp-room-carousel__slide">
+                <img src="images/general/10.jpg" alt="Shared Garden Room" class="rdp-room-carousel__slide">
                 <img src="images/header_vale-de-moses.jpg" alt="Shared Garden Room" class="rdp-room-carousel__slide">
                 <img src="images/header_casa-ana_20230628180415.jpg" alt="Shared Garden Room" class="rdp-room-carousel__slide">
               </div>
@@ -1572,7 +1597,7 @@
             </div>
             <div class="rdp-room-card__body">
               <div class="rdp-room-card__badge" style="visibility: hidden;">–</div>
-              <div class="rdp-room-card__name">Shared Garden Room</div>
+              <div class="rdp-room-card__name">Standard Suite</div>
               <div class="rdp-room-card__type">Twin share · Garden view · En-suite</div>
               <div class="rdp-room-card__includes">
                 <div class="rdp-room-card__include">Garden-view terrace with hammock</div>
@@ -1592,7 +1617,7 @@
           <div class="rdp-room-card rdp-room-card--popular" data-price="2895" data-room="2895">
             <div class="rdp-room-carousel" data-carousel>
               <div class="rdp-room-carousel__track">
-                <img src="images/header_casa-ana_20230628180415.jpg" alt="Private Valley Room" class="rdp-room-carousel__slide">
+                <img src="images/retreats/four-seasons/Four+Seasons+Bali+at+Sayan+Two+Bedroom+River+View+Villa.webp" alt="Private Valley Room" class="rdp-room-carousel__slide">
                 <img src="images/header_vale-de-moses.jpg" alt="Private Valley Room" class="rdp-room-carousel__slide">
                 <img src="images/header_les-marguerites.jpg" alt="Private Valley Room" class="rdp-room-carousel__slide">
               </div>
@@ -1606,7 +1631,7 @@
             </div>
             <div class="rdp-room-card__body">
               <div class="rdp-room-card__badge">Most popular</div>
-              <div class="rdp-room-card__name">Private Valley Room</div>
+              <div class="rdp-room-card__name">Family Suite</div>
               <div class="rdp-room-card__type">Double or twin · Rice paddy view · En-suite</div>
               <div class="rdp-room-card__includes">
                 <div class="rdp-room-card__include">Private balcony with rice paddy view</div>
@@ -1626,7 +1651,7 @@
           <div class="rdp-room-card" data-price="3750" data-room="3750">
             <div class="rdp-room-carousel" data-carousel>
               <div class="rdp-room-carousel__track">
-                <img src="images/header_les-marguerites.jpg" alt="Quinta Suite" class="rdp-room-carousel__slide">
+                <img src="images/general/16.jpg" alt="Quinta Suite" class="rdp-room-carousel__slide">
                 <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Quinta Suite" class="rdp-room-carousel__slide">
                 <img src="images/header_vale-de-moses.jpg" alt="Quinta Suite" class="rdp-room-carousel__slide">
               </div>
@@ -1640,7 +1665,7 @@
             </div>
             <div class="rdp-room-card__body">
               <div class="rdp-room-card__badge" style="background: var(--warning-bg); color: var(--warning);">Premium</div>
-              <div class="rdp-room-card__name">Quinta Suite</div>
+              <div class="rdp-room-card__name">Private Villa</div>
               <div class="rdp-room-card__type">Junior suite · Private terrace · Deep-soak bath</div>
               <div class="rdp-room-card__includes">
                 <div class="rdp-room-card__include">Private terrace &amp; plunge pool</div>
@@ -2134,9 +2159,9 @@
           <div class="select-wrap">
             <select class="form-select" id="widget-room">
               <option value="" disabled selected>Select room</option>
-              <option value="2195">Shared Garden Room — £2,195 pp</option>
-              <option value="2895">Private Valley Room — £2,895 pp</option>
-              <option value="3750">Quinta Suite — £3,750 pp</option>
+              <option value="2195">Standard Suite — £2,195 pp</option>
+              <option value="2895">Family Suite — £2,895 pp</option>
+              <option value="3750">Private Villa — £3,750 pp</option>
             </select>
           </div>
 
@@ -2296,21 +2321,39 @@
       window.addEventListener('scroll', updateBarVisibility, { passive: true });
       updateBarVisibility();
 
-      // Bottom bar "Book This Retreat" — save selections to sessionStorage so
-      // booking.html can pre-populate and jump straight to Step 3
+      // Bottom bar CTAs — save selections to sessionStorage so destination pages
+      // can pre-populate and jump straight to Step 3
+      function savePreselect() {
+        if (widgetState.roomSelected) {
+          const preselect = {
+            dateId:    null,
+            dateLabel: null,
+            roomPrice: widgetState.price,
+            guests:    widgetState.guests,
+          };
+          sessionStorage.setItem('qor_preselect', JSON.stringify(preselect));
+        }
+        // Save flex date range separately so booking-flexible can read it
+        if (bdcState.rangeStart && bdcState.rangeEnd) {
+          sessionStorage.setItem('qor_flex_range', JSON.stringify({
+            start: bdcState.rangeStart,
+            end:   bdcState.rangeEnd
+          }));
+        }
+      }
+
       const bookBtn = document.getElementById('pdp-bar-book');
       if (bookBtn) {
-        bookBtn.addEventListener('click', function(e) {
-          // Only preselect if user has chosen a room; otherwise normal Step 1 flow
-          if (widgetState.roomSelected) {
-            const preselect = {
-              dateId:    widgetState.dateId,
-              dateLabel: widgetState.dateLabel,
-              roomPrice: widgetState.price,
-              guests:    widgetState.guests,
-            };
-            sessionStorage.setItem('qor_preselect', JSON.stringify(preselect));
-          }
+        bookBtn.addEventListener('click', function() {
+          savePreselect();
+          // Navigation continues naturally via the href
+        });
+      }
+
+      const enquireBtn = document.getElementById('pdp-bar-enquire');
+      if (enquireBtn) {
+        enquireBtn.addEventListener('click', function() {
+          savePreselect();
           // Navigation continues naturally via the href
         });
       }
@@ -2348,32 +2391,256 @@
         }
       });
 
-      // Date dropdown → sync widgetState + in-page date cards
-      document.getElementById('pdp-bar-date').addEventListener('change', function() {
-        if (!this.value) return;
-        const dateId = this.value;
-        const card = document.querySelector(`.rdp-date-card[data-date="${dateId}"]`);
-        if (!card) return;
-        const label = card.dataset.label || '';
-        // Update widget state
-        widgetState.dateSelected = true;
-        widgetState.dateId       = dateId;
-        widgetState.dateLabel    = label;
-        // Highlight date card in main content
-        document.querySelectorAll('.rdp-date-card').forEach(c => c.classList.remove('is-selected'));
-        card.classList.add('is-selected');
-        // Sync sidebar widget date display
-        const placeholderEl  = document.getElementById('widget-date-placeholder');
-        const dateSelectedEl = document.getElementById('widget-date-selected');
-        const dateLabelEl    = document.getElementById('widget-date-label');
-        if (placeholderEl)  placeholderEl.style.display = 'none';
-        if (dateSelectedEl && dateLabelEl) {
-          dateLabelEl.textContent = label;
-          dateSelectedEl.style.display = 'flex';
+      // ── Bar date-range picker ────────────────────────────────────
+      const BDC_MONTHS   = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+      const BDC_WEEKDAYS = ['M','T','W','T','F','S','S'];
+      const bdcState = { leftYear: 2026, leftMonth: 5, rangeStart: null, rangeEnd: null, hoverDate: null };
+
+      function bdcRenderBoth() {
+        let rY = bdcState.leftYear, rM = bdcState.leftMonth + 1;
+        if (rM > 11) { rM = 0; rY++; }
+        bdcRenderMonth('bdc-left',  bdcState.leftYear, bdcState.leftMonth, true);
+        bdcRenderMonth('bdc-right', rY, rM, false);
+      }
+
+      function bdcRenderMonth(id, year, month, isLeft) {
+        const today    = new Date(); today.setHours(0,0,0,0);
+        const firstDow = ((new Date(year, month, 1).getDay() + 6) % 7);
+        const daysInM  = new Date(year, month + 1, 0).getDate();
+        const prevBtn  = isLeft  ? `<button class="bdc__nav-btn" id="bdc-prev">&#8249;</button>` : `<button class="bdc__nav-btn is-hidden"></button>`;
+        const nextBtn  = !isLeft ? `<button class="bdc__nav-btn" id="bdc-next">&#8250;</button>` : `<button class="bdc__nav-btn is-hidden"></button>`;
+
+        let html = `<div class="bdc__nav">${prevBtn}<div class="bdc__nav-title">${BDC_MONTHS[month]} ${year}</div>${nextBtn}</div>`;
+        html += `<div class="bdc__weekdays">${BDC_WEEKDAYS.map(d=>`<div>${d}</div>`).join('')}</div>`;
+        html += `<div class="bdc__days">`;
+        for (let i = 0; i < firstDow; i++) html += `<div class="bdc__day is-empty"></div>`;
+        for (let d = 1; d <= daysInM; d++) {
+          const date    = new Date(year, month, d);
+          const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+          let cls = 'bdc__day';
+          if (date < today) cls += ' is-past';
+          if (date.toDateString() === today.toDateString()) cls += ' is-today';
+          const rs = bdcState.rangeStart, re = bdcState.rangeEnd || bdcState.hoverDate;
+          if (rs && date.toDateString() === new Date(rs).toDateString()) cls += ' is-start';
+          if (re && date.toDateString() === new Date(re).toDateString()) cls += ' is-end';
+          if (rs && re && date > new Date(rs) && date < new Date(re)) cls += ' is-in-range';
+          html += `<div class="${cls}" data-date="${dateStr}">${d}</div>`;
         }
-        updateWidgetPrice();
-        syncBottomBar();
+        html += `</div>`;
+
+        const el = document.getElementById(id);
+        el.innerHTML = html;
+
+        const p = el.querySelector('#bdc-prev'), n = el.querySelector('#bdc-next');
+        if (p) p.addEventListener('click', (e) => {
+          e.stopPropagation();
+          bdcState.leftMonth--;
+          if (bdcState.leftMonth < 0) { bdcState.leftMonth = 11; bdcState.leftYear--; }
+          bdcRenderBoth();
+        });
+        if (n) n.addEventListener('click', (e) => {
+          e.stopPropagation();
+          bdcState.leftMonth++;
+          if (bdcState.leftMonth > 11) { bdcState.leftMonth = 0; bdcState.leftYear++; }
+          bdcRenderBoth();
+        });
+
+        el.querySelectorAll('.bdc__day:not(.is-empty):not(.is-past)').forEach(dayEl => {
+          dayEl.addEventListener('click', (e) => {
+            e.stopPropagation(); // prevent outside-click handler firing after re-render destroys element
+            const date = new Date(dayEl.dataset.date);
+            if (!bdcState.rangeStart || (bdcState.rangeStart && bdcState.rangeEnd)) {
+              bdcState.rangeStart = dayEl.dataset.date;
+              bdcState.rangeEnd = null;
+            } else {
+              const start = new Date(bdcState.rangeStart);
+              if (date >= start) { bdcState.rangeEnd = dayEl.dataset.date; }
+              else { bdcState.rangeStart = dayEl.dataset.date; bdcState.rangeEnd = null; }
+            }
+            bdcState.hoverDate = null;
+            bdcUpdateFooter();
+            bdcRenderBoth();
+          });
+        });
+      }
+
+      // Hover delegation — stable listener on the panel
+      (function() {
+        const panel = document.getElementById('pdp-bar-datepicker');
+        panel.addEventListener('mouseover', (e) => {
+          if (!bdcState.rangeStart || bdcState.rangeEnd) return;
+          const day = e.target.closest('.bdc__day');
+          if (!day || day.classList.contains('is-empty') || day.classList.contains('is-past')) return;
+          const d = new Date(day.dataset.date);
+          if (!bdcState.hoverDate || bdcState.hoverDate !== day.dataset.date) {
+            bdcState.hoverDate = day.dataset.date;
+            bdcRenderBoth();
+          }
+        });
+        panel.addEventListener('mouseleave', () => {
+          if (!bdcState.rangeStart || bdcState.rangeEnd) return;
+          bdcState.hoverDate = null;
+          bdcRenderBoth();
+        });
+      })();
+
+      function bdcFmt(dateStr) {
+        const d = new Date(dateStr);
+        return d.getDate() + ' ' + ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()] + ' ' + d.getFullYear();
+      }
+
+      function bdcUpdateFooter() {
+        const ci = document.getElementById('bdc-checkin');
+        const co = document.getElementById('bdc-checkout');
+        if (ci) {
+          ci.textContent = bdcState.rangeStart ? bdcFmt(bdcState.rangeStart) : 'Add date';
+          ci.classList.toggle('is-placeholder', !bdcState.rangeStart);
+        }
+        if (co) {
+          co.textContent = bdcState.rangeEnd ? bdcFmt(bdcState.rangeEnd) : 'Add date';
+          co.classList.toggle('is-placeholder', !bdcState.rangeEnd);
+        }
+
+        // Sync in-page calendar footer
+        const pci = document.getElementById('page-cal-checkin');
+        const pco = document.getElementById('page-cal-checkout');
+        if (pci) {
+          pci.textContent = bdcState.rangeStart ? bdcFmt(bdcState.rangeStart) : 'Add date';
+          pci.classList.toggle('is-placeholder', !bdcState.rangeStart);
+        }
+        if (pco) {
+          pco.textContent = bdcState.rangeEnd ? bdcFmt(bdcState.rangeEnd) : 'Add date';
+          pco.classList.toggle('is-placeholder', !bdcState.rangeEnd);
+        }
+
+        // Update the bar button label
+        const btn = document.getElementById('pdp-bar-dates-btn');
+        if (bdcState.rangeStart && bdcState.rangeEnd) {
+          const nights = Math.round((new Date(bdcState.rangeEnd) - new Date(bdcState.rangeStart)) / 86400000);
+          btn.textContent = `${bdcFmt(bdcState.rangeStart)} – ${bdcFmt(bdcState.rangeEnd)} · ${nights}n`;
+          btn.classList.remove('is-placeholder');
+          widgetState.dateSelected = true;
+          widgetState.dateLabel    = btn.textContent;
+          // Close popup picker once both dates confirmed
+          document.getElementById('pdp-bar-datepicker').classList.remove('is-open');
+        } else if (bdcState.rangeStart) {
+          btn.textContent = bdcFmt(bdcState.rangeStart) + ' → Select check-out';
+          btn.classList.remove('is-placeholder');
+        }
+      }
+
+      // Toggle picker open/close
+      document.getElementById('pdp-bar-dates-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const picker = document.getElementById('pdp-bar-datepicker');
+        const isOpen = picker.classList.contains('is-open');
+        picker.classList.toggle('is-open', !isOpen);
+        if (!isOpen) bdcRenderBoth();
       });
+
+      // Close on outside click
+      document.addEventListener('click', (e) => {
+        const picker = document.getElementById('pdp-bar-datepicker');
+        const btn    = document.getElementById('pdp-bar-dates-btn');
+        if (!picker.contains(e.target) && e.target !== btn) {
+          picker.classList.remove('is-open');
+        }
+      });
+
+      // ── In-page dual calendar ────────────────────────────────────
+      const pageCalState = { leftYear: 2026, leftMonth: 5 };
+
+      function pageRenderBoth() {
+        let rY = pageCalState.leftYear, rM = pageCalState.leftMonth + 1;
+        if (rM > 11) { rM = 0; rY++; }
+        pageRenderMonth('page-cal-left',  pageCalState.leftYear, pageCalState.leftMonth, true);
+        pageRenderMonth('page-cal-right', rY, rM, false);
+      }
+
+      function pageRenderMonth(id, year, month, isLeft) {
+        const today    = new Date(); today.setHours(0,0,0,0);
+        const firstDow = ((new Date(year, month, 1).getDay() + 6) % 7);
+        const daysInM  = new Date(year, month + 1, 0).getDate();
+        const prevBtn  = isLeft  ? `<button class="bdc__nav-btn" id="page-cal-prev">&#8249;</button>` : `<button class="bdc__nav-btn is-hidden"></button>`;
+        const nextBtn  = !isLeft ? `<button class="bdc__nav-btn" id="page-cal-next">&#8250;</button>` : `<button class="bdc__nav-btn is-hidden"></button>`;
+
+        let html = `<div class="bdc__nav">${prevBtn}<div class="bdc__nav-title">${BDC_MONTHS[month]} ${year}</div>${nextBtn}</div>`;
+        html += `<div class="bdc__weekdays">${BDC_WEEKDAYS.map(d=>`<div>${d}</div>`).join('')}</div>`;
+        html += `<div class="bdc__days">`;
+        for (let i = 0; i < firstDow; i++) html += `<div class="bdc__day is-empty"></div>`;
+        for (let d = 1; d <= daysInM; d++) {
+          const date    = new Date(year, month, d);
+          const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+          let cls = 'bdc__day';
+          if (date < today) cls += ' is-past';
+          if (date.toDateString() === today.toDateString()) cls += ' is-today';
+          const rs = bdcState.rangeStart, re = bdcState.rangeEnd || bdcState.hoverDate;
+          if (rs && date.toDateString() === new Date(rs).toDateString()) cls += ' is-start';
+          if (re && date.toDateString() === new Date(re).toDateString()) cls += ' is-end';
+          if (rs && re && date > new Date(rs) && date < new Date(re)) cls += ' is-in-range';
+          html += `<div class="${cls}" data-date="${dateStr}">${d}</div>`;
+        }
+        html += `</div>`;
+
+        const el = document.getElementById(id);
+        el.innerHTML = html;
+
+        const p = el.querySelector('#page-cal-prev'), n = el.querySelector('#page-cal-next');
+        if (p) p.addEventListener('click', () => {
+          pageCalState.leftMonth--;
+          if (pageCalState.leftMonth < 0) { pageCalState.leftMonth = 11; pageCalState.leftYear--; }
+          pageRenderBoth();
+        });
+        if (n) n.addEventListener('click', () => {
+          pageCalState.leftMonth++;
+          if (pageCalState.leftMonth > 11) { pageCalState.leftMonth = 0; pageCalState.leftYear++; }
+          pageRenderBoth();
+        });
+
+        el.querySelectorAll('.bdc__day:not(.is-empty):not(.is-past)').forEach(dayEl => {
+          dayEl.addEventListener('click', () => {
+            const date = new Date(dayEl.dataset.date);
+            if (!bdcState.rangeStart || (bdcState.rangeStart && bdcState.rangeEnd)) {
+              bdcState.rangeStart = dayEl.dataset.date;
+              bdcState.rangeEnd = null;
+            } else {
+              const start = new Date(bdcState.rangeStart);
+              if (date >= start) { bdcState.rangeEnd = dayEl.dataset.date; }
+              else { bdcState.rangeStart = dayEl.dataset.date; bdcState.rangeEnd = null; }
+            }
+            bdcState.hoverDate = null;
+            bdcUpdateFooter();
+            pageRenderBoth();
+            // Also re-render popup if open
+            if (document.getElementById('pdp-bar-datepicker').classList.contains('is-open')) {
+              bdcRenderBoth();
+            }
+          });
+        });
+      }
+
+      // Hover delegation on in-page calendar
+      (function() {
+        const pageCal = document.getElementById('page-cal');
+        if (!pageCal) return;
+        pageCal.addEventListener('mouseover', (e) => {
+          if (!bdcState.rangeStart || bdcState.rangeEnd) return;
+          const day = e.target.closest('.bdc__day');
+          if (!day || day.classList.contains('is-empty') || day.classList.contains('is-past')) return;
+          if (bdcState.hoverDate !== day.dataset.date) {
+            bdcState.hoverDate = day.dataset.date;
+            pageRenderBoth();
+          }
+        });
+        pageCal.addEventListener('mouseleave', () => {
+          if (!bdcState.rangeStart || bdcState.rangeEnd) return;
+          bdcState.hoverDate = null;
+          pageRenderBoth();
+        });
+      })();
+
+      // Initial render of in-page calendar
+      pageRenderBoth();
 
       // Room dropdown → sync widgetState
       document.getElementById('pdp-bar-room').addEventListener('change', function() {
@@ -2645,14 +2912,7 @@
       <!-- Dates -->
       <div class="pdp-bar__field">
         <div class="pdp-bar__label">Dates</div>
-        <select class="pdp-bar__select" id="pdp-bar-date">
-          <option value="" disabled selected>Select dates</option>
-          <option value="d1">7–14 Jun 2026</option>
-          <option value="d2">21–28 Jun 2026</option>
-          <option value="d3">2–9 Aug 2026</option>
-          <option value="d4">16–23 Aug 2026</option>
-          <option value="d5">6–13 Sep 2026</option>
-        </select>
+        <button class="pdp-bar__dates-btn is-placeholder" id="pdp-bar-dates-btn">Select dates</button>
       </div>
 
       <div class="pdp-bar__divider"></div>
@@ -2662,9 +2922,9 @@
         <div class="pdp-bar__label">Room</div>
         <select class="pdp-bar__select" id="pdp-bar-room">
           <option value="" disabled selected>Select room</option>
-          <option value="2195">Shared Garden Room — £2,195 pp</option>
-          <option value="2895">Private Valley Room — £2,895 pp</option>
-          <option value="3750">Quinta Suite — £3,750 pp</option>
+          <option value="2195">Standard Suite — £2,195 pp</option>
+          <option value="2895">Family Suite — £2,895 pp</option>
+          <option value="3750">Private Villa — £3,750 pp</option>
         </select>
       </div>
 
@@ -2686,15 +2946,38 @@
 
       <!-- CTAs -->
       <div class="pdp-bar__ctas">
-        <a href="enquiry.html" class="btn btn--lg" style="height: 36px; padding-top: 0; padding-bottom: 0; display: inline-flex; align-items: center; border: 1.5px solid var(--border); color: var(--ink); background: transparent;">Enquire</a>
+        <a href="enquiry-flexible.html" id="pdp-bar-enquire" class="btn btn--lg" style="height: 36px; padding-top: 0; padding-bottom: 0; display: inline-flex; align-items: center; border: 1.5px solid var(--border); color: var(--ink); background: transparent;">Enquire</a>
         <div class="pdp-bar__cta-wrap">
-          <a href="booking.html" id="pdp-bar-book" class="btn btn--primary btn--lg" style="height: 36px; padding-top: 0; padding-bottom: 0; display: inline-flex; align-items: center; font-size: 90%;">Book This Retreat</a>
+          <a href="booking-flexible.html" id="pdp-bar-book" class="btn btn--primary btn--lg" style="height: 36px; padding-top: 0; padding-bottom: 0; display: inline-flex; align-items: center; font-size: 90%;">Book This Retreat</a>
           <div class="pdp-bar__note">No payment today · 25% deposit to secure your place</div>
         </div>
       </div>
 
     </div>
+
+    <!-- Drop-up date range picker — left-aligned with price, above bar -->
+    <div id="pdp-bar-datepicker">
+      <div class="bdc__months">
+        <div class="bdc__month" id="bdc-left"></div>
+        <div class="bdc__sep"></div>
+        <div class="bdc__month" id="bdc-right"></div>
+      </div>
+      <div class="bdc__footer">
+        <div class="bdc__foot-col">
+          <div class="bdc__foot-label">Check in</div>
+          <div class="bdc__foot-value is-placeholder" id="bdc-checkin">Add date</div>
+        </div>
+        <div class="bdc__foot-sep"></div>
+        <div class="bdc__foot-col">
+          <div class="bdc__foot-label">Check out</div>
+          <div class="bdc__foot-value is-placeholder" id="bdc-checkout">Add date</div>
+        </div>
+      </div>
+    </div>
+
   </div>
+
+  <script src="mega-menu.js"></script>
 
 </body>
 </html>

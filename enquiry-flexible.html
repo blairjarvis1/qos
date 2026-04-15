@@ -1,0 +1,2000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Enquire About This Retreat — Queen of Retreats</title>
+  <script>
+    history.scrollRestoration = 'manual';
+    if (location.hash) history.replaceState(null, '', location.pathname);
+  </script>
+  <!-- <link rel="stylesheet" href="https://use.typekit.net/XXXXXXX.css"> -->
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Offset scroll top to sit below both sticky header (60px) and progress bar (~68px) */
+    html { scroll-padding-top: 168px; }
+
+    /* ── Hide nav summary on confirmation step ── */
+    .booking-nav--no-summary .booking-nav__summary {
+      display: none;
+    }
+
+    /* ── Booking nav summary ── */
+    .booking-nav__summary {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+    }
+    .booking-nav__thumb {
+      width: 96px;
+      height: auto;
+      object-fit: cover;
+      border-radius: 0;
+      flex-shrink: 0;
+      align-self: stretch;
+    }
+    .booking-nav__section {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      align-self: center;
+      padding: 0 58px 0 26px;
+    }
+    .booking-nav__retreat-name-group {
+      display: flex;
+      align-items: center;
+      gap: var(--s5);
+      align-self: center;
+      padding: 0 2px 0 26px;
+    }
+    .booking-nav__retreat-name {
+      font-family: var(--serif);
+      font-size: var(--t-lg);
+      font-weight: 400;
+      color: var(--ink);
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+    .booking-nav__retreat-loc {
+      font-size: var(--t-sm);
+      color: var(--stone);
+      white-space: nowrap;
+    }
+    .booking-nav__step-info { align-self: center; }
+    .booking-nav__label {
+      font-size: 10px;
+      color: var(--stone);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+    .booking-nav__val {
+      font-size: var(--t-sm);
+      color: var(--ink);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .booking-nav__val.placeholder { color: var(--mist); font-weight: 400; }
+    .booking-nav__vdivider {
+      width: 1px;
+      height: 48px;
+      background: var(--border);
+      flex-shrink: 0;
+      align-self: center;
+    }
+    .booking-nav__vdivider--full {
+      height: auto;
+      align-self: stretch;
+    }
+    .booking-nav__total-wrap {
+      background: var(--sage-light);
+      border-radius: 0;
+      padding: 0 74px 0 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      align-self: stretch;
+    }
+    .booking-nav__total-wrap .booking-nav__label { color: var(--sage); }
+    .booking-nav__total-amount {
+      font-family: var(--serif);
+      font-size: var(--t-xl);
+      font-weight: 500;
+      color: var(--ink);
+      white-space: nowrap;
+      line-height: 1.1;
+    }
+
+    /* ── Booking-page overrides ── */
+    .cal-months-viewport {
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+    }
+    .cal-months-viewport:active {
+      cursor: grabbing;
+    }
+    .cal-months {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: var(--s5);
+      margin-top: 6px;
+      transition: transform 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+    .cal-months .calendar {
+      flex: 0 0 auto;
+      min-width: 0;
+    }
+    .cal-arrow-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border);
+      border-radius: var(--r-sm);
+      background: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--ink);
+      transition: border-color var(--dur-fast), opacity var(--dur-fast);
+      padding: 0;
+      flex-shrink: 0;
+    }
+    .cal-arrow-btn:hover { border-color: var(--charcoal); }
+    .cal-arrow-btn:disabled { opacity: 0.3; cursor: default; }
+    .cal-nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--s4) var(--s6);
+      border-bottom: 1px solid var(--border);
+    }
+    .cal-nav-bar h4 {
+      font-family: var(--serif);
+      font-size: var(--t-lg);
+      font-weight: 400;
+    }
+    .cal-legend {
+      display: flex;
+      gap: var(--s5);
+      align-items: center;
+      margin-top: var(--s4);
+    }
+    .cal-legend__item {
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      font-size: var(--t-xs);
+      color: var(--stone);
+    }
+    .cal-legend__dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+    .cal-legend__dot--available { background: var(--sage-light); }
+    .cal-legend__dot--limited   { background: var(--warning-bg); }
+    .cal-legend__dot--soldout   { background: var(--cloud); }
+
+    /* Step 1 date info panel */
+    .selected-date-info {
+      margin-top: 0;
+      padding: var(--s5) var(--s6);
+      background: var(--sage-pale);
+      border: 1.5px solid var(--sage-light);
+      border-radius: var(--r-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .selected-date-info.is-hidden { display: none; }
+
+    /* Step 3 summary layout */
+    .booking-summary-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      margin-bottom: var(--s5);
+    }
+    .booking-summary-card__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--s4) var(--s6);
+      background: var(--parchment);
+      border-bottom: 1px solid var(--border);
+    }
+    .booking-summary-card__title {
+      font-size: var(--t-sm);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--charcoal);
+      text-transform: uppercase;
+    }
+    .booking-summary-card__body { padding: var(--s5) var(--s6); }
+
+    /* Char count */
+    .char-count {
+      text-align: right;
+      font-size: var(--t-xs);
+      color: var(--mist);
+    }
+
+    /* Confirmation layout */
+    .confirmation-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: var(--s8);
+      max-width: var(--max-booking);
+      margin: 0 auto;
+      padding: 0 var(--s7) var(--s12);
+    }
+
+    /* Includes list in step 2 */
+    .room-includes-list {
+      margin-top: var(--s4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--s2);
+    }
+    .room-includes-list li {
+      display: flex;
+      gap: var(--s2);
+      font-size: var(--t-sm);
+      color: var(--charcoal);
+      line-height: 1.4;
+    }
+    .room-includes-list li::before {
+      content: '✓';
+      color: var(--sage);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .room-includes-list li.extra::before { content: '+'; }
+
+    /* Alert banner */
+    .alert {
+      display: flex;
+      gap: var(--s3);
+      padding: var(--s4) var(--s5);
+      border-radius: var(--r-md);
+      font-size: var(--t-sm);
+      line-height: 1.5;
+      margin-bottom: var(--s6);
+    }
+    .alert--warning { background: var(--warning-bg); color: var(--warning); }
+    .alert--info    { background: var(--sage-pale);  color: var(--sage);    }
+
+    /* Guest form sections */
+    .form-section {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      margin-bottom: var(--s5);
+    }
+    .form-section__header {
+      padding: var(--s4) var(--s6);
+      background: var(--parchment);
+      border-bottom: 1px solid var(--border);
+    }
+    .form-section__header h4 {
+      font-family: var(--sans);
+      font-size: var(--t-base);
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .form-section__body {
+      padding: var(--s6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--s5);
+    }
+
+    /* Confirmation receipt card */
+    .receipt-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+    }
+    .receipt-card__header {
+      padding: var(--s5) var(--s6);
+      background: var(--parchment);
+      border-bottom: 1px solid var(--border);
+    }
+    .receipt-card__body { padding: var(--s6); }
+    .receipt-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+    .receipt-row {
+      display: flex;
+      justify-content: space-between;
+      padding: var(--s3) 0;
+      border-bottom: 1px solid var(--border);
+      font-size: var(--t-sm);
+    }
+    .receipt-row:last-child { border-bottom: none; }
+    .receipt-row__key { color: var(--stone); }
+    .receipt-row__val { font-weight: 500; color: var(--ink); text-align: right; }
+    .receipt-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: var(--s4) var(--s6);
+      background: var(--sage-pale);
+      border-top: 1px solid var(--sage-light);
+    }
+
+    /* ── Icon stepper ── */
+    .progress-bar { background: var(--parchment); border-bottom: none; }
+    .progress-step__dot { border: none; background: transparent; }
+    .progress-step.is-done .progress-step__dot       { border: none; background: transparent; color: var(--ink); }
+    .progress-step.is-active .progress-step__dot     { border: none; background: transparent; color: var(--ink); }
+    .progress-step.is-done:hover .progress-step__dot { border: none; background: transparent; color: var(--ink); }
+
+    /* ── Flexible date chip ─────────────────────────────────────── */
+    .flex-date-chip--empty { font-size: var(--t-sm); color: var(--stone); font-style: italic; }
+    .flex-date-chip--selecting {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--white); border: 1.5px solid var(--sage); border-radius: var(--r-pill);
+      padding: 8px 16px; font-size: var(--t-sm); font-weight: 500; color: var(--ink);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .flex-date-chip--selected {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r-pill);
+      padding: 8px 16px; font-size: var(--t-sm); font-weight: 500; color: var(--ink);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .flex-chip-clear {
+      background: none; border: none; cursor: pointer; color: var(--stone);
+      font-size: 16px; padding: 0 0 0 4px; line-height: 1;
+      display: inline-flex; align-items: center;
+    }
+    .flex-chip-clear:hover { color: var(--ink); }
+
+    /* ── Flexible calendar day states ───────────────────────────── */
+    .flex-cal .cal-day--available {
+      background: var(--white); color: var(--charcoal); font-weight: 500;
+      cursor: pointer; transition: all var(--dur-fast);
+    }
+    .flex-cal .cal-day--available:hover { background: #EBEBEB; color: var(--ink); }
+    .flex-cal .cal-day--past { background: none; color: var(--mist); cursor: default; font-weight: 400; }
+
+    /* ── Date range highlights ───────────────────────────────────── */
+    .flex-cal .cal-day--checkin {
+      background: #2D5A3D !important; color: var(--white) !important;
+      border-radius: var(--r-sm) 0 0 var(--r-sm) !important; font-weight: 600;
+    }
+    .flex-cal .cal-day--checkout {
+      background: #2D5A3D !important; color: var(--white) !important;
+      border-radius: 0 var(--r-sm) var(--r-sm) 0 !important; font-weight: 600;
+    }
+    .flex-cal .cal-day--checkin.cal-day--checkout { border-radius: var(--r-sm) !important; }
+    .flex-cal .cal-day--in-range {
+      background: var(--sage-light) !important; color: var(--sage) !important; border-radius: 0 !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Enquiry Header ===== -->
+  <header class="booking-header">
+    <div class="booking-header__inner">
+      <div style="display:flex; justify-content:flex-start; margin-left: -24px;">
+        <a href="pdp-flexible.html" class="btn btn--ghost" style="font-size: var(--t-sm);">
+          <svg width="27" height="27" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          BACK TO RETREAT
+        </a>
+      </div>
+      <a href="index.html" class="booking-header__logo">Queen of Retreats</a>
+      <div class="booking-header__context" style="justify-content:flex-end;">
+        <span>Need help? (Mon–Fri, 9am–5pm)</span>
+        <span class="booking-header__sep">/</span>
+        <span class="booking-header__retreat">Contact us</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Progress Bar ===== -->
+  <div class="progress-bar">
+    <div class="progress-bar__inner">
+      <div class="progress-steps">
+
+        <div class="progress-step is-active" data-step="1">
+          <div class="progress-step__dot-wrap">
+            <div class="progress-step__dot">1</div>
+            <span class="progress-step__label">Dates</span>
+          </div>
+        </div>
+        <div class="progress-step__line"></div>
+
+        <div class="progress-step" data-step="2">
+          <div class="progress-step__dot-wrap">
+            <div class="progress-step__dot">2</div>
+            <span class="progress-step__label">Room</span>
+          </div>
+        </div>
+        <div class="progress-step__line"></div>
+
+        <div class="progress-step" data-step="3">
+          <div class="progress-step__dot-wrap">
+            <div class="progress-step__dot">3</div>
+            <span class="progress-step__label">Summary</span>
+          </div>
+        </div>
+        <!-- Step 4 (Review) hidden — content preserved in step-4 panel below -->
+        <div class="progress-step__line" style="display:none"></div>
+        <div class="progress-step" data-step="4" style="display:none">
+          <div class="progress-step__dot-wrap">
+            <div class="progress-step__dot">4</div>
+            <span class="progress-step__label">Review</span>
+          </div>
+        </div>
+        <div class="progress-step__line"></div>
+
+        <div class="progress-step" data-step="4">
+          <div class="progress-step__dot-wrap">
+            <div class="progress-step__dot">4</div>
+            <span class="progress-step__label">Your Details</span>
+          </div>
+        </div>
+        <div class="progress-step__line"></div>
+
+        <div class="progress-step" data-step="5">
+          <div class="progress-step__dot-wrap">
+            <div class="progress-step__dot">5</div>
+            <span class="progress-step__label">About You</span>
+          </div>
+        </div>
+        <div class="progress-step__line"></div>
+
+        <div class="progress-step" data-step="6">
+          <div class="progress-step__dot-wrap">
+            <div class="progress-step__dot">6</div>
+            <span class="progress-step__label">Submit Enquiry</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Enquiry Body ===== -->
+  <div class="booking-body">
+
+    <div id="booking-layout" class="booking-layout--full">
+
+      <div id="booking-steps">
+
+        <!-- ─────────────────────────────────────────────────
+             STEP 1: Select Dates
+        ───────────────────────────────────────────────── -->
+        <section id="step-1" class="step-panel is-active">
+          <div>
+            <div class="step-panel__header">
+              <p class="label-caps step-panel__eyebrow">Step 1 of 6</p>
+              <h1 class="step-panel__title">When would you like to stay?</h1>
+              <p class="step-panel__desc" style="white-space: nowrap;">Select your check-in and check-out dates. Click a date to set your arrival, then click again to set your departure.</p>
+            </div>
+
+            <!-- Date range chip + calendar arrows -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--s6);">
+              <div id="date-chip-wrap">
+                <span id="date-chip-text" class="flex-date-chip flex-date-chip--empty">No dates selected</span>
+              </div>
+              <div id="cal-arrows" style="display:flex; gap: var(--s2);">
+                <button id="cal-prev" class="cal-arrow-btn" disabled aria-label="Previous months">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <button id="cal-next" class="cal-arrow-btn" aria-label="Next months">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Calendar view -->
+            <div id="cal-view" class="flex-cal">
+              <div class="cal-months-viewport">
+              <div class="cal-months">
+
+                <div class="calendar" id="cal-june">
+                  <div class="cal-nav-bar">
+                    <div style="width:32px"></div>
+                    <h4>June 2026</h4>
+                    <div style="width:32px"></div>
+                  </div>
+                  <div class="calendar__grid-header">
+                    <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                  </div>
+                  <div class="calendar__grid" id="cal-june-grid"></div>
+                </div>
+
+                <div class="calendar" id="cal-july">
+                  <div class="cal-nav-bar">
+                    <div style="width:32px"></div>
+                    <h4>July 2026</h4>
+                    <div style="width:32px"></div>
+                  </div>
+                  <div class="calendar__grid-header">
+                    <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                  </div>
+                  <div class="calendar__grid" id="cal-july-grid"></div>
+                </div>
+
+                <div class="calendar" id="cal-aug">
+                  <div class="cal-nav-bar">
+                    <div style="width:32px"></div>
+                    <h4>August 2026</h4>
+                    <div style="width:32px"></div>
+                  </div>
+                  <div class="calendar__grid-header">
+                    <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                  </div>
+                  <div class="calendar__grid" id="cal-aug-grid"></div>
+                </div>
+
+                <div class="calendar" id="cal-sep">
+                  <div class="cal-nav-bar">
+                    <div style="width:32px"></div>
+                    <h4>September 2026</h4>
+                    <div style="width:32px"></div>
+                  </div>
+                  <div class="calendar__grid-header">
+                    <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                  </div>
+                  <div class="calendar__grid" id="cal-sep-grid"></div>
+                </div>
+
+                <div class="calendar" id="cal-oct">
+                  <div class="cal-nav-bar">
+                    <div style="width:32px"></div>
+                    <h4>October 2026</h4>
+                    <div style="width:32px"></div>
+                  </div>
+                  <div class="calendar__grid-header">
+                    <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                  </div>
+                  <div class="calendar__grid" id="cal-oct-grid"></div>
+                </div>
+
+                <div class="calendar" id="cal-nov">
+                  <div class="cal-nav-bar">
+                    <div style="width:32px"></div>
+                    <h4>November 2026</h4>
+                    <div style="width:32px"></div>
+                  </div>
+                  <div class="calendar__grid-header">
+                    <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                  </div>
+                  <div class="calendar__grid" id="cal-nov-grid"></div>
+                </div>
+
+                <div class="calendar" id="cal-dec">
+                  <div class="cal-nav-bar">
+                    <div style="width:32px"></div>
+                    <h4>December 2026</h4>
+                    <div style="width:32px"></div>
+                  </div>
+                  <div class="calendar__grid-header">
+                    <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                  </div>
+                  <div class="calendar__grid" id="cal-dec-grid"></div>
+                </div>
+
+                <div class="calendar" id="cal-jan27">
+                  <div class="cal-nav-bar">
+                    <div style="width:32px"></div>
+                    <h4>January 2027</h4>
+                    <div style="width:32px"></div>
+                  </div>
+                  <div class="calendar__grid-header">
+                    <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                  </div>
+                  <div class="calendar__grid" id="cal-jan27-grid"></div>
+                </div>
+
+                <div class="calendar" id="cal-feb27">
+                  <div class="cal-nav-bar">
+                    <div style="width:32px"></div>
+                    <h4>February 2027</h4>
+                    <div style="width:32px"></div>
+                  </div>
+                  <div class="calendar__grid-header">
+                    <span>Mo</span><span>Tu</span><span>We</span><span>Th</span><span>Fr</span><span>Sa</span><span>Su</span>
+                  </div>
+                  <div class="calendar__grid" id="cal-feb27-grid"></div>
+                </div>
+
+              </div><!-- /.cal-months -->
+              </div><!-- /.cal-months-viewport -->
+              <p class="text-small text-muted" style="margin-top: var(--s4);">Click to set check-in, click again to set check-out &nbsp;·&nbsp; Prices from £2,195 pp</p>
+            </div>
+
+            <!-- List view (hidden in flexible mode) -->
+            <div id="list-view" class="hidden" style="display:none !important;">
+              <div style="display: grid; grid-template-columns: 1fr var(--sidebar-w); gap: var(--s8); align-items: start;">
+
+                <div class="date-list">
+
+                  <p class="label-caps" style="padding: var(--s4) 0 var(--s3); color: var(--stone); font-size: calc(var(--t-xs) * 1.25);">2026</p>
+
+                  <div class="date-list-item" data-date-id="d1" data-status="limited">
+                    <div>
+                      <div class="date-list-item__dates">7 – 14 June 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--warning">3 spaces left</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d2" data-status="available">
+                    <div>
+                      <div class="date-list-item__dates">21 – 28 June 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--success">8 spaces</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item is-soldout" data-date-id="d3" data-status="soldout">
+                    <div>
+                      <div class="date-list-item__dates">5 – 12 July 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--stone">Sold out</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d4" data-status="available">
+                    <div>
+                      <div class="date-list-item__dates">19 – 26 July 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--success">6 spaces</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d5" data-status="limited">
+                    <div>
+                      <div class="date-list-item__dates">2 – 9 August 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--warning">2 spaces left</span>
+                      <span class="date-list-item__price">From £2,895</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d6" data-status="available">
+                    <div>
+                      <div class="date-list-item__dates">16 – 23 August 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--success">10 spaces</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d7" data-status="available">
+                    <div>
+                      <div class="date-list-item__dates">6 – 13 September 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--success">8 spaces</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d8" data-status="limited">
+                    <div>
+                      <div class="date-list-item__dates">20 – 27 September 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--warning">3 spaces left</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d9" data-status="available">
+                    <div>
+                      <div class="date-list-item__dates">4 – 11 October 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--success">6 spaces</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item is-soldout" data-date-id="d10" data-status="soldout">
+                    <div>
+                      <div class="date-list-item__dates">18 – 25 October 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--stone">Sold out</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d11" data-status="available">
+                    <div>
+                      <div class="date-list-item__dates">1 – 8 November 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--success">10 spaces</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d12" data-status="limited">
+                    <div>
+                      <div class="date-list-item__dates">15 – 22 November 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--warning">4 spaces left</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d13" data-status="available">
+                    <div>
+                      <div class="date-list-item__dates">6 – 13 December 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--success">8 spaces</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d14" data-status="limited">
+                    <div>
+                      <div class="date-list-item__dates">20 – 27 December 2026</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--warning">2 spaces left</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <p class="label-caps" style="padding: var(--s6) 0 var(--s3); color: var(--stone); font-size: calc(var(--t-xs) * 1.25);">2027</p>
+
+                  <div class="date-list-item" data-date-id="d15" data-status="available">
+                    <div>
+                      <div class="date-list-item__dates">3 – 10 January 2027</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--success">12 spaces</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d16" data-status="available">
+                    <div>
+                      <div class="date-list-item__dates">17 – 24 January 2027</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--success">8 spaces</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d17" data-status="limited">
+                    <div>
+                      <div class="date-list-item__dates">7 – 14 February 2027</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--warning">3 spaces left</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                  <div class="date-list-item" data-date-id="d18" data-status="available">
+                    <div>
+                      <div class="date-list-item__dates">21 – 28 February 2027</div>
+                      <p style="font-size: var(--t-sm); color: var(--stone); margin-top: 3px;">7 nights · Saturday arrival</p>
+                    </div>
+                    <div class="date-list-item__meta">
+                      <span class="badge badge--success">10 spaces</span>
+                      <span class="date-list-item__price">From £2,195</span>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div style="align-self: start;">
+                  <div class="selected-date-info is-hidden" id="date-selected-panel">
+                    <div>
+                      <p class="label-caps" style="margin-bottom: var(--s1);">Selected</p>
+                      <p id="date-selected-label" style="font-family: var(--serif); font-size: var(--t-xl); color: var(--ink);"></p>
+                    </div>
+                    <div style="text-align: right;">
+                      <p style="font-size: var(--t-sm); color: var(--stone);">7 nights · From £2,195 pp</p>
+                      <button class="edit-link" style="margin-top: var(--s2);" onclick="document.getElementById('date-selected-panel').classList.add('is-hidden')">Change dates</button>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div style="display: grid; grid-template-columns: 1fr var(--sidebar-w); gap: var(--s8); margin-top: var(--s7);">
+                <button class="btn btn--primary btn--lg btn--full" onclick="document.getElementById('nav-continue').click()">
+                  Continue
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+
+        <!-- ─────────────────────────────────────────────────
+             STEP 2: Select Room
+        ───────────────────────────────────────────────── -->
+        <section id="step-2" class="step-panel">
+          <div class="step-panel__header">
+            <p class="label-caps step-panel__eyebrow">Step 2 of 6</p>
+            <h1 class="step-panel__title">Choose your room</h1>
+            <p class="step-panel__desc">All rooms are en-suite and include the full retreat programme. Select the option that suits you best.</p>
+          </div>
+
+          <div class="room-grid">
+
+            <div class="room-card" data-room-id="r1">
+              <img src="images/general/10.jpg"
+                   alt="Standard Suite" class="room-card__image">
+              <div class="room-card__badge"></div>
+              <div class="room-card__body">
+                <h3 class="room-card__name">Standard Suite</h3>
+                <p class="room-card__type">Twin share · Garden view · En-suite</p>
+                <ul class="room-includes-list">
+                  <li>Twin beds, Egyptian cotton linen</li>
+                  <li>Garden terrace access</li>
+                  <li>Shared with one other guest</li>
+                  <li>En-suite bathroom with rain shower</li>
+                  <li>All meals &amp; programme included</li>
+                  <li>Lisbon transfers included</li>
+                </ul>
+              </div>
+              <div class="room-card__footer">
+                <div>
+                  <div class="room-card__price">£2,195 <span>per person</span></div>
+                </div>
+                <button class="btn btn--secondary btn--sm">Select</button>
+              </div>
+            </div>
+
+            <div class="room-card" data-room-id="r2">
+              <img src="images/retreats/four-seasons/Four+Seasons+Bali+at+Sayan+Two+Bedroom+River+View+Villa.webp"
+                   alt="Family Suite" class="room-card__image">
+              <div class="room-card__badge">
+                <span class="badge badge--sage">Most popular</span>
+              </div>
+              <div class="room-card__body">
+                <h3 class="room-card__name">Family Suite</h3>
+                <p class="room-card__type">Double or twin · Valley view · En-suite</p>
+                <ul class="room-includes-list">
+                  <li>King or twin beds — your choice</li>
+                  <li>Private room for solo or couple</li>
+                  <li>Valley view with morning light</li>
+                  <li>En-suite with walk-in shower</li>
+                  <li>All meals &amp; programme included</li>
+                  <li>Lisbon transfers included</li>
+                </ul>
+              </div>
+              <div class="room-card__footer">
+                <div>
+                  <div class="room-card__price">£2,895 <span>per person</span></div>
+                </div>
+                <button class="btn btn--secondary btn--sm">Select</button>
+              </div>
+            </div>
+
+            <div class="room-card" data-room-id="r3">
+              <img src="images/general/16.jpg"
+                   alt="Private Villa" class="room-card__image">
+              <div class="room-card__badge">
+                <span class="badge badge--stone">Premium</span>
+              </div>
+              <div class="room-card__body">
+                <h3 class="room-card__name">Private Villa</h3>
+                <p class="room-card__type">Junior suite · Private terrace · Deep-soak bath</p>
+                <ul class="room-includes-list">
+                  <li>Spacious suite with lounge area</li>
+                  <li>Private terrace with valley views</li>
+                  <li>Deep-soak bath + rain shower</li>
+                  <li>All meals &amp; programme included</li>
+                  <li>Lisbon transfers included</li>
+                  <li class="extra">2× private coaching sessions</li>
+                  <li class="extra">In-room aromatherapy welcome kit</li>
+                </ul>
+              </div>
+              <div class="room-card__footer">
+                <div>
+                  <div class="room-card__price">£3,750 <span>per person</span></div>
+                </div>
+                <button class="btn btn--secondary btn--sm">Select</button>
+              </div>
+            </div>
+
+          </div>
+
+          <div style="margin-top: var(--s7);">
+            <h4 style="font-family: var(--sans); font-size: var(--t-base); font-weight: 600; margin-bottom: var(--s4);">Are you travelling alone, with someone or in a group?</h4>
+            <div class="guest-type-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+              <div class="guest-type-card is-active" data-type="solo">
+                <div class="guest-type-card__title">Solo traveller</div>
+                <div class="guest-type-card__desc">1 guest — private or shared room</div>
+              </div>
+              <div class="guest-type-card" data-type="couple">
+                <div class="guest-type-card__title">Two guests</div>
+                <div class="guest-type-card__desc">2 guests — prices apply per person</div>
+              </div>
+              <div class="guest-type-card" data-type="group">
+                <div class="guest-type-card__title">A group</div>
+                <div style="display: flex; align-items: center; gap: var(--s3); margin-top: var(--s2);">
+                  <div class="select-wrap" style="flex-shrink: 0; width: 130px;">
+                    <select class="form-select" id="group-guest-count" style="padding: var(--s3) var(--s4);">
+                      <option value="3">3 guests</option>
+                      <option value="4">4 guests</option>
+                      <option value="5">5 guests</option>
+                      <option value="6">6 guests</option>
+                    </select>
+                  </div>
+                  <span class="guest-type-card__desc" style="margin-top: 0;">prices apply per person</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: var(--s7);">
+            <button class="btn btn--primary btn--lg btn--full" onclick="document.getElementById('nav-continue').click()">
+              Continue
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </section>
+
+
+        <!-- ─────────────────────────────────────────────────
+             STEP 3: Enquiry Summary
+        ───────────────────────────────────────────────── -->
+        <section id="step-3" class="step-panel">
+          <div class="step-panel__header">
+            <p class="label-caps step-panel__eyebrow">Step 3 of 6</p>
+            <h1 class="step-panel__title">Enquiry summary</h1>
+            <p class="step-panel__desc">Review your selections before we proceed. You can make changes at any point.</p>
+          </div>
+
+          <!-- Retreat overview -->
+          <div class="booking-summary-card">
+            <div class="booking-summary-card__header">
+              <span class="booking-summary-card__title">Retreat</span>
+              <button class="edit-link" data-goto-step="1">Edit dates</button>
+            </div>
+            <div class="booking-summary-card__body">
+              <div style="display: grid; grid-template-columns: 120px 1fr; gap: var(--s5);">
+                <img src="images/retreats/four-seasons/Four+Seasons+Bali+at+Sayan+meditation.webp"
+                     alt="Quinta da Levada" style="width:100%; height:80px; object-fit:cover; border-radius: var(--r-md);">
+                <div>
+                  <h4 style="font-family: var(--serif); font-weight: 400; margin-bottom: var(--s1);">Four Seasons Bali at Sayan</h4>
+                  <p style="font-size: var(--t-sm); color: var(--stone);">Near Ubud, Bali</p>
+                  <p id="step3-dates" style="font-size: var(--t-sm); color: var(--sage); font-weight: 500; margin-top: var(--s2);">Dates not yet selected</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Room selection -->
+          <div class="booking-summary-card">
+            <div class="booking-summary-card__header">
+              <span class="booking-summary-card__title">Room</span>
+              <button class="edit-link" data-goto-step="2">Edit room</button>
+            </div>
+            <div class="booking-summary-card__body">
+              <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div>
+                  <p id="step3-room" style="font-weight: 500; color: var(--ink);">No room selected</p>
+                  <p id="step3-guests" style="font-size: var(--t-sm); color: var(--stone); margin-top: var(--s1);">1 guest</p>
+                </div>
+              </div>
+
+              <div class="divider"></div>
+
+              <p class="label-caps" style="margin-bottom: var(--s4);">What's included</p>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--s2) var(--s5);">
+                <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;Return Lisbon transfers</div>
+                <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;All meals included</div>
+                <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;2× daily yoga sessions</div>
+                <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;Guided forest bathing</div>
+                <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;Daily meditation</div>
+                <div style="display:flex; gap: var(--s2); font-size: var(--t-sm); color: var(--charcoal);">✓ &nbsp;Closing ceremony &amp; dinner</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Price breakdown -->
+          <div class="booking-summary-card">
+            <div class="booking-summary-card__header">
+              <span class="booking-summary-card__title">Price Breakdown</span>
+            </div>
+            <div class="booking-summary-card__body">
+              <table class="price-table" style="width:100%">
+                <tr>
+                  <td style="color: var(--stone);">Room rate</td>
+                  <td id="price-room-line" style="text-align:right; color: var(--ink);">Select room to see price</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--stone);">Meals, programme &amp; transfers</td>
+                  <td style="text-align:right; color: var(--ink);">Included</td>
+                </tr>
+                <tr class="subtotal">
+                  <td style="color: var(--ink); font-weight: 600;">Total</td>
+                  <td id="price-subtotal" style="text-align:right; font-weight: 600; color: var(--ink);">—</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+
+          <div style="margin-top: var(--s7);">
+            <button class="btn btn--primary btn--lg btn--full" onclick="document.getElementById('nav-continue').click()">
+              Continue
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </section>
+
+
+        <!-- ─────────────────────────────────────────────────
+             STEP 4: Review
+        ───────────────────────────────────────────────── -->
+        <!-- Step 4 (Review) hidden — not deleted, available to restore -->
+        <section id="step-review-hidden" class="step-panel" style="display:none">
+          <div class="step-panel__header">
+            <p class="label-caps step-panel__eyebrow">Step 4 of 6</p>
+            <h1 class="step-panel__title">Review your booking</h1>
+            <p class="step-panel__desc">Please read the retreat policies before confirming. You can return and make changes at any time.</p>
+          </div>
+
+          <!-- Booking snapshot -->
+          <div class="review-section" style="margin-bottom: var(--s7);">
+            <div class="review-section__header">
+              <span class="review-section__title">Booking Snapshot</span>
+            </div>
+            <div class="review-section__body">
+              <div class="review-row">
+                <span class="review-row__key">Retreat</span>
+                <span class="review-row__val">Four Seasons Bali at Sayan</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Dates</span>
+                <span class="review-row__val" id="review-dates">21 – 28 June 2026</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Room</span>
+                <span class="review-row__val" id="review-room">Family Suite</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Guests</span>
+                <span class="review-row__val" id="review-guests">1 guest</span>
+              </div>
+              <div class="review-row">
+                <span class="review-row__key">Total</span>
+                <span class="review-row__val" id="review-total" style="font-family: var(--serif); font-size: var(--t-lg);">£2,895</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cancellation policy -->
+          <div class="policy-box" style="margin-bottom: var(--s6);">
+            <p class="label-caps" style="margin-bottom: var(--s4);">Cancellation Policy</p>
+            <div class="policy-timeline">
+              <div class="policy-row">
+                <span class="policy-row__period">90+ days before</span>
+                <span class="policy-row__rule" style="color: var(--success);">Full refund</span>
+              </div>
+              <div class="policy-row">
+                <span class="policy-row__period">60–90 days before</span>
+                <span class="policy-row__rule" style="color: var(--warning);">50% refund</span>
+              </div>
+              <div class="policy-row">
+                <span class="policy-row__period">30–60 days before</span>
+                <span class="policy-row__rule" style="color: var(--error);">No refund · credit offered</span>
+              </div>
+              <div class="policy-row">
+                <span class="policy-row__period">Under 30 days</span>
+                <span class="policy-row__rule" style="color: var(--error);">No refund or credit</span>
+              </div>
+            </div>
+            <p style="font-size: var(--t-sm); color: var(--stone); margin-top: var(--s5); line-height: 1.6;">
+              Cancellations must be submitted in writing. Credits (where applicable) are valid for 12 months and may be applied to any future Queen of Retreats booking.
+              We strongly recommend purchasing comprehensive travel insurance.
+            </p>
+          </div>
+
+          <!-- Accordions -->
+          <div style="margin-bottom: var(--s6);">
+            <div class="accordion-item">
+              <button class="accordion-trigger">
+                House Rules
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-body">
+                <p style="margin-bottom: var(--s3);">Four Seasons Bali at Sayan is a place of rest and mutual respect. We ask all guests to observe the following:</p>
+                <ul style="display: flex; flex-direction: column; gap: var(--s2); color: var(--stone); font-size: var(--t-sm);">
+                  <li>— Quiet hours: 10pm – 7am</li>
+                  <li>— No external alcohol during the programme</li>
+                  <li>— Photography of other guests is not permitted without explicit consent</li>
+                  <li>— Please arrive on time for group sessions</li>
+                  <li>— The retreat is a phone-free zone during shared practice times</li>
+                </ul>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-trigger">
+                Health &amp; Participation
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-body">
+                <p style="color: var(--stone); font-size: var(--t-sm); line-height: 1.7;">All activities are opt-in. You are always welcome to rest, modify, or simply observe. Please disclose any relevant health conditions or injuries when completing your guest details — this is kept confidential and shared only with facilitators to ensure your safety.</p>
+              </div>
+            </div>
+            <div class="accordion-item">
+              <button class="accordion-trigger">
+                QoR Booking Guarantee
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="accordion-body">
+                <p style="color: var(--stone); font-size: var(--t-sm); line-height: 1.7;">Every retreat listed on Queen of Retreats has been personally visited and assessed by our team. In the unlikely event a retreat is cancelled by the organiser, we will offer a full refund or assist you in finding an alternative experience of equivalent value.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Agreements -->
+          <div class="agreement-block">
+            <p style="font-size: var(--t-sm); font-weight: 600; color: var(--ink); margin-bottom: var(--s2);">Before you continue, please confirm:</p>
+            <label class="check-item" style="padding: 0; margin-bottom: 0;">
+              <input type="checkbox" id="agree-policies">
+              <div class="check-item__text">
+                <strong>I have read and agree to the retreat's cancellation policy and house rules</strong>
+              </div>
+            </label>
+            <label class="check-item" style="padding: 0;">
+              <input type="checkbox" id="agree-tcs">
+              <div class="check-item__text">
+                <strong>I agree to Queen of Retreats' <a href="#" style="color: var(--sage);">Terms &amp; Conditions</a> and <a href="#" style="color: var(--sage);">Privacy Policy</a></strong>
+              </div>
+            </label>
+          </div>
+        </section>
+
+
+        <!-- ─────────────────────────────────────────────────
+             STEP 5: Guest Details
+        ───────────────────────────────────────────────── -->
+        <section id="step-4" class="step-panel">
+          <div class="step-panel__header">
+            <p class="label-caps step-panel__eyebrow">Step 4 of 6</p>
+            <h1 class="step-panel__title">Your details</h1>
+            <p class="step-panel__desc">We'll use these to prepare your enquiry confirmation and pre-arrival materials.</p>
+          </div>
+
+          <div class="alert alert--info">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0; margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>All personal information is handled in accordance with our Privacy Policy and is shared only with the retreat organiser to facilitate your stay.</span>
+          </div>
+
+          <!-- Login to your account -->
+          <div class="form-section" style="margin-bottom: var(--s5);">
+            <button class="accordion-trigger" style="padding: var(--s4) var(--s6); background: var(--parchment); border: none; border-bottom: 1px solid var(--border); font-family: var(--sans); font-size: var(--t-base); font-weight: 600; color: var(--ink);">
+              <span>Login to your account <span style="font-weight: 400; color: var(--stone); font-size: var(--t-sm);">(optional)</span></span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="accordion-body" style="padding: var(--s6);">
+              <p style="font-size: var(--t-sm); color: var(--stone); line-height: 1.6; margin-bottom: var(--s5);">If you already have an account, login here to use your saved guest details.</p>
+              <div class="form-group">
+                <label class="form-label" for="login-email-enq">Username</label>
+                <input class="form-input" type="email" id="login-email-enq" placeholder="e.g. name@email.com">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="login-password-enq">Password</label>
+                <input class="form-input" type="password" id="login-password-enq" placeholder="Minimum 8 characters">
+              </div>
+              <p style="font-size: var(--t-sm); margin-bottom: var(--s6);"><a href="#" style="color: var(--sage);">Forgot your password? Reset here</a></p>
+              <button class="btn btn--primary" type="button">LOGIN</button>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section__header">
+              <h4>Create an account <span style="font-weight: 400; color: var(--stone); font-size: var(--t-sm);">(optional)</span></h4>
+            </div>
+            <div class="form-section__body">
+              <p style="font-size: var(--t-sm); color: var(--stone); line-height: 1.6;">Save your details for future bookings, access your retreat portal, and manage your booking from one place.</p>
+              <label class="check-item" style="padding: 0;">
+                <input type="checkbox" id="create-account" data-reveals="password-field">
+                <div class="check-item__text">
+                  <strong>Create a Queen of Retreats account</strong>
+                  <span>Your email address below will be your username</span>
+                </div>
+              </label>
+              <div id="password-field" class="hidden">
+                <div class="form-group">
+                  <label class="form-label" for="password">Choose a password</label>
+                  <input class="form-input" type="password" id="password" placeholder="Minimum 8 characters">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section__header">
+              <h4>Lead guest</h4>
+            </div>
+            <div class="form-section__body">
+              <div class="form-row form-row--2">
+                <div class="form-group">
+                  <label class="form-label" for="first-name">First name</label>
+                  <input class="form-input" type="text" id="first-name" placeholder="e.g. Sarah" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="last-name">Last name</label>
+                  <input class="form-input" type="text" id="last-name" placeholder="e.g. Mitchell" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="email">Email address</label>
+                <input class="form-input" type="email" id="email" placeholder="sarah@example.com" required>
+                <p class="form-hint">Your enquiry confirmation will be sent here.</p>
+              </div>
+              <div class="form-row form-row--2">
+                <div class="form-group">
+                  <label class="form-label" for="phone">Phone number</label>
+                  <input class="form-input" type="tel" id="phone" placeholder="+44 7700 900000" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="country">Country of residence</label>
+                  <div class="select-wrap">
+                    <select class="form-select" id="country" required>
+                      <option value="">Select country</option>
+                      <option value="GB" selected>United Kingdom</option>
+                      <option value="IE">Ireland</option>
+                      <option value="FR">France</option>
+                      <option value="DE">Germany</option>
+                      <option value="US">United States</option>
+                      <option value="AU">Australia</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section__header">
+              <h4>Billing address</h4>
+            </div>
+            <div class="form-section__body">
+              <div class="form-group">
+                <label class="form-label" for="address-1">Address line 1</label>
+                <input class="form-input" type="text" id="address-1" placeholder="Street address">
+              </div>
+              <div class="form-row form-row--2">
+                <div class="form-group">
+                  <label class="form-label" for="city">City</label>
+                  <input class="form-input" type="text" id="city" placeholder="London">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="postcode">Postcode</label>
+                  <input class="form-input" type="text" id="postcode" placeholder="SW1A 1AA">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: var(--s7);">
+            <button class="btn btn--primary btn--lg btn--full" onclick="document.getElementById('nav-continue').click()">
+              Continue
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </section>
+
+
+        <!-- ─────────────────────────────────────────────────
+             STEP 6: About You
+        ───────────────────────────────────────────────── -->
+        <section id="step-5" class="step-panel">
+          <div class="step-panel__header">
+            <p class="label-caps step-panel__eyebrow">Step 5 of 6</p>
+            <h1 class="step-panel__title">A little about you</h1>
+            <p class="step-panel__desc">To ensure we create the best possible experience, please share a little about yourself. All information is confidential and shared only with your facilitators.</p>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section__header">
+              <h4>Health &amp; Wellbeing</h4>
+            </div>
+            <div class="form-section__body">
+              <div class="form-group">
+                <label class="form-label" for="health-info">
+                  Do you have any physical conditions, injuries, or health considerations that may affect your participation?
+                  <span class="optional">Optional</span>
+                </label>
+                <textarea class="form-textarea" id="health-info" placeholder="e.g. Lower back pain, recent knee surgery, vertigo. If none, please leave blank."></textarea>
+                <p class="form-hint">This is kept strictly confidential. It allows your facilitators to offer appropriate modifications and care.</p>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Are you currently taking any medication that may be relevant? <span class="optional">Optional</span></label>
+                <div class="check-group">
+                  <label class="check-item" style="padding: var(--s2) 0;">
+                    <input type="radio" name="medication" value="no" checked>
+                    <div class="check-item__text"><strong>No</strong></div>
+                  </label>
+                  <label class="check-item" style="padding: var(--s2) 0;">
+                    <input type="radio" name="medication" value="yes" data-reveals="medication-detail">
+                    <div class="check-item__text"><strong>Yes</strong> <span>— I'll provide details below</span></div>
+                  </label>
+                  <div id="medication-detail" class="hidden">
+                    <textarea class="form-textarea" placeholder="Please note any medication relevant to physical activity or dietary requirements."></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section__header">
+              <h4>Dietary Requirements</h4>
+            </div>
+            <div class="form-section__body">
+              <div class="form-group">
+                <label class="form-label">Please select all that apply</label>
+                <div class="check-group">
+                  <label class="check-item">
+                    <input type="checkbox" value="none"><div class="check-item__text"><strong>No restrictions</strong></div>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" value="vegetarian"><div class="check-item__text"><strong>Vegetarian</strong></div>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" value="vegan"><div class="check-item__text"><strong>Vegan</strong></div>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" value="gluten"><div class="check-item__text"><strong>Gluten-free</strong></div>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" value="dairy"><div class="check-item__text"><strong>Dairy-free</strong></div>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" value="nuts"><div class="check-item__text"><strong>Nut allergy</strong></div>
+                  </label>
+                  <label class="check-item">
+                    <input type="checkbox" value="other" id="dietary-other-trigger" data-reveals="dietary-other-text">
+                    <div class="check-item__text"><strong>Other / Allergies</strong></div>
+                  </label>
+                  <div id="dietary-other-text" class="hidden" style="padding: 0 var(--s4);">
+                    <input class="form-input" type="text" placeholder="Please describe your requirements">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section__header">
+              <h4>Movement &amp; Practice Experience</h4>
+            </div>
+            <div class="form-section__body">
+              <div class="form-group">
+                <label class="form-label">How would you describe your yoga or movement experience?</label>
+                <div class="pill-group">
+                  <input type="radio" name="experience" id="exp-none" value="none">
+                  <label for="exp-none">Complete beginner</label>
+                  <input type="radio" name="experience" id="exp-some" value="some" checked>
+                  <label for="exp-some">Some experience</label>
+                  <input type="radio" name="experience" id="exp-regular" value="regular">
+                  <label for="exp-regular">Regular practitioner</label>
+                  <input type="radio" name="experience" id="exp-teacher" value="teacher">
+                  <label for="exp-teacher">Teacher / Advanced</label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="intentions">
+                  What are you hoping to take away from this retreat? <span class="optional">Optional</span>
+                </label>
+                <textarea class="form-textarea" id="intentions" maxlength="500"
+                  placeholder="There are no right answers here. Write freely — this helps us hold the space in a way that serves you."
+                  oninput="document.getElementById('intentions-count').textContent = this.value.length"></textarea>
+                <p class="char-count"><span id="intentions-count">0</span> / 500</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-section">
+            <div class="form-section__header">
+              <h4>Travel &amp; Logistics</h4>
+            </div>
+            <div class="form-section__body">
+              <div class="form-group">
+                <label class="form-label">Will you be joining the group transfer from Denpasar International Airport?</label>
+                <div class="check-group">
+                  <label class="check-item" style="padding: var(--s2) 0;">
+                    <input type="radio" name="transfer" value="yes" checked>
+                    <div class="check-item__text">
+                      <strong>Yes, please include the Lisbon transfer</strong>
+                      <span>Included in your package. Departure Saturday morning, details sent pre-arrival.</span>
+                    </div>
+                  </label>
+                  <label class="check-item" style="padding: var(--s2) 0;">
+                    <input type="radio" name="transfer" value="no">
+                    <div class="check-item__text">
+                      <strong>No, I'll arrange my own transport</strong>
+                      <span>We'll send directions and parking information.</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="roommate">
+                  If you are sharing a room and know your roommate's name, please enter it here
+                  <span class="optional">Optional</span>
+                </label>
+                <input class="form-input" type="text" id="roommate" placeholder="e.g. Emma Johnson">
+                <p class="form-hint">We'll do our best to accommodate room-sharing requests when confirmed in advance.</p>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="special-requests">
+                  Any other requests or things we should know? <span class="optional">Optional</span>
+                </label>
+                <textarea class="form-textarea" id="special-requests" placeholder="Anything else you'd like to share — we read every response carefully."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: var(--s7);">
+            <button class="btn btn--ink btn--lg btn--full" onclick="document.getElementById('nav-continue').click()">
+              SUBMIT ENQUIRY
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </section>
+
+
+        <!-- ─────────────────────────────────────────────────
+             STEP 7: Enquiry Submitted
+        ───────────────────────────────────────────────── -->
+        <section id="step-6" class="step-panel">
+
+          <div class="confirmation-hero">
+            <div class="confirmation-hero__icon">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#637A5E" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <p class="label-caps" style="color: var(--sage); margin-bottom: var(--s3);">Enquiry Submitted</p>
+            <h1 style="font-size: var(--t-3xl); font-weight: 300;">Thank you for your enquiry.</h1>
+            <p style="font-size: var(--t-md); color: var(--stone); margin-top: var(--s3); max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+              We have sent your enquiry to the retreat host and they will respond once they have checked your details.
+            </p>
+            <span class="confirmation-hero__ref">Enquiry ref: EQ-2026-08847</span>
+          </div>
+
+          <div class="confirmation-grid">
+
+            <!-- Left: What happens next -->
+            <div>
+              <h3 style="font-family: var(--sans); font-size: var(--t-lg); font-weight: 600; margin-bottom: var(--s6);">What happens next</h3>
+              <div class="next-steps">
+                <div class="next-step">
+                  <div class="next-step__number">1</div>
+                  <div class="next-step__content">
+                    <h5>Confirmation email sent</h5>
+                    <p>Check your inbox for a confirmation with your enquiry reference and the retreat details you selected.</p>
+                  </div>
+                </div>
+                <div class="next-step">
+                  <div class="next-step__number">2</div>
+                  <div class="next-step__content">
+                    <h5>Retreat host notified</h5>
+                    <p>Your enquiry has been forwarded to the retreat host along with your details and preferences.</p>
+                  </div>
+                </div>
+                <div class="next-step">
+                  <div class="next-step__number">3</div>
+                  <div class="next-step__content">
+                    <h5>Response within 48 hours</h5>
+                    <p>The host will review your enquiry and respond directly to your email address within 48 hours.</p>
+                  </div>
+                </div>
+                <div class="next-step">
+                  <div class="next-step__number">4</div>
+                  <div class="next-step__content">
+                    <h5>Ready to book?</h5>
+                    <p>If everything looks right for you, our team will guide you through the booking process from there.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: var(--s3); margin-top: var(--s8);">
+                <a href="pdp-flexible.html" class="btn btn--secondary">← Return to Queen of Retreats</a>
+              </div>
+            </div>
+
+            <!-- Right: Enquiry summary card -->
+            <div>
+              <div class="receipt-card">
+                <img src="images/retreats/four-seasons/Four+Seasons+Bali+at+Sayan+meditation.webp"
+                     alt="Quinta da Levada" class="receipt-image">
+                <div class="receipt-card__header">
+                  <p style="font-family: var(--serif); font-size: var(--t-lg); color: var(--ink);">Four Seasons Bali at Sayan</p>
+                  <p style="font-size: var(--t-sm); color: var(--stone);">Near Ubud, Bali</p>
+                </div>
+                <div class="receipt-card__body">
+                  <div class="receipt-row">
+                    <span class="receipt-row__key">Enquiry ref</span>
+                    <span class="receipt-row__val" style="font-family: monospace; letter-spacing: 0.05em;">EQ-2026-08847</span>
+                  </div>
+                  <div class="receipt-row">
+                    <span class="receipt-row__key">Dates</span>
+                    <span class="receipt-row__val">21 – 28 June 2026</span>
+                  </div>
+                  <div class="receipt-row">
+                    <span class="receipt-row__key">Room</span>
+                    <span class="receipt-row__val">Family Suite</span>
+                  </div>
+                  <div class="receipt-row">
+                    <span class="receipt-row__key">Guests</span>
+                    <span class="receipt-row__val">1 person</span>
+                  </div>
+                </div>
+                <div class="receipt-total">
+                  <span style="font-size: var(--t-sm); color: var(--stone);">Estimated price from</span>
+                  <span style="font-family: var(--serif); font-size: var(--t-xl); color: var(--ink); font-weight: 500;">£2,895</span>
+                </div>
+              </div>
+
+              <div class="sidebar-trust" style="margin-top: var(--s5);">
+                <div class="trust-item">
+                  <svg class="trust-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  <div class="trust-item__text"><strong>QoR Vetted</strong><span>This retreat has been personally assessed by our team</span></div>
+                </div>
+                <div class="trust-item">
+                  <svg class="trust-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  <div class="trust-item__text"><strong>Safe &amp; confidential</strong><span>Your details are kept private and shared only with the retreat host</span></div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div><!-- end booking-steps -->
+
+      <!-- ====================================================
+           SIDEBAR (hidden on step 1 & 7)
+      ==================================================== -->
+      <aside id="booking-sidebar" class="booking-sidebar hidden">
+
+        <div class="summary-card">
+          <img src="images/retreats/four-seasons/Four+Seasons+Bali+at+Sayan+meditation.webp"
+               alt="Quinta da Levada" class="summary-card__image">
+          <div class="summary-card__body">
+            <div class="summary-card__retreat-name">Quinta da Levada</div>
+            <div class="summary-card__location">Alentejo, Portugal · 7 nights</div>
+            <div class="summary-lines">
+              <div class="summary-line">
+                <span class="summary-line__label">Dates</span>
+                <span class="summary-line__value placeholder" id="sidebar-date">Select dates</span>
+              </div>
+              <div class="summary-line">
+                <span class="summary-line__label">Room</span>
+                <span class="summary-line__value placeholder" id="sidebar-room">Select room</span>
+              </div>
+              <div class="summary-line">
+                <span class="summary-line__label">Guests</span>
+                <span class="summary-line__value" id="sidebar-guests">1 guest</span>
+              </div>
+            </div>
+          </div>
+          <div class="summary-card__price-total">
+            <div>
+              <div class="price-total__label">Total</div>
+            </div>
+            <div style="text-align: right;">
+              <div class="price-total__amount" id="sidebar-total">—</div>
+              <div class="price-total__per" id="sidebar-per"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="padding: var(--s4); border: 1px solid var(--border); border-radius: var(--r-lg);">
+          <p style="font-size: var(--t-sm); font-weight: 600; color: var(--ink); margin-bottom: var(--s2);">Need help?</p>
+          <p style="font-size: var(--t-sm); color: var(--stone); line-height: 1.5; margin-bottom: var(--s3);">Our retreat specialists are here to help. Mon–Fri, 9am–5pm.</p>
+          <a href="mailto:hello@queenofretreats.com" class="btn btn--secondary btn--full btn--sm">Contact us</a>
+        </div>
+
+        <div class="sidebar-trust" style="padding: var(--s4) 0;">
+          <div class="trust-item">
+            <svg class="trust-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <div class="trust-item__text"><strong>No obligation</strong><span>Enquiring doesn't commit you to booking</span></div>
+          </div>
+          <div class="trust-item">
+            <svg class="trust-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <div class="trust-item__text"><strong>QoR Vetted</strong><span>Curated and quality-checked</span></div>
+          </div>
+          <div class="trust-item">
+            <svg class="trust-item__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div class="trust-item__text"><strong>Response within 48hrs</strong><span>The retreat host will get back to you promptly</span></div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div><!-- end booking-layout -->
+  </div><!-- end booking-body -->
+
+  <!-- ===== Sticky Nav ===== -->
+  <nav class="booking-nav">
+    <div class="booking-nav__inner">
+
+      <div class="booking-nav__left">
+        <div style="display:flex; align-items:center; gap: var(--s4); min-width: 120px; flex-shrink:0; align-self:center;">
+          <button id="nav-back" class="btn btn--secondary" aria-label="Back" style="width:48px; height:48px; padding:0; display:flex; align-items:center; justify-content:center; visibility:hidden;">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <span class="booking-nav__step-info" id="nav-step-info">1 of 6</span>
+        </div>
+
+        <div class="booking-nav__summary">
+          <img src="images/retreats/four-seasons/Four+Seasons+Bali+at+Sayan+meditation.webp" alt="Four Seasons Bali at Sayan" class="booking-nav__thumb">
+
+          <div class="booking-nav__section" style="padding-right: 34px;">
+            <span class="booking-nav__retreat-name">Four Seasons Bali at Sayan</span>
+            <span class="booking-nav__retreat-loc">Near Ubud, Bali</span>
+          </div>
+
+          <div class="booking-nav__vdivider booking-nav__vdivider--full"></div>
+
+          <div class="booking-nav__section">
+            <span class="booking-nav__label">Dates</span>
+            <span class="booking-nav__val placeholder" id="nav-date">Select dates</span>
+          </div>
+
+          <div class="booking-nav__vdivider booking-nav__vdivider--full"></div>
+
+          <div class="booking-nav__section">
+            <span class="booking-nav__label">Room</span>
+            <span class="booking-nav__val placeholder" id="nav-room">Select room</span>
+          </div>
+
+          <div class="booking-nav__vdivider booking-nav__vdivider--full"></div>
+
+          <div class="booking-nav__section">
+            <span class="booking-nav__label">Guests</span>
+            <span class="booking-nav__val" id="nav-guests">1 guest</span>
+          </div>
+
+          <div class="booking-nav__total-wrap">
+            <span class="booking-nav__label">Total</span>
+            <span class="booking-nav__total-amount" id="nav-total">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="booking-nav__right">
+        <button id="nav-continue" class="btn btn--primary btn--lg">
+          Continue
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Flexible preselect shim: inject a placeholder dateId so enquiry.js
+       preselect condition fires for room-only payloads (no fixed retreat dates) -->
+  <script>
+    (function() {
+      try {
+        const raw = sessionStorage.getItem('qor_preselect');
+        if (raw) {
+          const ps = JSON.parse(raw);
+          if (!ps.dateId && ps.roomPrice) {
+            ps.dateId = '__flex__';
+            sessionStorage.setItem('qor_preselect', JSON.stringify(ps));
+          }
+        }
+      } catch(e) {}
+    })();
+  </script>
+
+  <script src="enquiry.js"></script>
+  <script>
+
+    // Override ROOMS for Four Seasons flexible variant
+    ROOMS.length = 0;
+    ROOMS.push(
+      { id: 'r1', name: 'Standard Suite',  type: 'King · Garden view',               price: 2195, badge: null },
+      { id: 'r2', name: 'Family Suite',    type: 'Two bedrooms · Private terrace',   price: 2895, badge: 'Most popular' },
+      { id: 'r3', name: 'Private Villa',   type: 'Villa · Plunge pool · River view', price: 3750, badge: 'Premium' }
+    );
+
+    window.enquiryApp = { renderStep };
+
+    // Patch: update summary fields when navigating forward
+    document.getElementById('nav-continue').addEventListener('click', function() {
+      setTimeout(() => {
+        const s = state;
+        // Step 3 summary
+        const d3dates = document.getElementById('step3-dates');
+        if (d3dates && s.selectedDate) d3dates.textContent = s.selectedDate.label;
+        const d3room = document.getElementById('step3-room');
+        if (d3room && s.selectedRoom) d3room.textContent = s.selectedRoom.name;
+        const d3guests = document.getElementById('step3-guests');
+        if (d3guests) d3guests.textContent = s.guestCount === 1 ? '1 guest' : `${s.guestCount} guests`;
+
+        // Step 4 review fields
+        const rDates = document.getElementById('review-dates');
+        if (rDates && s.selectedDate) rDates.textContent = s.selectedDate.label;
+        const rRoom = document.getElementById('review-room');
+        if (rRoom && s.selectedRoom) rRoom.textContent = s.selectedRoom.name;
+        const rGuests = document.getElementById('review-guests');
+        if (rGuests) rGuests.textContent = s.guestCount === 1 ? '1 guest' : `${s.guestCount} guests`;
+
+        // Price in review
+        if (s.selectedRoom) {
+          const total  = s.selectedRoom.price * s.guestCount;
+          const rTotal = document.getElementById('review-total');
+          if (rTotal) rTotal.textContent = `£${total.toLocaleString()}`;
+        }
+      }, 50);
+    }, true);
+
+    // Date selected panel
+    document.addEventListener('click', e => {
+      const item = e.target.closest('.date-list-item[data-date-id]:not(.is-soldout)');
+      if (item) {
+        const panel = document.getElementById('date-selected-panel');
+        const label = document.getElementById('date-selected-label');
+        const date  = RETREAT_DATES.find(d => d.id === item.dataset.dateId);
+        if (date && panel && label) {
+          label.textContent = date.label;
+          panel.classList.remove('is-hidden');
+        }
+      }
+      const calDay = e.target.closest('.cal-day--available, .cal-day--limited');
+      if (calDay && calDay.dataset.dateId) {
+        const panel = document.getElementById('date-selected-panel');
+        const label = document.getElementById('date-selected-label');
+        const date  = RETREAT_DATES.find(d => d.id === calDay.dataset.dateId);
+        if (date && panel && label) {
+          label.textContent = date.label;
+          panel.classList.remove('is-hidden');
+        }
+      }
+    });
+
+    /* ── Flexible date range calendar ───────────────────────────── */
+    (function () {
+      const MONTH_ABBR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      const range = { start: null, end: null, hovering: null };
+
+      function toDate(obj) { return new Date(obj.year, obj.month, obj.day); }
+      function fmtDate(obj) { return obj.day + ' ' + MONTH_ABBR[obj.month] + ' ' + obj.year; }
+
+      function flexRenderMonth(containerId, year, month) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const grid = container.querySelector('.calendar__grid');
+        if (!grid) return;
+        const today = new Date(); today.setHours(0,0,0,0);
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        grid.innerHTML = '';
+        const offset = firstDay === 0 ? 6 : firstDay - 1;
+        for (let i = 0; i < offset; i++) {
+          const e = document.createElement('div');
+          e.className = 'cal-day cal-day--empty';
+          grid.appendChild(e);
+        }
+        for (let d = 1; d <= daysInMonth; d++) {
+          const cell = document.createElement('div');
+          const thisDate = new Date(year, month, d);
+          if (thisDate < today) {
+            cell.className = 'cal-day cal-day--past';
+          } else {
+            cell.className = 'cal-day cal-day--available';
+            cell.dataset.year  = year;
+            cell.dataset.month = month;
+            cell.dataset.day   = d;
+          }
+          cell.textContent = d;
+          grid.appendChild(cell);
+        }
+      }
+
+      function applyHighlights() {
+        document.querySelectorAll('#cal-view .cal-day[data-day]').forEach(cell => {
+          cell.classList.remove('cal-day--checkin','cal-day--checkout','cal-day--in-range');
+          if (!range.start) return;
+          const d = toDate({ year: +cell.dataset.year, month: +cell.dataset.month, day: +cell.dataset.day });
+          const startD = toDate(range.start);
+          const endObj = range.end || range.hovering;
+          const endD   = endObj ? toDate(endObj) : null;
+          let visStart = startD, visEnd = endD;
+          if (endD && endD < startD) { visStart = endD; visEnd = startD; }
+          if (d.getTime() === startD.getTime()) cell.classList.add('cal-day--checkin');
+          if (range.end && d.getTime() === toDate(range.end).getTime()) cell.classList.add('cal-day--checkout');
+          if (visEnd && d > visStart && d < visEnd) cell.classList.add('cal-day--in-range');
+        });
+      }
+
+      function updateNavDate(label) {
+        const navDate = document.getElementById('nav-date');
+        if (!navDate) return;
+        if (label) { navDate.textContent = label; navDate.classList.remove('placeholder'); }
+        else        { navDate.textContent = 'Select dates'; navDate.classList.add('placeholder'); }
+      }
+
+      function updateChip() {
+        const chip = document.getElementById('date-chip-text');
+        if (!chip) return;
+        if (!range.start) {
+          chip.className = 'flex-date-chip flex-date-chip--empty';
+          chip.textContent = 'No dates selected';
+          updateNavDate(null);
+          return;
+        }
+        if (!range.end) {
+          chip.className = 'flex-date-chip flex-date-chip--selecting';
+          chip.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${fmtDate(range.start)} &nbsp;→&nbsp; Select check-out`;
+          updateNavDate(fmtDate(range.start) + ' →');
+          return;
+        }
+        const nights = Math.round(Math.abs(toDate(range.end) - toDate(range.start)) / 86400000);
+        const label  = `${fmtDate(range.start)} – ${fmtDate(range.end)}`;
+        chip.className = 'flex-date-chip flex-date-chip--selected';
+        chip.innerHTML =
+          `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>` +
+          ` ${label} &nbsp;·&nbsp; ${nights} night${nights !== 1 ? 's' : ''}` +
+          ` <button class="flex-chip-clear" id="flex-chip-clear" title="Clear dates">×</button>`;
+        updateNavDate(`${fmtDate(range.start)} – ${fmtDate(range.end)} · ${nights}n`);
+        document.getElementById('flex-chip-clear').addEventListener('click', e => {
+          e.stopPropagation();
+          range.start = range.end = range.hovering = null;
+          applyHighlights();
+          updateChip();
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        flexRenderMonth('cal-june',  2026, 5);
+        flexRenderMonth('cal-july',  2026, 6);
+        flexRenderMonth('cal-aug',   2026, 7);
+        flexRenderMonth('cal-sep',   2026, 8);
+        flexRenderMonth('cal-oct',   2026, 9);
+        flexRenderMonth('cal-nov',   2026, 10);
+        flexRenderMonth('cal-dec',   2026, 11);
+        flexRenderMonth('cal-jan27', 2027, 0);
+        flexRenderMonth('cal-feb27', 2027, 1);
+
+        // ── Preselect date range from pdp-flexible.html ──────────────
+        let _flexScrollIdx = -1;
+        try {
+          const rawFlex = sessionStorage.getItem('qor_flex_range');
+          if (rawFlex) {
+            sessionStorage.removeItem('qor_flex_range');
+            const fd = JSON.parse(rawFlex);
+            if (fd.start && fd.end) {
+              const ps = fd.start.split('-').map(Number);
+              const pe = fd.end.split('-').map(Number);
+              range.start = { year: ps[0], month: ps[1] - 1, day: ps[2] };
+              range.end   = { year: pe[0], month: pe[1] - 1, day: pe[2] };
+              applyHighlights();
+              updateChip();
+              // Work out which carousel card holds the check-in date
+              const checkinCell = document.querySelector('#cal-view .cal-day--checkin');
+              const calCard = checkinCell && checkinCell.closest('.calendar');
+              if (calCard) {
+                const allCards = Array.from(document.querySelectorAll('.cal-months .calendar'));
+                _flexScrollIdx = allCards.indexOf(calCard);
+              }
+            }
+          }
+        } catch(e) {}
+
+        // Override renderStep so we can scroll the carousel when step 1 is revealed
+        const _origEnqRenderStep = window.renderStep;
+        window.renderStep = function(n, animate) {
+          _origEnqRenderStep(n, animate);
+          if (n === 1 && _flexScrollIdx > 0) {
+            const idx = _flexScrollIdx;
+            _flexScrollIdx = -1; // scroll once only
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              const nextBtn = document.getElementById('cal-next');
+              if (nextBtn) {
+                for (let i = 0; i < idx; i++) nextBtn.click();
+              }
+            }));
+          }
+        };
+
+        // Override step 1 validation
+        const _origValidate = window.validateStep || validateStep;
+        window.validateStep = function(n) {
+          if (n === 1) {
+            if (!range.start || !range.end) {
+              showError('Please select your check-in and check-out dates to continue.');
+              return false;
+            }
+            const nights = Math.round(Math.abs(toDate(range.end) - toDate(range.start)) / 86400000);
+            state.selectedDate = {
+              id: 'flex',
+              label: `${fmtDate(range.start)} – ${fmtDate(range.end)} · ${nights} night${nights !== 1 ? 's' : ''}`
+            };
+            return true;
+          }
+          return _origValidate(n);
+        };
+
+        const calView = document.getElementById('cal-view');
+        if (!calView) return;
+
+        calView.addEventListener('click', e => {
+          const cell = e.target.closest('.cal-day[data-day]');
+          if (!cell) return;
+          const clicked = { year: +cell.dataset.year, month: +cell.dataset.month, day: +cell.dataset.day };
+          if (!range.start || range.end) {
+            range.start = clicked; range.end = null;
+          } else {
+            const startD = toDate(range.start), clickedD = toDate(clicked);
+            if (clickedD <= startD) { range.start = clicked; range.end = null; }
+            else { range.end = clicked; }
+          }
+          applyHighlights();
+          updateChip();
+        });
+
+        calView.addEventListener('mouseover', e => {
+          if (!range.start || range.end) return;
+          const cell = e.target.closest('.cal-day[data-day]');
+          range.hovering = cell ? { year: +cell.dataset.year, month: +cell.dataset.month, day: +cell.dataset.day } : null;
+          applyHighlights();
+        });
+
+        calView.addEventListener('mouseleave', () => {
+          range.hovering = null;
+          applyHighlights();
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
