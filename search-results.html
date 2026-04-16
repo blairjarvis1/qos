@@ -7,7 +7,8 @@
   <link rel="stylesheet" href="styles.css">
   <style>
 
-    html, body { overflow-x: hidden; background: var(--parchment); }
+    html { background: var(--parchment); }
+    body { overflow-x: hidden; background: var(--parchment); }
 
     /* ── HERO / SEARCH BAR ───────────────────────────────────────── */
     .lr-hero {
@@ -34,7 +35,10 @@
     .lr-hero__title-block { flex-shrink: 0; }
     .lr-search-wrap {
       background: #F6D087;
-      padding: 0 48px 20px;
+      padding: 24px 48px 20px;
+      position: sticky;
+      top: 60px;
+      z-index: 40;
     }
     .lr-hero__label {
       font-family: var(--ui, var(--sans));
@@ -696,7 +700,7 @@
       </a>
 
       <!-- Card 3 -->
-      <a href="#les-marguerites" class="lr-card" style="text-decoration:none;color:inherit;">
+      <a href="pdp-venue.html" class="lr-card" style="text-decoration:none;color:inherit;">
         <div class="lr-card__image">
           <img src="images/general/13.jpg" alt="Les Marguerites">
           <button class="lr-card__save" aria-label="Save">
@@ -705,16 +709,16 @@
         </div>
         <div class="lr-card__body">
           <div class="lr-card__type">Meditation · Healing</div>
-          <div class="lr-card__title">Les Marguerites Silent Retreat</div>
+          <div class="lr-card__title">London Meditation Centre</div>
           <div class="lr-card__location">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            Algarve, Southern Portugal
+            London, England
           </div>
           <div class="lr-card__tags">
             <span class="lr-tag">Meditation</span>
             <span class="lr-tag">Silence</span>
-            <span class="lr-tag">6 nights</span>
-            <span class="lr-tag">Algarve</span>
+            <span class="lr-tag">4 days</span>
+            <span class="lr-tag">England</span>
           </div>
           <div class="lr-card__footer">
             <div class="lr-card__rating">
