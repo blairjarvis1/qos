@@ -165,12 +165,19 @@
 
     /* ── DISCOVERY RAILS ────────────────────────────────────────────── */
     .discovery {
-      padding: 40px 0 32px;
+      padding: 40px 0 36px;
       border-bottom: 1px solid var(--border);
       background: var(--parchment);
     }
+    .discovery__inner {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      gap: 0 56px;
+      padding: 0 48px;
+      align-items: start;
+    }
     .discovery__header {
-      padding: 0 48px 24px;
+      padding-top: 6px;
     }
     .discovery__label {
       font-family: var(--ui, var(--sans));
@@ -183,28 +190,49 @@
     }
     .discovery__title {
       font-family: var(--serif);
-      font-size: clamp(20px, 2vw, 28px);
+      font-size: clamp(20px, 2vw, 26px);
       color: var(--ink);
-      margin-bottom: 6px;
+      margin-bottom: 10px;
+      line-height: 1.2;
     }
     .discovery__intro {
-      font-size: 14px;
+      font-size: 13px;
       color: var(--stone);
+      line-height: 1.6;
     }
-    .discovery__rail { margin-bottom: 32px; }
-    .discovery__rail-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
+    .discovery__tabs-wrap { min-width: 0; }
+    .discovery__tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+    .discovery__tab {
+      font-size: 12px;
+      font-weight: 500;
       color: var(--stone);
-      padding: 0 48px 12px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      padding: 6px 18px 10px;
+      cursor: pointer;
+      margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+      white-space: nowrap;
     }
+    .discovery__tab:first-child { padding-left: 0; }
+    .discovery__tab.is-active {
+      color: var(--ink);
+      border-bottom-color: var(--ink);
+    }
+    .discovery__tab:hover:not(.is-active) { color: var(--ink); }
+    .discovery__panel { display: none; }
+    .discovery__panel.is-active { display: block; }
     .discovery__scroll {
       display: flex;
       gap: 12px;
       overflow-x: auto;
-      padding: 4px 48px 16px;
+      padding: 4px 0 16px;
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
@@ -1138,110 +1166,120 @@
 
   <!-- ── 4. DISCOVERY RAILS ─────────────────────────────────────────── -->
   <section class="discovery">
-    <div class="discovery__header">
-      <p class="discovery__label">Browse &amp; explore</p>
-      <h2 class="discovery__title">Not sure where to start?</h2>
-      <p class="discovery__intro">Explore retreats by category, intention, or destination — hand-picked by our editorial team.</p>
-    </div>
+    <div class="discovery__inner">
 
-    <!-- Rail 1: By Category -->
-    <div class="discovery__rail">
-      <div class="discovery__rail-label">Browse by category</div>
-      <div class="discovery__scroll">
-        <div class="cat-card">
-          <img src="images/general/05.jpg" alt="Yoga & Meditation">
-          <div class="cat-card__overlay"><span class="cat-card__name">Yoga &amp; Meditation</span></div>
-        </div>
-        <div class="cat-card">
-          <img src="images/general/19.jpg" alt="Detox & Cleanse">
-          <div class="cat-card__overlay"><span class="cat-card__name">Detox &amp; Cleanse</span></div>
-        </div>
-        <div class="cat-card">
-          <img src="images/general/17.jpg" alt="Fitness & Adventure">
-          <div class="cat-card__overlay"><span class="cat-card__name">Fitness &amp; Adventure</span></div>
-        </div>
-        <div class="cat-card">
-          <img src="images/general/01.jpg" alt="Meditation & Mindfulness">
-          <div class="cat-card__overlay"><span class="cat-card__name">Meditation &amp; Mindfulness</span></div>
-        </div>
-        <div class="cat-card">
-          <img src="images/general/13.jpg" alt="Health & Healing">
-          <div class="cat-card__overlay"><span class="cat-card__name">Health &amp; Healing</span></div>
-        </div>
-        <div class="cat-card">
-          <img src="images/general/04.jpg" alt="Personal Growth">
-          <div class="cat-card__overlay"><span class="cat-card__name">Personal Growth</span></div>
-        </div>
+      <div class="discovery__header">
+        <p class="discovery__label">Browse &amp; explore</p>
+        <h2 class="discovery__title">Not sure where to start?</h2>
+        <p class="discovery__intro">Explore retreats by category, intention, or destination — hand-picked by our editorial team.</p>
       </div>
-    </div>
 
-    <!-- Rail 2: By Intent -->
-    <div class="discovery__rail">
-      <div class="discovery__rail-label">What are you looking for?</div>
-      <div class="discovery__scroll">
-        <div class="intent-card">
-          <div class="intent-card__icon">🌿</div>
-          <div class="intent-card__name">Relaxation</div>
-          <div class="intent-card__desc">Slow down and restore your sense of calm</div>
+      <div class="discovery__tabs-wrap">
+        <div class="discovery__tabs">
+          <button class="discovery__tab is-active" data-tab="category">What kind of retreat are you looking for?</button>
+          <button class="discovery__tab" data-tab="intent">What do you want from the retreat?</button>
+          <button class="discovery__tab" data-tab="destination">Where do you feel like going?</button>
         </div>
-        <div class="intent-card">
-          <div class="intent-card__icon">✨</div>
-          <div class="intent-card__name">Transformation</div>
-          <div class="intent-card__desc">Break old patterns and emerge renewed</div>
-        </div>
-        <div class="intent-card">
-          <div class="intent-card__icon">🏃</div>
-          <div class="intent-card__name">Active &amp; Fitness</div>
-          <div class="intent-card__desc">Challenge your body in beautiful settings</div>
-        </div>
-        <div class="intent-card">
-          <div class="intent-card__icon">📵</div>
-          <div class="intent-card__name">Digital Detox</div>
-          <div class="intent-card__desc">Unplug, breathe, and reconnect with yourself</div>
-        </div>
-        <div class="intent-card">
-          <div class="intent-card__icon">🤝</div>
-          <div class="intent-card__name">Reconnect</div>
-          <div class="intent-card__desc">Find community with like-minded souls</div>
-        </div>
-        <div class="intent-card">
-          <div class="intent-card__icon">🔮</div>
-          <div class="intent-card__name">Inner Work</div>
-          <div class="intent-card__desc">Therapy, journalling, and deep self-enquiry</div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Rail 3: By Destination -->
-    <div class="discovery__rail">
-      <div class="discovery__rail-label">Browse by destination</div>
-      <div class="discovery__scroll">
-        <div class="cat-card">
-          <img src="images/header_vale-de-moses.jpg" alt="Portugal">
-          <div class="cat-card__overlay"><span class="cat-card__name">Portugal</span></div>
+        <!-- Panel 1: By Category -->
+        <div class="discovery__panel is-active" id="disc-panel-category">
+          <div class="discovery__scroll">
+            <div class="cat-card">
+              <img src="images/general/05.jpg" alt="Yoga & Meditation">
+              <div class="cat-card__overlay"><span class="cat-card__name">Yoga &amp; Meditation</span></div>
+            </div>
+            <div class="cat-card">
+              <img src="images/general/19.jpg" alt="Detox & Cleanse">
+              <div class="cat-card__overlay"><span class="cat-card__name">Detox &amp; Cleanse</span></div>
+            </div>
+            <div class="cat-card">
+              <img src="images/general/17.jpg" alt="Fitness & Adventure">
+              <div class="cat-card__overlay"><span class="cat-card__name">Fitness &amp; Adventure</span></div>
+            </div>
+            <div class="cat-card">
+              <img src="images/general/01.jpg" alt="Meditation & Mindfulness">
+              <div class="cat-card__overlay"><span class="cat-card__name">Meditation &amp; Mindfulness</span></div>
+            </div>
+            <div class="cat-card">
+              <img src="images/general/13.jpg" alt="Health & Healing">
+              <div class="cat-card__overlay"><span class="cat-card__name">Health &amp; Healing</span></div>
+            </div>
+            <div class="cat-card">
+              <img src="images/general/04.jpg" alt="Personal Growth">
+              <div class="cat-card__overlay"><span class="cat-card__name">Personal Growth</span></div>
+            </div>
+          </div>
         </div>
-        <div class="cat-card">
-          <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Bali">
-          <div class="cat-card__overlay"><span class="cat-card__name">Bali</span></div>
+
+        <!-- Panel 2: By Intention -->
+        <div class="discovery__panel" id="disc-panel-intent">
+          <div class="discovery__scroll">
+            <div class="intent-card">
+              <div class="intent-card__icon">🌿</div>
+              <div class="intent-card__name">Relaxation</div>
+              <div class="intent-card__desc">Slow down and restore your sense of calm</div>
+            </div>
+            <div class="intent-card">
+              <div class="intent-card__icon">✨</div>
+              <div class="intent-card__name">Transformation</div>
+              <div class="intent-card__desc">Break old patterns and emerge renewed</div>
+            </div>
+            <div class="intent-card">
+              <div class="intent-card__icon">🏃</div>
+              <div class="intent-card__name">Active &amp; Fitness</div>
+              <div class="intent-card__desc">Challenge your body in beautiful settings</div>
+            </div>
+            <div class="intent-card">
+              <div class="intent-card__icon">📵</div>
+              <div class="intent-card__name">Digital Detox</div>
+              <div class="intent-card__desc">Unplug, breathe, and reconnect with yourself</div>
+            </div>
+            <div class="intent-card">
+              <div class="intent-card__icon">🤝</div>
+              <div class="intent-card__name">Reconnect</div>
+              <div class="intent-card__desc">Find community with like-minded souls</div>
+            </div>
+            <div class="intent-card">
+              <div class="intent-card__icon">🔮</div>
+              <div class="intent-card__name">Inner Work</div>
+              <div class="intent-card__desc">Therapy, journalling, and deep self-enquiry</div>
+            </div>
+          </div>
         </div>
-        <div class="cat-card">
-          <img src="images/retreats/ananda/ANANDA+hot+oil+2.webp" alt="India">
-          <div class="cat-card__overlay"><span class="cat-card__name">India</span></div>
+
+        <!-- Panel 3: By Destination -->
+        <div class="discovery__panel" id="disc-panel-destination">
+          <div class="discovery__scroll">
+            <div class="cat-card">
+              <img src="images/header_vale-de-moses.jpg" alt="Portugal">
+              <div class="cat-card__overlay"><span class="cat-card__name">Portugal</span></div>
+            </div>
+            <div class="cat-card">
+              <img src="images/header_mellulah-yoga-retreats_20240514092216.jpg" alt="Bali">
+              <div class="cat-card__overlay"><span class="cat-card__name">Bali</span></div>
+            </div>
+            <div class="cat-card">
+              <img src="images/retreats/ananda/ANANDA+hot+oil+2.webp" alt="India">
+              <div class="cat-card__overlay"><span class="cat-card__name">India</span></div>
+            </div>
+            <div class="cat-card">
+              <img src="images/header_casa-ana_20230628180415.jpg" alt="Spain">
+              <div class="cat-card__overlay"><span class="cat-card__name">Spain</span></div>
+            </div>
+            <div class="cat-card">
+              <img src="images/header_les-marguerites.jpg" alt="France">
+              <div class="cat-card__overlay"><span class="cat-card__name">France</span></div>
+            </div>
+            <div class="cat-card">
+              <img src="images/header_vale-de-moses.webp" alt="Greece">
+              <div class="cat-card__overlay"><span class="cat-card__name">Greece</span></div>
+            </div>
+          </div>
         </div>
-        <div class="cat-card">
-          <img src="images/header_casa-ana_20230628180415.jpg" alt="Spain">
-          <div class="cat-card__overlay"><span class="cat-card__name">Spain</span></div>
-        </div>
-        <div class="cat-card">
-          <img src="images/header_les-marguerites.jpg" alt="France">
-          <div class="cat-card__overlay"><span class="cat-card__name">France</span></div>
-        </div>
-        <div class="cat-card">
-          <img src="images/header_vale-de-moses.webp" alt="Greece">
-          <div class="cat-card__overlay"><span class="cat-card__name">Greece</span></div>
-        </div>
-      </div>
-    </div>
+      </div><!-- /.discovery__tabs-wrap -->
+
+    </div><!-- /.discovery__inner -->
+  </section>
 
   <!-- ── 6. RESULTS ─────────────────────────────────────────────────── -->
   <main class="results">
