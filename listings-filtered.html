@@ -108,7 +108,7 @@
     .lr-search-bar {
       background: var(--white);
       border-radius: var(--r-pill);
-      box-shadow: 0 2px 20px rgba(0,0,0,0.12), 0 0 0 1px var(--border);
+      box-shadow: none;
       display: flex;
       align-items: center;
       height: 52px;
@@ -1391,8 +1391,8 @@
     <!-- Grid: Row 1 -->
     <div class="lr-grid" style="padding-top: 32px;">
 
-      <!-- Card 1: London Meditation Centre -->
-      <a href="pdp-venue.html" class="lr-card">
+      <!-- Card 1: rotating -->
+      <div id="rotating-card-1"><a href="pdp-venue.html" class="lr-card">
         <div class="lr-card__image">
           <img src="images/general/13.jpg" alt="London Meditation Centre">
           <button class="lr-card__save" aria-label="Save" onclick="event.preventDefault()">
@@ -1450,7 +1450,7 @@
             <button class="lr-card__book" onclick="event.preventDefault()">Book now</button>
           </div>
         </div>
-      </a>
+      </a></div>
 
       <!-- Card 2: Four Seasons Bali -->
       <a href="pdp-flexible.html" class="lr-card">
@@ -2158,7 +2158,7 @@
 
   <script src="mega-menu.js"></script>
   <script>
-    // Shared label → count map (used by both URL param init and card clicks)
+    // Shared label → count map
     var labelCountMap = {
       'Yoga & Meditation':        24,
       'Detox & Cleanse':          17,
@@ -2167,6 +2167,66 @@
       'Health & Healing':         28,
       'Personal Growth':          19
     };
+
+    // Card rotation
+    var cardStateIndex = 0;
+    var cardData = [
+      {
+        href: 'pdp-venue.html', img: 'images/general/13.jpg',
+        alt: 'London Meditation Centre', gallery: '1 / 4', badge: '✦ Editorial Pick',
+        type: 'Meditation', title: 'London Meditation Centre', location: 'London, England',
+        info: '4 days · Intermediate · Max 6', tags: ['Silent', 'Vipassana', 'Nature'],
+        avail: 'amber', availText: 'Next: 28 May · <strong>Limited availability</strong>', score: '9.7', price: '£980'
+      },
+      {
+        href: 'pdp-flexible.html', img: 'images/retreats/four-seasons/Four+Seasons+Bali+at+Sayan+meditation.webp',
+        alt: 'Four Seasons Bali', gallery: '1 / 6', badge: '',
+        type: 'Detox', title: 'Four Seasons Bali at Sayan', location: 'Near Ubud, Bali',
+        info: 'Flexible stays · Beginner-friendly · Max 10', tags: ['Detox', 'Spa', 'Nutrition'],
+        avail: 'green', availText: 'Next: 21 May · <strong>5 spots</strong>', score: '9.4', price: '£1,650'
+      },
+      {
+        href: 'pdp-enquire.html', img: 'images/retreats/ananda/ANANDA+hot+oil+2.webp',
+        alt: 'Ananda in the Himalayas', gallery: '1 / 5', badge: 'Featured',
+        type: 'Yoga', title: 'Ananda in the Himalayas, India', location: 'Uttarakhand, India',
+        info: '5 nights · All levels · Max 8', tags: ['Yoga', 'Ayurveda', 'Vegan food'],
+        avail: 'amber', availText: 'Next: 14 May · <strong>2 spots</strong>', score: '9.6', price: '£2,100'
+      },
+      {
+        href: 'pdp.html', img: 'images/retreats/elevation-barn/Elevation+Barn+Bali+Jungle+Villa.webp',
+        alt: 'Elevation Barn', gallery: '1 / 6', badge: "✦ Editor's Pick",
+        type: 'Yoga &amp; Meditation', title: 'Elevation Barn', location: 'Gianyar, Bali',
+        info: '7 nights · All levels · Max 12', tags: ['Yoga', 'Meditation', 'Organic food'],
+        avail: 'green', availText: 'Next: 21 May · <strong>3 spots</strong>', score: '9.8', price: '£1,850'
+      }
+    ];
+
+    function renderCard(d) {
+      return '<a href="' + d.href + '" class="lr-card">'
+        + '<div class="lr-card__image">'
+        + '<img src="' + d.img + '" alt="' + d.alt + '">'
+        + '<button class="lr-card__save" aria-label="Save" onclick="event.preventDefault()">'
+        + '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
+        + '</button>'
+        + (d.badge ? '<div class="lr-card__badge">' + d.badge + '</div>' : '')
+        + '<div class="lr-card__gallery">' + d.gallery + '</div>'
+        + '</div>'
+        + '<div class="lr-card__body">'
+        + '<div class="lr-card__type">' + d.type + '</div>'
+        + '<div class="lr-card__title">' + d.title + '</div>'
+        + '<div class="lr-card__location"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> ' + d.location + '</div>'
+        + '<div class="lr-card__info">' + d.info + '</div>'
+        + '<div class="lr-card__tags">' + d.tags.map(function(t){ return '<span class="lr-card__tag">' + t + '</span>'; }).join('') + '</div>'
+        + '<div class="lr-card__avail"><span class="avail-dot avail-dot--' + d.avail + '"></span> ' + d.availText + '</div>'
+        + '<div class="lr-card__footer">'
+        + '<div class="lr-card__left"><div class="lr-card__vetted"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>'
+        + '<div class="lr-card__rating"><span class="lr-card__stars">★</span><span class="lr-card__score">' + d.score + '</span></div></div>'
+        + '<div class="lr-card__right"><div class="card-pgm-tip"><span class="card-pgm-badge"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> Our price guarantee</span><div class="card-pgm-box"><div class="card-pgm-title">Fair Pricing, Thoughtfully Matched</div><div class="card-pgm-body">Our prices reflect those set by each retreat. By booking through Queen of Retreats, you receive the same rate, alongside considered advice and ongoing support.</div></div></div>'
+        + '<div class="lr-card__price-wrap"><span class="lr-card__from">From</span><span class="lr-card__price">' + d.price + '</span></div></div>'
+        + '</div>'
+        + '<div class="lr-card__ctas"><button class="lr-card__view" onclick="event.preventDefault()">View</button><button class="lr-card__book" onclick="event.preventDefault()">Book now</button></div>'
+        + '</div></a>';
+    }
 
     function applyCategory(label) {
       var count = labelCountMap[label];
@@ -2180,6 +2240,8 @@
         var img = card.querySelector('img');
         if (img && img.alt === label) card.classList.add('is-active');
       });
+      cardStateIndex = (cardStateIndex + 1) % cardData.length;
+      document.getElementById('rotating-card-1').innerHTML = renderCard(cardData[cardStateIndex]);
     }
 
     // Apply on load from URL param (?cat=yoga-meditation etc.)
