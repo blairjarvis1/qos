@@ -1044,3 +1044,146 @@
   font-size: var(--t-sm);
   color: var(--stone);
 }
+
+/* ============================================================
+   Mobile — ≤ 768px
+   All desktop styles above are unchanged.
+   ============================================================ */
+@media (max-width: 768px) {
+
+  /* Header — hide help text, reduce padding, shrink logo */
+  .acct-header__inner { padding: 0 var(--s5); }
+  .acct-header__help { display: none; }
+  .acct-header__logo { font-size: 18px; }
+
+  /* Layout — single column, sidebar stacks above main */
+  .acct-layout { display: block; }
+
+  /* Sidebar → compact horizontal scrollable nav strip */
+  .acct-sidebar {
+    position: sticky;
+    top: 60px;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 0;
+    overflow-x: hidden;
+    overflow-y: visible;
+    z-index: 90;
+  }
+  .acct-sidebar__user { display: none; }
+  .acct-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: var(--s2) var(--s3);
+    gap: var(--s1);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .acct-nav::-webkit-scrollbar { display: none; }
+  .acct-nav__section { display: none; }
+  .acct-nav__divider {
+    width: 1px;
+    height: 20px;
+    margin: auto var(--s2);
+    flex-shrink: 0;
+  }
+  .acct-nav__item {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding: var(--s2) var(--s3);
+    border-radius: var(--r-pill);
+    font-size: var(--t-xs);
+  }
+  .acct-nav__item svg { display: none; }
+  .acct-nav__badge { display: none; }
+
+  /* Main content */
+  .acct-main {
+    padding: var(--s6) var(--s5);
+    min-height: auto;
+  }
+  .acct-page-header { margin-bottom: var(--s5); }
+  .acct-page-header h1 { font-size: var(--t-xl); }
+  .acct-back { margin-bottom: var(--s4); }
+
+  /* Stat bar — 2×2 */
+  .acct-stat-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--s3);
+    margin-bottom: var(--s5);
+  }
+  .acct-stat { padding: var(--s4); }
+  .acct-stat__value { font-size: var(--t-xl); }
+
+  /* Tabs — horizontally scrollable */
+  .acct-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-bottom: var(--s5);
+  }
+  .acct-tabs::-webkit-scrollbar { display: none; }
+
+  /* Booking card — stack image above body */
+  .booking-card__inner { grid-template-columns: 1fr; }
+  .booking-card__img { width: 100%; height: 200px; }
+  .booking-card__footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s3);
+    padding: var(--s4) var(--s5);
+  }
+  .booking-card__actions {
+    flex-wrap: wrap;
+    gap: var(--s2);
+    width: 100%;
+  }
+  .booking-card__next-step { font-size: var(--t-xs); }
+
+  /* Enquiry card — stack */
+  .enquiry-card__inner { grid-template-columns: 1fr; }
+  .enquiry-card__img { width: 100%; aspect-ratio: 16/9; height: auto; }
+  .enquiry-card__footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--s3);
+    padding: var(--s4) var(--s5);
+  }
+
+  /* Past card — stack */
+  .past-card { grid-template-columns: 1fr; }
+  .past-card__img { width: 100%; height: 160px; }
+  .past-card__actions {
+    padding: var(--s3) var(--s5) var(--s4);
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  /* Account panels */
+  .acct-panel__header { padding: var(--s4) var(--s5); }
+  .acct-panel__body { padding: var(--s5); }
+  .acct-panel__footer { padding: var(--s4) var(--s5); flex-wrap: wrap; }
+
+  /* Field rows — stack label above value */
+  .field-row { flex-direction: column; gap: var(--s2); }
+  .field-row__label { min-width: auto; }
+
+  /* Comms — tighten gap between text and toggle */
+  .comms-item { gap: var(--s5); }
+
+  /* Saved grid — 2 columns on tablet, 1 on phone */
+  .saved-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Payment cards */
+  .payment-card { flex-wrap: wrap; }
+  .payment-card__actions { width: 100%; justify-content: flex-end; }
+
+}
+
+@media (max-width: 480px) {
+  .saved-grid { grid-template-columns: 1fr; }
+  .booking-card__meta { gap: var(--s3); }
+  .booking-card__body { padding: var(--s4); }
+  .enquiry-card__body { padding: var(--s4); }
+}
