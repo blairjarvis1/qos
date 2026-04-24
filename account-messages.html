@@ -244,6 +244,215 @@
     .msg-detail__empty-state svg { opacity: 0.25; }
     .msg-detail__empty-state p { font-size: var(--t-sm); }
 
+    /* ── Msg / Chat tab switcher ────────────────────────────────── */
+    .msgs-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: var(--s6);
+    }
+    .msgs-tab {
+      padding: var(--s3) var(--s6);
+      font-family: var(--ui);
+      font-size: var(--t-xs);
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--stone);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: all var(--dur-fast);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      background: none;
+      border-top: none; border-left: none; border-right: none;
+      white-space: nowrap;
+    }
+    .msgs-tab:first-child { padding-left: 0; }
+    .msgs-tab:hover { color: var(--ink); }
+    .msgs-tab.is-active { color: var(--sage); border-bottom-color: var(--sage); }
+    .msgs-tab__count {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 18px; height: 18px; padding: 0 5px;
+      border-radius: var(--r-pill);
+      font-size: 10px; font-weight: 600;
+      background: var(--cloud); color: var(--stone);
+    }
+    .msgs-tab.is-active .msgs-tab__count { background: var(--sage-light); color: var(--sage); }
+    .msg-tab-panel { display: none; }
+    .msg-tab-panel.is-active { display: block; }
+
+    /* ── Chat Panel ─────────────────────────────────────────────── */
+    .chat-panel {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      overflow: hidden;
+      background: var(--white);
+      min-height: 600px;
+    }
+    .chat-list {
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+    }
+    .chat-list__header {
+      padding: var(--s4) var(--s5);
+      border-bottom: 1px solid var(--border);
+      font-family: var(--ui);
+      font-size: var(--t-xs);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--stone);
+    }
+    .chat-list__item {
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      padding: var(--s4) var(--s5);
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      transition: background var(--dur-fast);
+    }
+    .chat-list__item:hover { background: var(--linen); }
+    .chat-list__item.is-active { background: var(--linen); }
+    .chat-list__av {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--sage-light); color: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ui); font-size: var(--t-sm); font-weight: 700;
+      flex-shrink: 0;
+    }
+    .chat-list__body { flex: 1; min-width: 0; }
+    .chat-list__top {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: var(--s2); margin-bottom: 2px;
+    }
+    .chat-list__name {
+      font-size: var(--t-sm); font-weight: 500; color: var(--ink);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .chat-list__item.has-unread .chat-list__name { font-weight: 700; }
+    .chat-list__time { font-size: 11px; color: var(--stone); white-space: nowrap; flex-shrink: 0; }
+    .chat-list__last {
+      font-size: var(--t-xs); color: var(--stone);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .chat-list__sub { font-size: 11px; color: var(--mist); margin-top: 2px; }
+    .chat-list__badge {
+      min-width: 18px; height: 18px; padding: 0 5px;
+      border-radius: var(--r-pill);
+      background: var(--sage); color: var(--white);
+      font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    /* Chat conversation pane */
+    .chat-conv {
+      display: flex;
+      flex-direction: column;
+      height: 600px;
+    }
+    .chat-conv__header {
+      padding: var(--s4) var(--s6);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: var(--s5);
+      background: var(--white);
+      flex-shrink: 0;
+    }
+    .chat-conv__name {
+      font-family: var(--serif);
+      font-size: var(--t-md);
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+    .chat-conv__meta {
+      font-size: var(--t-xs); color: var(--stone);
+      display: flex; align-items: center; gap: var(--s3); flex-wrap: wrap;
+    }
+    .chat-conv__actions { display: flex; gap: var(--s2); flex-shrink: 0; }
+    .chat-conv__messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--s6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--s4);
+      background: var(--parchment);
+    }
+    .chat-date-sep {
+      text-align: center;
+      font-family: var(--ui); font-size: 10px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--mist); padding: var(--s1) 0;
+    }
+    .chat-msg { display: flex; flex-direction: column; }
+    .chat-msg--out { align-items: flex-end; }
+    .chat-msg--in  { align-items: flex-start; }
+    .chat-msg__sender { font-size: var(--t-xs); color: var(--stone); margin-bottom: 4px; font-weight: 500; }
+    .chat-msg__bubble {
+      max-width: 72%;
+      padding: var(--s3) var(--s5);
+      border-radius: var(--r-lg);
+      font-size: var(--t-sm);
+      line-height: 1.55;
+    }
+    .chat-msg--out .chat-msg__bubble {
+      background: var(--sage); color: var(--white);
+      border-bottom-right-radius: var(--r-sm);
+    }
+    .chat-msg--in .chat-msg__bubble {
+      background: var(--white); color: var(--charcoal);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: var(--r-sm);
+    }
+    .chat-msg__time { font-size: 11px; color: var(--mist); margin-top: 4px; }
+    .chat-conv__status {
+      padding: var(--s3) var(--s5);
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between; gap: var(--s4);
+      flex-shrink: 0;
+    }
+    .chat-conv__status-text {
+      font-size: var(--t-xs); color: var(--stone);
+      display: flex; align-items: center; gap: var(--s2);
+    }
+    .chat-conv__compose {
+      border-top: 1px solid var(--border);
+      padding: var(--s4) var(--s5);
+      display: flex; gap: var(--s3); align-items: flex-end;
+      background: var(--white);
+      flex-shrink: 0;
+    }
+    .chat-conv__compose textarea {
+      flex: 1;
+      padding: var(--s3) var(--s4);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-md);
+      font-size: var(--t-sm); color: var(--ink); background: var(--white);
+      resize: none; outline: none;
+      transition: border-color var(--dur-fast);
+      font-family: var(--sans); line-height: 1.5;
+      min-height: 40px;
+    }
+    .chat-conv__compose textarea:focus { border-color: var(--sage-mid); }
+    .chat-conv__empty {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: var(--s3); color: var(--stone); background: var(--parchment);
+    }
+    .chat-conv__empty svg { opacity: 0.25; }
+    .chat-conv__empty p { font-size: var(--t-sm); }
+    /* Each inner conversation div fills the pane and flexes */
+    .chat-conv > div {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
     /* Mobile back button — hidden on desktop */
     .msg-back-btn {
       display: none;
@@ -372,6 +581,18 @@
         <p>Communications from the Queen of Retreats team</p>
       </div>
 
+      <!-- Tab switcher -->
+      <div class="msgs-tabs">
+        <button class="msgs-tab is-active" onclick="switchMsgTab('messages', this)">
+          Messages <span class="msgs-tab__count">3</span>
+        </button>
+        <button class="msgs-tab" onclick="switchMsgTab('chats', this)">
+          Chats <span class="msgs-tab__count">3</span>
+        </button>
+      </div>
+
+      <!-- Tab: Messages -->
+      <div id="tab-messages" class="msg-tab-panel is-active">
       <div class="msg-panel">
 
         <!-- Message list -->
@@ -729,11 +950,203 @@
 
         </div><!-- /msg-detail -->
       </div><!-- /msg-panel -->
+      </div><!-- /tab-messages -->
+
+      <!-- Tab: Chats -->
+      <div id="tab-chats" class="msg-tab-panel">
+        <div class="chat-panel">
+
+          <!-- Chat list -->
+          <div class="chat-list">
+            <div class="chat-list__header">Conversations</div>
+
+            <!-- Ananda — has reply, unread -->
+            <div class="chat-list__item has-unread is-active" onclick="openChat('chat-ananda', this)">
+              <div class="chat-list__av">A</div>
+              <div class="chat-list__body">
+                <div class="chat-list__top">
+                  <span class="chat-list__name">Ananda in the Himalayas</span>
+                  <span class="chat-list__time">19 Apr</span>
+                </div>
+                <div class="chat-list__last">Ananda Retreats: We do have availability for 3–10 Oct…</div>
+                <div class="chat-list__sub">Narendra Nagar, India · ENQ-2026-0198</div>
+              </div>
+              <div class="chat-list__badge">1</div>
+            </div>
+
+            <!-- Kaliyoga — awaiting -->
+            <div class="chat-list__item" onclick="openChat('chat-kaliyoga', this)">
+              <div class="chat-list__av" style="background:var(--cloud);color:var(--stone);">K</div>
+              <div class="chat-list__body">
+                <div class="chat-list__top">
+                  <span class="chat-list__name">Kaliyoga</span>
+                  <span class="chat-list__time">21 Apr</span>
+                </div>
+                <div class="chat-list__last">You: Hello, I'd love to join the January yoga…</div>
+                <div class="chat-list__sub">Andalucía, Spain · ENQ-2026-0231</div>
+              </div>
+            </div>
+
+            <!-- SHA — just submitted -->
+            <div class="chat-list__item" onclick="openChat('chat-sha', this)">
+              <div class="chat-list__av" style="background:var(--cloud);color:var(--stone);">S</div>
+              <div class="chat-list__body">
+                <div class="chat-list__top">
+                  <span class="chat-list__name">SHA Wellness Clinic</span>
+                  <span class="chat-list__time">22 Apr</span>
+                </div>
+                <div class="chat-list__last">You: I'm interested in the SHA method programme…</div>
+                <div class="chat-list__sub">Alicante, Spain · ENQ-2026-0247</div>
+              </div>
+            </div>
+          </div><!-- /chat-list -->
+
+          <!-- Conversation pane -->
+          <div class="chat-conv" id="chat-conv-pane">
+
+            <!-- Ananda conversation (default) -->
+            <div id="chat-ananda">
+              <div class="chat-conv__header">
+                <div>
+                  <div class="chat-conv__name">Ananda in the Himalayas</div>
+                  <div class="chat-conv__meta">
+                    <span>Narendra Nagar, India</span>
+                    <span>·</span>
+                    <span>ENQ-2026-0198</span>
+                    <span class="badge badge--sage">Provider replied</span>
+                  </div>
+                </div>
+                <div class="chat-conv__actions">
+                  <button class="btn btn--ghost btn--sm" style="color:var(--error)">Withdraw</button>
+                  <button class="btn btn--primary btn--sm">Continue to book</button>
+                </div>
+              </div>
+              <div class="chat-conv__messages">
+                <div class="chat-date-sep">18 April 2026</div>
+                <div class="chat-msg chat-msg--out">
+                  <span class="chat-msg__sender">You</span>
+                  <div class="chat-msg__bubble">Hi, I'm interested in the 7-night Panchakarma programme. Do you have availability in early October? I'd also like to know if single rooms are available.</div>
+                  <span class="chat-msg__time">11:22</span>
+                </div>
+                <div class="chat-date-sep">19 April 2026</div>
+                <div class="chat-msg chat-msg--in">
+                  <span class="chat-msg__sender">Ananda Retreats</span>
+                  <div class="chat-msg__bubble">Thank you for your enquiry, Sarah. We do have availability for 3–10 October. Our Garden View single room is available at ₹62,000 per night inclusive of all treatments and meals. Shall I hold this for you?</div>
+                  <span class="chat-msg__time">09:15</span>
+                </div>
+              </div>
+              <div class="chat-conv__status">
+                <div class="chat-conv__status-text">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  Provider has replied — respond to confirm or request more information
+                </div>
+              </div>
+              <div class="chat-conv__compose">
+                <textarea rows="1" placeholder="Reply to Ananda…"></textarea>
+                <button class="btn btn--primary btn--sm">Send</button>
+              </div>
+            </div>
+
+            <!-- Kaliyoga conversation (hidden) -->
+            <div id="chat-kaliyoga" style="display:none">
+              <div class="chat-conv__header">
+                <div>
+                  <div class="chat-conv__name">Kaliyoga</div>
+                  <div class="chat-conv__meta">
+                    <span>Andalucía, Spain</span>
+                    <span>·</span>
+                    <span>ENQ-2026-0231</span>
+                    <span class="badge badge--neutral">Awaiting response</span>
+                  </div>
+                </div>
+                <div class="chat-conv__actions">
+                  <button class="btn btn--ghost btn--sm" style="color:var(--error)">Withdraw</button>
+                  <button class="btn btn--secondary btn--sm">Edit enquiry</button>
+                </div>
+              </div>
+              <div class="chat-conv__messages">
+                <div class="chat-date-sep">21 April 2026</div>
+                <div class="chat-msg chat-msg--out">
+                  <span class="chat-msg__sender">You</span>
+                  <div class="chat-msg__bubble">Hello, I'd love to join the January yoga and detox programme. Could you let me know if there's availability for a solo traveller, and whether you offer airport transfers from Málaga?</div>
+                  <span class="chat-msg__time">14:05</span>
+                </div>
+              </div>
+              <div class="chat-conv__status">
+                <div class="chat-conv__status-text">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--stone)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Waiting for Kaliyoga to respond — typically within 2 business days
+                </div>
+              </div>
+              <div class="chat-conv__compose">
+                <textarea rows="1" placeholder="Add a message…"></textarea>
+                <button class="btn btn--primary btn--sm">Send</button>
+              </div>
+            </div>
+
+            <!-- SHA conversation (hidden) -->
+            <div id="chat-sha" style="display:none">
+              <div class="chat-conv__header">
+                <div>
+                  <div class="chat-conv__name">SHA Wellness Clinic</div>
+                  <div class="chat-conv__meta">
+                    <span>Alicante, Spain</span>
+                    <span>·</span>
+                    <span>ENQ-2026-0247</span>
+                    <span class="badge badge--neutral">Enquiry submitted</span>
+                  </div>
+                </div>
+                <div class="chat-conv__actions">
+                  <button class="btn btn--ghost btn--sm" style="color:var(--error)">Withdraw</button>
+                  <button class="btn btn--secondary btn--sm">Edit enquiry</button>
+                </div>
+              </div>
+              <div class="chat-conv__messages">
+                <div class="chat-date-sep">22 April 2026</div>
+                <div class="chat-msg chat-msg--out">
+                  <span class="chat-msg__sender">You</span>
+                  <div class="chat-msg__bubble">I'm interested in the SHA method programme for early March. I have mild hypertension and would like to know if there's a suitable programme, and whether an initial health assessment is included.</div>
+                  <span class="chat-msg__time">09:48</span>
+                </div>
+              </div>
+              <div class="chat-conv__status">
+                <div class="chat-conv__status-text">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--stone)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Enquiry sent — SHA Wellness will respond within 3 business days
+                </div>
+              </div>
+              <div class="chat-conv__compose">
+                <textarea rows="1" placeholder="Add a message…"></textarea>
+                <button class="btn btn--primary btn--sm">Send</button>
+              </div>
+            </div>
+
+          </div><!-- /chat-conv -->
+        </div><!-- /chat-panel -->
+      </div><!-- /tab-chats -->
 
     </main>
   </div><!-- /acct-layout -->
 
   <script>
+    function switchMsgTab(id, btn) {
+      document.querySelectorAll('.msg-tab-panel').forEach(p => p.classList.remove('is-active'));
+      document.querySelectorAll('.msgs-tab').forEach(t => t.classList.remove('is-active'));
+      document.getElementById('tab-' + id).classList.add('is-active');
+      btn.classList.add('is-active');
+    }
+
+    function openChat(id, el) {
+      document.querySelectorAll('#chat-conv-pane > div').forEach(d => d.style.display = 'none');
+      document.getElementById(id).style.display = '';
+      document.querySelectorAll('.chat-list__item').forEach(i => i.classList.remove('is-active'));
+      el.classList.add('is-active');
+      // clear unread badge
+      const badge = el.querySelector('.chat-list__badge');
+      if (badge) badge.remove();
+      el.classList.remove('has-unread');
+    }
+
     function openMessage(id, el) {
       document.querySelectorAll('.msg-detail__content').forEach(m => m.style.display = 'none');
       document.getElementById(id).style.display = 'block';
